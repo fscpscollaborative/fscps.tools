@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{99B99A9C-80EC-4BC9-8F2F-58B5375DB36D}") = "fsc-ps.tools", "fsc-ps.tools\fsc-ps.tools.csproj", "{F86783F0-361F-4790-B375-E5043E92BD70}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F86783F0-361F-4790-B375-E5043E92BD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86783F0-361F-4790-B375-E5043E92BD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86783F0-361F-4790-B375-E5043E92BD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86783F0-361F-4790-B375-E5043E92BD70}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E858B48-F9A1-4B46-B9AC-616E105F4586}
+	EndGlobalSection
+EndGlobal
