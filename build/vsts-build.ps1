@@ -38,23 +38,23 @@ if (-not $WorkingDirectory) { $WorkingDirectory = Split-Path $PSScriptRoot }
 
 # Build Library
 if ($Build) {
-	dotnet build "$WorkingDirectory\library\fsc-ps.tools.sln"
+	dotnet build "$WorkingDirectory\library\fscps.tools.sln"
 	if ($LASTEXITCODE -ne 0) {
-		throw "Failed to build fsc-ps.tools.dll!"
+		throw "Failed to build fscps.tools.dll!"
 	}
 }
 
 # Prepare publish folder
 Write-PSFMessage -Level Important -Message "Creating and populating publishing directory"
 $publishDir = New-Item -Path $WorkingDirectory -Name publish -ItemType Directory -Force
-Copy-Item -Path "$($WorkingDirectory)\fsc-ps.tools" -Destination $publishDir.FullName -Recurse -Force
+Copy-Item -Path "$($WorkingDirectory)\fscps.tools" -Destination $publishDir.FullName -Recurse -Force
 
 #region Gather text data to compile
 $text = @()
 $processed = @()
 
 # Gather Stuff to run before
-foreach ($filePath in (& "$($PSScriptRoot)\..\fsc-ps.tools\internal\scripts\preimport.ps1"))
+foreach ($filePath in (& "$($PSScriptRoot)\..\fscps.tools\internal\scripts\preimport.ps1"))
 {
 	if ([string]::IsNullOrWhiteSpace($filePath)) { continue }
 	
@@ -66,15 +66,15 @@ foreach ($filePath in (& "$($PSScriptRoot)\..\fsc-ps.tools\internal\scripts\prei
 }
 
 # Gather commands
-Get-ChildItem -Path "$($publishDir.FullName)\fsc-ps.tools\internal\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
+Get-ChildItem -Path "$($publishDir.FullName)\fscps.tools\internal\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
 	$text += [System.IO.File]::ReadAllText($_.FullName)
 }
-Get-ChildItem -Path "$($publishDir.FullName)\fsc-ps.tools\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
+Get-ChildItem -Path "$($publishDir.FullName)\fscps.tools\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
 	$text += [System.IO.File]::ReadAllText($_.FullName)
 }
 
 # Gather stuff to run afterwards
-foreach ($filePath in (& "$($PSScriptRoot)\..\fsc-ps.tools\internal\scripts\postimport.ps1"))
+foreach ($filePath in (& "$($PSScriptRoot)\..\fscps.tools\internal\scripts\postimport.ps1"))
 {
 	if ([string]::IsNullOrWhiteSpace($filePath)) { continue }
 	
@@ -87,28 +87,28 @@ foreach ($filePath in (& "$($PSScriptRoot)\..\fsc-ps.tools\internal\scripts\post
 #endregion Gather text data to compile
 
 #region Update the psm1 file
-$fileData = Get-Content -Path "$($publishDir.FullName)\fsc-ps.tools\fsc-ps.tools.psm1" -Raw
+$fileData = Get-Content -Path "$($publishDir.FullName)\fscps.tools\fscps.tools.psm1" -Raw
 $fileData = $fileData.Replace('"<was not compiled>"', '"<was compiled>"')
 $fileData = $fileData.Replace('"<compile code into here>"', ($text -join "`n`n"))
-[System.IO.File]::WriteAllText("$($publishDir.FullName)\fsc-ps.tools\fsc-ps.tools.psm1", $fileData, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText("$($publishDir.FullName)\fscps.tools\fscps.tools.psm1", $fileData, [System.Text.Encoding]::UTF8)
 #endregion Update the psm1 file
 
 #region Updating the Module Version
 if ($AutoVersion)
 {
 	Write-PSFMessage -Level Important -Message "Updating module version numbers."
-	try { [version]$remoteVersion = (Find-Module 'fsc-ps.tools' -Repository $Repository -ErrorAction Stop).Version }
+	try { [version]$remoteVersion = (Find-Module 'fscps.tools' -Repository $Repository -ErrorAction Stop).Version }
 	catch
 	{
 		Stop-PSFFunction -Message "Failed to access $($Repository)" -EnableException $true -ErrorRecord $_
 	}
 	if (-not $remoteVersion)
 	{
-		Stop-PSFFunction -Message "Couldn't find fsc-ps.tools on repository $($Repository)" -EnableException $true
+		Stop-PSFFunction -Message "Couldn't find fscps.tools on repository $($Repository)" -EnableException $true
 	}
 	$newBuildNumber = $remoteVersion.Build + 1
-	[version]$localVersion = (Import-PowerShellDataFile -Path "$($publishDir.FullName)\fsc-ps.tools\fsc-ps.tools.psd1").ModuleVersion
-	Update-ModuleManifest -Path "$($publishDir.FullName)\fsc-ps.tools\fsc-ps.tools.psd1" -ModuleVersion "$($localVersion.Major).$($localVersion.Minor).$($newBuildNumber)"
+	[version]$localVersion = (Import-PowerShellDataFile -Path "$($publishDir.FullName)\fscps.tools\fscps.tools.psd1").ModuleVersion
+	Update-ModuleManifest -Path "$($publishDir.FullName)\fscps.tools\fscps.tools.psd1" -ModuleVersion "$($localVersion.Major).$($localVersion.Minor).$($newBuildNumber)"
 }
 #endregion Updating the Module Version
 
@@ -119,13 +119,13 @@ if ($LocalRepo)
 	# Dependencies must go first
 	Write-PSFMessage -Level Important -Message "Creating Nuget Package for module: PSFramework"
 	New-PSMDModuleNugetPackage -ModulePath (Get-Module -Name PSFramework).ModuleBase -PackagePath .
-	Write-PSFMessage -Level Important -Message "Creating Nuget Package for module: fsc-ps.tools"
-	New-PSMDModuleNugetPackage -ModulePath "$($publishDir.FullName)\fsc-ps.tools" -PackagePath .
+	Write-PSFMessage -Level Important -Message "Creating Nuget Package for module: fscps.tools"
+	New-PSMDModuleNugetPackage -ModulePath "$($publishDir.FullName)\fscps.tools" -PackagePath .
 }
 else
 {
 	# Publish to Gallery
-	Write-PSFMessage -Level Important -Message "Publishing the fsc-ps.tools module to $($Repository)"
-	Publish-Module -Path "$($publishDir.FullName)\fsc-ps.tools" -NuGetApiKey $ApiKey -Force -Repository $Repository
+	Write-PSFMessage -Level Important -Message "Publishing the fscps.tools module to $($Repository)"
+	Publish-Module -Path "$($publishDir.FullName)\fscps.tools" -NuGetApiKey $ApiKey -Force -Repository $Repository
 }
 #endregion Publish

@@ -6,7 +6,7 @@ without having to maintain it in separate locations.
 It also prevents lengthy validation scriptblocks from making your parameter block
 hard to read.
 
-Set-PSFScriptblock -Name 'fsc-ps.tools.ScriptBlockName' -Scriptblock {
+Set-PSFScriptblock -Name 'fscps.tools.ScriptBlockName' -Scriptblock {
 	
 }
 #>

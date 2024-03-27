@@ -1,9 +1,9 @@
 ﻿<#
 	.SYNOPSIS
-		Installs the fsc-ps.tools Module from github
+		Installs the fscps.tools Module from github
 		
 	.DESCRIPTION
-		This script installs the fsc-ps.tools Module from github.
+		This script installs the fscps.tools Module from github.
 		
 		It does so by ...
 		- downloading the specified branch as zip to $env:TEMP
@@ -42,13 +42,13 @@ Param (
 
 #region Configuration for cloning script
 # Name of the module that is being cloned
-$ModuleName = "fsc-ps.tools"
+$ModuleName = "fscps.tools"
 
 # Base path to the github repository
-$BaseUrl = "https://github.com/ciellosinc/fsc-ps.tools"
+$BaseUrl = "https://github.com/<InsertUsernameHere>/fscps.tools"
 
 # If the module is in a subfolder of the cloned repository, specify relative path here. Empty string to skip.
-$SubFolder = "fsc-ps.tools"
+$SubFolder = "fscps.tools"
 #endregion Configuration for cloning script
 
 #region Parameter Calculation

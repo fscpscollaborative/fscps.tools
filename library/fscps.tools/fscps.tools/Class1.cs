@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace fsc-ps.tools
+namespace fscps.tools
 {
     public class Class1
     {

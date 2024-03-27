@@ -1,4 +1,4 @@
-﻿New-PSFLicense -Product 'fsc-ps.tools' -Manufacturer 'remix' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2024-03-27") -Text @"
+﻿New-PSFLicense -Product 'fscps.tools' -Manufacturer 'remix' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2024-03-27") -Text @"
 Copyright (c) 2024 remix
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

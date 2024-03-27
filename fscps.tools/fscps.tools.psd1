@@ -1,12 +1,12 @@
 ﻿@{
 	# Script module or binary module file associated with this manifest
-	RootModule = 'fsc-ps.tools.psm1'
+	RootModule = 'fscps.tools.psm1'
 	
 	# Version number of this module.
 	ModuleVersion = '1.0.0'
 	
 	# ID used to uniquely identify this module
-	GUID = '12c34e40-fe9d-41f9-8ce2-7aceed36f253'
+	GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
 	
 	# Author of this module
 	Author = 'remix'
@@ -18,7 +18,7 @@
 	Copyright = 'Copyright (c) 2024 remix'
 	
 	# Description of the functionality provided by this module
-	Description = 'fsc-ps.tools helper'
+	Description = 'fscps.tools'
 	
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = '5.0'
@@ -26,17 +26,17 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules = @(
-		@{ ModuleName='PSFramework'; ModuleVersion='1.9.310' }
+		@{ ModuleName='PSFramework'; ModuleVersion='1.10.318' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
-	# RequiredAssemblies = @('bin\fsc-ps.tools.dll')
+	# RequiredAssemblies = @('bin\fscps.tools.dll')
 	
 	# Type files (.ps1xml) to be loaded when importing this module
-	# TypesToProcess = @('xml\fsc-ps.tools.Types.ps1xml')
+	# TypesToProcess = @('xml\fscps.tools.Types.ps1xml')
 	
 	# Format files (.ps1xml) to be loaded when importing this module
-	# FormatsToProcess = @('xml\fsc-ps.tools.Format.ps1xml')
+	# FormatsToProcess = @('xml\fscps.tools.Format.ps1xml')
 	
 	# Functions to export from this module
 	FunctionsToExport = ''

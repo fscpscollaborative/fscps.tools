@@ -5,15 +5,15 @@
 *TempPoint*
 
 # Ignore staging info from Visual Studio
-library/fsc-ps.tools/.vs/*
-library/fsc-ps.tools/fsc-ps.tools/bin/*
-library/fsc-ps.tools/fsc-ps.tools/obj/*
+library/fscps.tools/.vs/*
+library/fscps.tools/fscps.tools/bin/*
+library/fscps.tools/fscps.tools/obj/*
 
 # ignore PowerShell Studio MetaData
-fsc-ps.tools/fsc-ps.tools.psproj
-fsc-ps.tools/fsc-ps.tools.psproj.bak
-fsc-ps.tools/fsc-ps.tools.psprojs
-fsc-ps.tools/fsc-ps.tools.psproj
+fscps.tools/fscps.tools.psproj
+fscps.tools/fscps.tools.psproj.bak
+fscps.tools/fscps.tools.psprojs
+fscps.tools/fscps.tools.psproj
 
 # ignore the TestResults
 TestResults/*
