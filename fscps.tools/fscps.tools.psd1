@@ -3,19 +3,19 @@
 	RootModule = 'fscps.tools.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '1.0.0'
+	ModuleVersion = '1.0.2'
 	
 	# ID used to uniquely identify this module
 	GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
 	
 	# Author of this module
-	Author = 'remix'
+	Author = 'Oleksandr Nikolaiev'
 	
 	# Company or vendor of this module
-	CompanyName = 'MyCompany'
+	CompanyName = 'Ciellos Inc.'
 	
 	# Copyright statement for this module
-	Copyright = 'Copyright (c) 2024 remix'
+	Copyright = 'Copyright (c) 2024 Oleksandr Nikolaiev. All rights reserved.'
 	
 	# Description of the functionality provided by this module
 	Description = 'fscps.tools'
@@ -26,20 +26,28 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules = @(
-		@{ ModuleName='PSFramework'; ModuleVersion='1.10.318' }
+		  @{ ModuleName = 'PSFramework'; ModuleVersion = '1.10.318' }
+		, @{ ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0' }
+		, @{ ModuleName = 'AzureAd'; ModuleVersion = '2.0.1.16' }
+		, @{ ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.9' }
+		, @{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.3.0' }
+		, @{ ModuleName = 'ImportExcel'; ModuleVersion = '7.1.0' }
+		, @{ ModuleName = 'Pester'; ModuleVersion = '4.10.1' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
-	# RequiredAssemblies = @('bin\fscps.tools.dll')
+	RequiredAssemblies = @('bin\fscps.tools.dll')
 	
 	# Type files (.ps1xml) to be loaded when importing this module
-	# TypesToProcess = @('xml\fscps.tools.Types.ps1xml')
+	#TypesToProcess = @('xml\fscps.tools.Types.ps1xml')
 	
 	# Format files (.ps1xml) to be loaded when importing this module
-	# FormatsToProcess = @('xml\fscps.tools.Format.ps1xml')
+    FormatsToProcess = @('xml\fscps.tools.Format.ps1xml')
 	
 	# Functions to export from this module
-	FunctionsToExport = ''
+	FunctionsToExport = @(
+		'Restart-FSCPSEnvironment'
+	)
 	
 	# Cmdlets to export from this module
 	CmdletsToExport = ''
@@ -62,14 +70,13 @@
 		#Support for PowerShellGet galleries.
 		PSData = @{
 			
-			# Tags applied to this module. These help with module discovery in online galleries.
-			# Tags = @()
-			
+			Tags                       = @('d365fo', 'Dynamics365', 'D365', 'Finance&Operations', 'FinanceOperations', 'FinanceAndOperations', 'Dynamics365FO', 'fscps', 'fsc-ps')
+
 			# A URL to the license for this module.
-			# LicenseUri = ''
-			
+			LicenseUri                 = "https://opensource.org/licenses/MIT"
+
 			# A URL to the main website for this project.
-			# ProjectUri = ''
+			ProjectUri                 = 'https://github.com/onikolaiev/fscps.tools'
 			
 			# A URL to an icon representing this module.
 			# IconUri = ''

@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\fscps.tools\bin</OutputPath>
-    <DocumentationFile>..\..\..\fscps.tools\bin\fscps.tools.xml</DocumentationFile>
+    <OutputPath>..\..\fscps.tools\bin</OutputPath>
+    <DocumentationFile>..\..\fscps.tools\bin\fscps.tools.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Release)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\fscps.tools\bin</OutputPath>
-    <DocumentationFile>..\..\..\fscps.tools\bin\fscps.tools.xml</DocumentationFile>
+    <OutputPath>..\..\fscps.tools\bin</OutputPath>
+    <DocumentationFile>..\..\fscps.tools\bin\fscps.tools.xml</DocumentationFile>
   </PropertyGroup>
   
   <PropertyGroup>

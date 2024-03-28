@@ -49,41 +49,55 @@ Write-PSFMessage -Level Important -Message "Creating and populating publishing d
 $publishDir = New-Item -Path $WorkingDirectory -Name publish -ItemType Directory -Force
 Copy-Item -Path "$($WorkingDirectory)\fscps.tools" -Destination $publishDir.FullName -Recurse -Force
 
-#region Gather text data to compile
+
+# Create commands.ps1
 $text = @()
-$processed = @()
-
-# Gather Stuff to run before
-foreach ($filePath in (& "$($PSScriptRoot)\..\fscps.tools\internal\scripts\preimport.ps1"))
-{
-	if ([string]::IsNullOrWhiteSpace($filePath)) { continue }
-	
-	$item = Get-Item $filePath
-	if ($item.PSIsContainer) { continue }
-	if ($item.FullName -in $processed) { continue }
-	$text += [System.IO.File]::ReadAllText($item.FullName)
-	$processed += $item.FullName
-}
-
-# Gather commands
 Get-ChildItem -Path "$($publishDir.FullName)\fscps.tools\internal\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
 	$text += [System.IO.File]::ReadAllText($_.FullName)
 }
 Get-ChildItem -Path "$($publishDir.FullName)\fscps.tools\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
 	$text += [System.IO.File]::ReadAllText($_.FullName)
 }
+$text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\fscps.tools\commands.ps1"
 
-# Gather stuff to run afterwards
-foreach ($filePath in (& "$($PSScriptRoot)\..\fscps.tools\internal\scripts\postimport.ps1"))
+#region Gather text data to compile
+# Create resourcesBefore.ps1
+$processed = @()
+$text = @()
+foreach ($line in (Get-Content "$($PSScriptRoot)\filesBefore.txt" | Where-Object { $_ -notlike "#*" }))
 {
-	if ([string]::IsNullOrWhiteSpace($filePath)) { continue }
+	if ([string]::IsNullOrWhiteSpace($line)) { continue }
 	
-	$item = Get-Item $filePath
-	if ($item.PSIsContainer) { continue }
-	if ($item.FullName -in $processed) { continue }
-	$text += [System.IO.File]::ReadAllText($item.FullName)
-	$processed += $item.FullName
+	$basePath = Join-Path "$($publishDir.FullName)\fscps.tools" $line
+	foreach ($entry in (Resolve-PSFPath -Path $basePath))
+	{
+		$item = Get-Item $entry
+		if ($item.PSIsContainer) { continue }
+		if ($item.FullName -in $processed) { continue }
+		$text += [System.IO.File]::ReadAllText($item.FullName)
+		$processed += $item.FullName
+	}
 }
+if ($text) { $text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\fscps.tools\resourcesBefore.ps1" }
+
+# Create resourcesAfter.ps1
+$processed = @()
+$text = @()
+foreach ($line in (Get-Content "$($PSScriptRoot)\filesAfter.txt" | Where-Object { $_ -notlike "#*" }))
+{
+	if ([string]::IsNullOrWhiteSpace($line)) { continue }
+	
+	$basePath = Join-Path "$($publishDir.FullName)\fscps.tools" $line
+	foreach ($entry in (Resolve-PSFPath -Path $basePath))
+	{
+		$item = Get-Item $entry
+		if ($item.PSIsContainer) { continue }
+		if ($item.FullName -in $processed) { continue }
+		$text += [System.IO.File]::ReadAllText($item.FullName)
+		$processed += $item.FullName
+	}
+}
+if ($text) { $text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\fscps.tools\resourcesAfter.ps1" }
 #endregion Gather text data to compile
 
 #region Update the psm1 file

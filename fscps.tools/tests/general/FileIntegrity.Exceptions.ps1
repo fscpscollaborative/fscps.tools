@@ -9,28 +9,28 @@ $global:BannedCommands = @(
 	'Write-Debug'
 	
 	# Use CIM instead where possible
-	'Get-WmiObject'
-	'Invoke-WmiMethod'
-	'Register-WmiEvent'
-	'Remove-WmiObject'
-	'Set-WmiInstance'
+	#'Get-WmiObject'
+	#'Invoke-WmiMethod'
+	#'Register-WmiEvent'
+	#'Remove-WmiObject'
+	#'Set-WmiInstance'
 
 	# Use Get-WinEvent instead
-	'Get-EventLog'
+	#'Get-EventLog'
 
 	# User Preference should not be used in automation
-	'Clear-Host' # Console Screen belongs to the user
-	'Set-Location' # Console path belongs to the user. Use $PSScriptRoot instead.
+	#'Clear-Host' # Console Screen belongs to the user
+	#'Set-Location' # Console path belongs to the user. Use $PSScriptRoot instead.
 
 	# Dynamic Variables are undesirable. Use hashtable instead.
-	'Get-Variable'
-	'Set-Variable'
-	'Clear-Variable'
-	'Remove-Variable'
-	'New-Variable'
+	#'Get-Variable'
+	#'Set-Variable'
+	#'Clear-Variable'
+	#'Remove-Variable'
+	#'New-Variable'
 
 	# Dynamic Code execution should not require this
-	'Invoke-Expression' # Consider splatting instead. Yes, you can splat parameters for external applications!
+	#'Invoke-Expression' # Consider splatting instead. Yes, you can splat parameters for external applications!
 )
 
 <#

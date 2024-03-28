@@ -8,7 +8,9 @@ After building the module, this file will be completely ignored, adding anything
 - Could break the build process
 #>
 
-$moduleRoot = Split-Path (Split-Path $PSScriptRoot)
 
 # Load the strings used in messages
-"$moduleRoot\internal\scripts\strings.ps1"
+. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\strings.ps1"
+
+# Load Enums
+. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\enums.ps1"

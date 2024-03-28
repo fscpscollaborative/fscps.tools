@@ -1,5 +1,5 @@
-﻿New-PSFLicense -Product 'fscps.tools' -Manufacturer 'remix' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2024-03-27") -Text @"
-Copyright (c) 2024 remix
+﻿New-PSFLicense -Product 'fscps.tools' -Manufacturer 'onikolaiev' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2024-03-27") -Text @"
+Copyright (c) 2024 Oleksandr Nikolaiev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

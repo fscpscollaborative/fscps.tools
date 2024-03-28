@@ -17,7 +17,6 @@ This is important when testing for paths.
 $importIndividualFiles = Get-PSFConfigValue -FullName fscps.tools.Import.IndividualFiles -Fallback $false
 if ($fscps.tools_importIndividualFiles) { $importIndividualFiles = $true }
 if (Test-Path (Resolve-PSFPath -Path "$($script:ModuleRoot)\..\.git" -SingleItem -NewChild)) { $importIndividualFiles = $true }
-if ("<was not compiled>" -eq '<was not compiled>') { $importIndividualFiles = $true }
 	
 function Import-ModuleFile
 {
@@ -50,36 +49,42 @@ function Import-ModuleFile
 	else { $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($resolvedPath))), $null, $null) }
 }
 
-#region Load individual files
+
 if ($importIndividualFiles)
 {
 	# Execute Preimport actions
-	foreach ($path in (& "$ModuleRoot\internal\scripts\preimport.ps1")) {
-		. Import-ModuleFile -Path $path
-	}
-	
+	. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\preimport.ps1"
+
 	# Import all internal functions
 	foreach ($function in (Get-ChildItem "$ModuleRoot\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
 		. Import-ModuleFile -Path $function.FullName
 	}
-	
+
 	# Import all public functions
 	foreach ($function in (Get-ChildItem "$ModuleRoot\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
 		. Import-ModuleFile -Path $function.FullName
 	}
-	
+
 	# Execute Postimport actions
-	foreach ($path in (& "$ModuleRoot\internal\scripts\postimport.ps1")) {
-		. Import-ModuleFile -Path $path
+	. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\postimport.ps1"
+}
+else
+{
+	if (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\resourcesBefore.ps1" -SingleItem -NewChild))
+	{
+		. Import-ModuleFile -Path "$($script:ModuleRoot)\resourcesBefore.ps1"
 	}
-	
-	# End it here, do not load compiled code below
-	return
+
+	. Import-ModuleFile -Path "$($script:ModuleRoot)\commands.ps1"
+
+	if (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\resourcesAfter.ps1" -SingleItem -NewChild))
+	{
+		. Import-ModuleFile -Path "$($script:ModuleRoot)\resourcesAfter.ps1"
+	}
 }
 #endregion Load individual files
-
 #region Load compiled code
 "<compile code into here>"
 #endregion Load compiled code

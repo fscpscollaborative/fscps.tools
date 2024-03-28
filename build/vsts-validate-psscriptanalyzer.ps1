@@ -1,10 +1,7 @@
 ﻿param (
-    $TestGeneral = $true,
+    $TestPublic = $true,
 	
-    $TestFunctions = $true,
-
-	$Exclude = ""
-
+    $TestInternal = $true
 )
 
 # Guide for available variables and working with secrets:
@@ -30,4 +27,4 @@ foreach ($item in $modules) {
 
 Import-Module "Pester" -MaximumVersion 4.99.99 -Force
 
-& "$PSScriptRoot\..\fscps.tools\tests\pester.ps1" -TestGeneral $TestGeneral -TestFunctions $TestFunctions -Exclude $Exclude
+& "$PSScriptRoot\..\fscps.tools\tests\pester-PSScriptAnalyzer.ps1" -TestPublic $TestPublic -TestInternal $TestInternal

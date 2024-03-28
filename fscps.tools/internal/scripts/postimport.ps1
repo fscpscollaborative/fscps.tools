@@ -8,19 +8,27 @@ After building the module, this file will be completely ignored, adding anything
 - Could break the build process
 #>
 
-$moduleRoot = Split-Path (Split-Path $PSScriptRoot)
-
 # Load Configurations
-(Get-ChildItem "$moduleRoot\internal\configurations\*.ps1" -ErrorAction Ignore).FullName
-
-# Load Scriptblocks
-(Get-ChildItem "$moduleRoot\internal\scriptblocks\*.ps1" -ErrorAction Ignore).FullName
+foreach ($file in (Get-ChildItem "$ModuleRoot\internal\configurations\*.ps1" -ErrorAction Ignore)) {
+	. Import-ModuleFile -Path $file.FullName
+}
 
 # Load Tab Expansion
-(Get-ChildItem "$moduleRoot\internal\tepp\*.tepp.ps1" -ErrorAction Ignore).FullName
+foreach ($file in (Get-ChildItem "$ModuleRoot\internal\tepp\*.tepp.ps1" -ErrorAction Ignore)) {
+	. Import-ModuleFile -Path $file.FullName
+}
+
+# Load Scriptblocks
+(Get-ChildItem "$ModuleRoot\internal\scriptblocks\*.ps1" -ErrorAction Ignore).FullName
 
 # Load Tab Expansion Assignment
-"$moduleRoot\internal\tepp\assignment.ps1"
+. Import-ModuleFile -Path "$ModuleRoot\internal\tepp\assignment.ps1"
 
 # Load License
-"$moduleRoot\internal\scripts\license.ps1"
+#."$ModuleRoot\internal\scripts\license.ps1"
+
+# Load Variables
+. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\variables.ps1"
+
+# Load dot net assemblies
+. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\load-dotnet-assemblies.ps1"
