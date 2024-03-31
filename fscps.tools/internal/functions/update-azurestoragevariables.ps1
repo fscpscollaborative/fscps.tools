@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Update the Azure Storage config variables

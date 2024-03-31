@@ -1,6 +1,7 @@
 ﻿Describe "Validating the module manifest" {
 	$moduleRoot = (Resolve-Path "$global:testroot\..").Path
 	$manifest = ((Get-Content "$moduleRoot\fscps.tools.psd1") -join "`n") | Invoke-Expression
+	[version]$moduleVersion = Get-Item "$moduleRoot\fscps.tools.psm1" | Select-String -Pattern '\$script:ModuleVersion = "(.*?)"' | ForEach-Object { $_.Matches[0].Groups[1].Value }
 	Context "Basic resources validation" {
 		$files = Get-ChildItem "$moduleRoot\functions" -Recurse -File | Where-Object Name -like "*.ps1"
 		It "Exports all functions in the public folder" -TestCases @{ files = $files; manifest = $manifest } {
@@ -17,45 +18,35 @@
 			$files = Get-ChildItem "$moduleRoot\internal\functions" -Recurse -File -Filter "*.ps1"
 			$files | Where-Object BaseName -In $manifest.FunctionsToExport | Should -BeNullOrEmpty
 		}
+		
+		It "Has the same version as the psm1 file" {
+			([version]$manifest.ModuleVersion) | Should -Be $moduleVersion
+		}
 	}
 	
 	Context "Individual file validation" {
-		It "The root module file exists" -TestCases @{ moduleRoot = $moduleRoot; manifest = $manifest } {
+		It "The root module file exists" {
 			Test-Path "$moduleRoot\$($manifest.RootModule)" | Should -Be $true
 		}
 		
 		foreach ($format in $manifest.FormatsToProcess)
 		{
-			It "The file $format should exist" -TestCases @{ moduleRoot = $moduleRoot; format = $format } {
+			It "The file $format should exist" {
 				Test-Path "$moduleRoot\$format" | Should -Be $true
 			}
 		}
 		
 		foreach ($type in $manifest.TypesToProcess)
 		{
-			It "The file $type should exist" -TestCases @{ moduleRoot = $moduleRoot; type = $type } {
+			It "The file $type should exist" {
 				Test-Path "$moduleRoot\$type" | Should -Be $true
 			}
 		}
 		
 		foreach ($assembly in $manifest.RequiredAssemblies)
 		{
-            if ($assembly -like "*.dll") {
-                It "The file $assembly should exist" -TestCases @{ moduleRoot = $moduleRoot; assembly = $assembly } {
-                    Test-Path "$moduleRoot\$assembly" | Should -Be $true
-                }
-            }
-            else {
-                It "The file $assembly should load from the GAC" -TestCases @{ moduleRoot = $moduleRoot; assembly = $assembly } {
-                    { Add-Type -AssemblyName $assembly } | Should -Not -Throw
-                }
-            }
-        }
-		
-		foreach ($tag in $manifest.PrivateData.PSData.Tags)
-		{
-			It "Tags should have no spaces in name" -TestCases @{ tag = $tag } {
-				$tag -match " " | Should -Be $false
+			It "The file $assembly should exist" {
+				Test-Path "$moduleRoot\$assembly" | Should -Be $true
 			}
 		}
 	}

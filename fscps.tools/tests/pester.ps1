@@ -20,14 +20,14 @@ $global:testroot = $PSScriptRoot
 $global:__pester_data = @{ }
 
 Remove-Module fscps.tools -ErrorAction Ignore
-Import-Module "$PSScriptRoot\..\fscps.tools.psd1"
-Import-Module "$PSScriptRoot\..\fscps.tools.psm1" -Force
-
+Import-Module "$global:testroot\..\fscps.tools.psd1"
+Import-Module "$global:testroot\..\fscps.tools.psm1" -Force
+Write-PSFMessage -Level Important -Message "Importing Module end"
 # Need to import explicitly so we can use the configuration class
-Import-Module Pester
+Import-Module Pester -Force
 
 Write-PSFMessage -Level Important -Message "Creating test result folder"
-$null = New-Item -Path "$PSScriptRoot\..\.." -Name TestResults -ItemType Directory -Force
+$null = New-Item -Path "$global:testroot\..\.." -Name TestResults -ItemType Directory -Force
 
 $totalFailed = 0
 $totalRun = 0
@@ -37,11 +37,10 @@ $config = [PesterConfiguration]::Default
 $config.TestResult.Enabled = $true
 
 #region Run General Tests
-if ($TestGeneral)
-{
+if ($TestGeneral) {
 	Write-PSFMessage -Level Important -Message "Modules imported, proceeding with general tests"
-	foreach ($file in (Get-ChildItem "$PSScriptRoot\general" | Where-Object Name -like "*.Tests.ps1"))
-	{
+	foreach ($file in (Get-ChildItem "$PSScriptRoot\general" -Filter "*.Tests.ps1")) {
+	
 		if ($file.Name -notlike $Include) { continue }
 		if ($file.Name -like $Exclude) { continue }
 
@@ -56,7 +55,7 @@ if ($TestGeneral)
 			$totalRun += $result.TotalCount
 			$totalFailed += $result.FailedCount
 			$result.Tests | Where-Object Result -ne 'Passed' | ForEach-Object {
-				$testresults += [pscustomobject]@{
+								$testresults += [pscustomobject]@{
 					Block    = $_.Block
 					Name	 = "It $($_.Name)"
 					Result   = $_.Result
@@ -71,14 +70,13 @@ if ($TestGeneral)
 $global:__pester_data.ScriptAnalyzer | Out-Host
 
 #region Test Commands
-if ($TestFunctions)
-{
+if ($TestFunctions) {
 	Write-PSFMessage -Level Important -Message "Proceeding with individual tests"
-	foreach ($file in (Get-ChildItem "$PSScriptRoot\functions" -Recurse -File | Where-Object Name -like "*Tests.ps1"))
-	{
+	foreach ($file in (Get-ChildItem "$PSScriptRoot\functions" -Recurse -File -Filter "*Tests.ps1")) {
+	
 		if ($file.Name -notlike $Include) { continue }
 		if ($file.Name -like $Exclude) { continue }
-		
+	
 		Write-PSFMessage -Level Significant -Message "  Executing $($file.Name)"
 		$config.TestResult.OutputPath = Join-Path "$PSScriptRoot\..\..\TestResults" "TEST-$($file.BaseName).xml"
 		$config.Run.Path = $file.FullName
@@ -90,7 +88,7 @@ if ($TestFunctions)
 			$totalRun += $result.TotalCount
 			$totalFailed += $result.FailedCount
 			$result.Tests | Where-Object Result -ne 'Passed' | ForEach-Object {
-				$testresults += [pscustomobject]@{
+								$testresults += [pscustomobject]@{
 					Block    = $_.Block
 					Name	 = "It $($_.Name)"
 					Result   = $_.Result
@@ -107,7 +105,6 @@ $testresults | Sort-Object Describe, Context, Name, Result, Message | Format-Lis
 if ($totalFailed -eq 0) { Write-PSFMessage -Level Critical -Message "All <c='em'>$totalRun</c> tests executed without a single failure!" }
 else { Write-PSFMessage -Level Critical -Message "<c='em'>$totalFailed tests</c> out of <c='sub'>$totalRun</c> tests failed!" }
 
-if ($totalFailed -gt 0)
-{
+if ($totalFailed -gt 0) {
 	throw "$totalFailed / $totalRun tests failed!"
 }

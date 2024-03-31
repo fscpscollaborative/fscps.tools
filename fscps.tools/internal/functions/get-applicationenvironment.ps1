@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Load all necessary information about the D365 instance

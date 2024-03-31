@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Test if a given registry key exists or not

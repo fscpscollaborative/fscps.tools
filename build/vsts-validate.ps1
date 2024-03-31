@@ -28,6 +28,6 @@ foreach ($item in $modules) {
     }
 }
 
-Import-Module "Pester" -MaximumVersion 4.99.99 -Force
+Import-Module "Pester" -MaximumVersion 5.5.0 -Force
 
 & "$PSScriptRoot\..\fscps.tools\tests\pester.ps1" -TestGeneral $TestGeneral -TestFunctions $TestFunctions -Exclude $Exclude

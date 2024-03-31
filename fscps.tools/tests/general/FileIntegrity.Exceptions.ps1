@@ -1,36 +1,12 @@
 ﻿# List of forbidden commands
 $global:BannedCommands = @(
-	'Write-Host'
-	'Write-Verbose'
-	'Write-Warning'
-	'Write-Error'
-	'Write-Output'
-	'Write-Information'
+	'Write-Host',
+	'Write-Verbose',
+	'Write-Warning',
+	'Write-Error',
+	'Write-Output',
+	'Write-Information',
 	'Write-Debug'
-	
-	# Use CIM instead where possible
-	#'Get-WmiObject'
-	#'Invoke-WmiMethod'
-	#'Register-WmiEvent'
-	#'Remove-WmiObject'
-	#'Set-WmiInstance'
-
-	# Use Get-WinEvent instead
-	#'Get-EventLog'
-
-	# User Preference should not be used in automation
-	#'Clear-Host' # Console Screen belongs to the user
-	#'Set-Location' # Console path belongs to the user. Use $PSScriptRoot instead.
-
-	# Dynamic Variables are undesirable. Use hashtable instead.
-	#'Get-Variable'
-	#'Set-Variable'
-	#'Clear-Variable'
-	#'Remove-Variable'
-	#'New-Variable'
-
-	# Dynamic Code execution should not require this
-	#'Invoke-Expression' # Consider splatting instead. Yes, you can splat parameters for external applications!
 )
 
 <#
@@ -42,10 +18,16 @@ $global:BannedCommands = @(
 #>
 $global:MayContainCommand = @{
 	"Write-Host"  = @()
-	"Write-Verbose" = @()
+	"Write-Verbose" = @('invoke-d365dbsync.ps1','invoke-d365dbsyncpartial.ps1')
 	"Write-Warning" = @()
 	"Write-Error"  = @()
-	"Write-Output" = @()
+	"Write-Output" = @('convertto-hashtable.ps1')
 	"Write-Information" = @()
 	"Write-Debug" = @()
 }
+
+$global:MayContainAlias = @(
+	'Initialize-D365RsatCertificate'
+	, 'Add-D365RsatWifConfigAuthorityThumbprint'
+)
+

@@ -3,7 +3,7 @@
 	RootModule = 'fscps.tools.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '1.0.2'
+	ModuleVersion = '0.1.6'
 	
 	# ID used to uniquely identify this module
 	GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
@@ -32,7 +32,7 @@
 		, @{ ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.9' }
 		, @{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.3.0' }
 		, @{ ModuleName = 'ImportExcel'; ModuleVersion = '7.1.0' }
-		, @{ ModuleName = 'Pester'; ModuleVersion = '4.10.1' }
+		, @{ ModuleName = 'Pester'; ModuleVersion = '5.5.0' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
@@ -46,7 +46,9 @@
 	
 	# Functions to export from this module
 	FunctionsToExport = @(
-		'Restart-FSCPSEnvironment'
+		 'Get-FSCPSSettings'
+		 
+		,'Install-FSCPSSoftware'
 	)
 	
 	# Cmdlets to export from this module
@@ -70,7 +72,7 @@
 		#Support for PowerShellGet galleries.
 		PSData = @{
 			
-			Tags                       = @('d365fo', 'Dynamics365', 'D365', 'Finance&Operations', 'FinanceOperations', 'FinanceAndOperations', 'Dynamics365FO', 'fscps', 'fsc-ps')
+			Tags                       = @('d365fo', 'd365fsc', 'Dynamics365', 'D365', 'Finance&Operations', 'FinanceOperations', 'FinanceAndOperations', 'Dynamics365FO', 'fscps', 'fsc-ps')
 
 			# A URL to the license for this module.
 			LicenseUri                 = "https://opensource.org/licenses/MIT"

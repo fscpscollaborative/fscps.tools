@@ -14,3 +14,4 @@ After building the module, this file will be completely ignored, adding anything
 
 # Load Enums
 . Import-ModuleFile -Path "$ModuleRoot\internal\scripts\enums.ps1"
+

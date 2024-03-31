@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Update the LCS API config variables

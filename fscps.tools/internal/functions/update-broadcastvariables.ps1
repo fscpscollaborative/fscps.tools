@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Update the broadcast message config variables
