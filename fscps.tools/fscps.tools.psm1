@@ -54,7 +54,6 @@ function Import-ModuleFile
 
 if ($importIndividualFiles)
 {
-	throw
 	# Execute Preimport actions
 	. Import-ModuleFile -Path "$($script:ModuleRoot)\internal\scripts\preimport.ps1"
 
