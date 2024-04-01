@@ -123,6 +123,7 @@ if ($AutoVersion)
 	$newBuildNumber = $remoteVersion.Build + 1
 	[version]$localVersion = (Import-PowerShellDataFile -Path "$($publishDir.FullName)\fscps.tools\fscps.tools.psd1").ModuleVersion
 	Update-ModuleManifest -Path "$($publishDir.FullName)\fscps.tools\fscps.tools.psd1" -ModuleVersion "$($localVersion.Major).$($localVersion.Minor).$($newBuildNumber)"
+	Update-ModuleManifest -Path "$($WorkingDirectory)\fscps.tools\fscps.tools.psd1" -ModuleVersion "$($localVersion.Major).$($localVersion.Minor).$($newBuildNumber)"
 }
 #endregion Updating the Module Version
 
