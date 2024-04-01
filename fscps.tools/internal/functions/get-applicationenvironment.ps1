@@ -18,8 +18,8 @@
 function Get-ApplicationEnvironment {
     [System.Collections.ArrayList] $Files2Process = New-Object -TypeName "System.Collections.ArrayList"
 
-    $AOSPath = Join-Path $script:ServiceDrive "\AOSService\webroot\bin"
-    
+    $AOSPath = Join-Path $script:ServiceDrive "\AOSService\webroot\bin"    
+    Write-PSFMessage -Level Verbose -Message "AOSPath $AOSPath"
     Write-PSFMessage -Level Verbose -Message "Testing if we are running on a AOS server or not."
     if (-not (Test-Path -Path $AOSPath -PathType Container)) {
         Write-PSFMessage -Level Verbose -Message "The machine is NOT an AOS server."

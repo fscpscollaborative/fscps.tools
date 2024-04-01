@@ -124,7 +124,7 @@ function Get-FSCPSSettings {
             )
         
             # Add missing properties in OrderedDictionary
-        
+
             $src.PSObject.Properties.GetEnumerator() | ForEach-Object {
                 $prop = $_.Name
                 $srcProp = $src."$prop"
@@ -203,7 +203,8 @@ function Get-FSCPSSettings {
                     $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
            
                     # check settingsJson.version and do modifications if needed
-             
+                    Write-PSFMessage -Level Important -Message $res
+                    Write-PSFMessage -Level Important -Message $settingsJson
                     MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
     
                     <#if ($settingsJson.PSObject.Properties.Name -eq "ConditionalSettings") {
