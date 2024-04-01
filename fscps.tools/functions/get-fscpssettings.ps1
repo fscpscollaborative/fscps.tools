@@ -57,7 +57,7 @@ function Get-FSCPSSettings {
 
         if($env:GITHUB_REPOSITORY)# If GitHub context
         {
-            Write-PSFMessage -Level Warning -Message "Running on GitHub"
+            Write-PSFMessage -Level Important -Message "Running on GitHub"
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
@@ -83,7 +83,7 @@ function Get-FSCPSSettings {
         }
         elseif($env:AGENT_ID)# If Azure DevOps context
         {
-            Write-PSFMessage -Level Warning -Message "Running on Azure"
+            Write-PSFMessage -Level Important -Message "Running on Azure"
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
@@ -100,7 +100,7 @@ function Get-FSCPSSettings {
 
         }
         else { # If Desktop or other
-            Write-PSFMessage -Level Warning -Message "Running on desktop"
+            Write-PSFMessage -Level Important -Message "Running on desktop"
             if($RepositoryRootPath -eq "")
             {
                 throw "RepositoryRootPath variable should be passed if running on the cloud/personal computer"

@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.16'
+ModuleVersion = '0.1.17'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -53,10 +53,8 @@ PowerShellVersion = '5.0'
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.10.318'; }, 
                @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; }, 
-               @{ModuleName = 'AzureAd'; ModuleVersion = '2.0.1.16'; }, 
                @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.9'; }, 
                @{ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.3.0'; }, 
-               @{ModuleName = 'ImportExcel'; ModuleVersion = '7.1.0'; }, 
                @{ModuleName = 'Pester'; ModuleVersion = '5.5.0'; })
 
 # Assemblies that must be loaded prior to importing this module
