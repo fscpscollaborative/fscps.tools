@@ -17,6 +17,7 @@ This is important when testing for paths.
 $importIndividualFiles = Get-PSFConfigValue -FullName fscps.tools.Import.IndividualFiles -Fallback $false
 if ($fscps.tools_importIndividualFiles) { $importIndividualFiles = $true }
 if (Test-Path (Resolve-PSFPath -Path "$($script:ModuleRoot)\..\.git" -SingleItem -NewChild)) { $importIndividualFiles = $true }
+if (-not (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\commands.ps1" -SingleItem -NewChild))) { $importIndividualFiles = $true }
 	
 function Import-ModuleFile
 {

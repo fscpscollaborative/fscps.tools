@@ -1,5 +1,5 @@
 ﻿TOPIC
-	about_ffscps.tools
+	about_fscps.tools
 	
 SHORT DESCRIPTION
 	Explains how to use the fscps.tools powershell module

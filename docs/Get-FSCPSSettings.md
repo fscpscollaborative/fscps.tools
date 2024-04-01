@@ -13,7 +13,8 @@ Get the LCS configuration details
 ## SYNTAX
 
 ```
-Get-FSCPSSettings [-OutputAsHashtable] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-FSCPSSettings [[-RepositoryRootPath] <String>] [-OutputAsHashtable] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +41,21 @@ This will output the current LCS API configuration.
 The object returned will be a Hashtable.
 
 ## PARAMETERS
+
+### -RepositoryRootPath
+Set root path of the project folder
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -OutputAsHashtable
 Instruct the cmdlet to return a hashtable object
@@ -84,18 +100,6 @@ Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
 Author: Mötz Jensen (@Splaxi)
 
 ## RELATED LINKS
-
-[Get-D365LcsApiToken]()
-
-[Get-D365LcsAssetValidationStatus]()
-
-[Get-D365LcsDeploymentStatus]()
-
-[Invoke-D365LcsApiRefreshToken]()
-
-[Invoke-D365LcsDeployment]()
-
-[Invoke-D365LcsUpload]()
 
 [Set-D365LcsApiConfig]()
 

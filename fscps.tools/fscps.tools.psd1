@@ -3,7 +3,7 @@
 	RootModule = 'fscps.tools.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.1.6'
+	ModuleVersion = '0.1.9'
 	
 	# ID used to uniquely identify this module
 	GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
@@ -46,8 +46,7 @@
 	
 	# Functions to export from this module
 	FunctionsToExport = @(
-		 'Get-FSCPSSettings'
-		 
+		 'Get-FSCPSSettings'		 
 		,'Install-FSCPSSoftware'
 	)
 	
@@ -85,6 +84,7 @@
 			
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''
+			ExternalModuleDependencies = @('PSDiagnostics')
 			
 		} # End of PSData hashtable
 		
