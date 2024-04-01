@@ -3,7 +3,7 @@
 	RootModule = 'fscps.tools.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.1.9'
+	ModuleVersion = '0.1.10'
 	
 	# ID used to uniquely identify this module
 	GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
