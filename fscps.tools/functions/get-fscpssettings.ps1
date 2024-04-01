@@ -57,6 +57,7 @@ function Get-FSCPSSettings {
 
         if($env:GITHUB_REPOSITORY)# If GitHub context
         {
+            Write-PSFMessage -Level Warning -Message "Running on GitHub"
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
@@ -82,6 +83,7 @@ function Get-FSCPSSettings {
         }
         elseif($env:AGENT_ID)# If Azure DevOps context
         {
+            Write-PSFMessage -Level Warning -Message "Running on Azure"
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
@@ -140,7 +142,7 @@ function Get-FSCPSSettings {
                 if ($src.PSObject.Properties.Name -eq $prop) {
                     $dstProp = $dst."$prop"
                     $srcProp = $src."$prop"
-                    $dstPropType = $dstProp.Value.GetType().Name
+                    $dstPropType = $dstProp.GetType().Name
                     $srcPropType = $srcProp.GetType().Name
                     if($dstPropType -eq 'Int32' -and $srcPropType -eq 'Int64')
                     {
@@ -169,7 +171,7 @@ function Get-FSCPSSettings {
                             }
                         }
                         else {
-                            Set-PSFConfig -FullName $dstProp.FullName -Value $srcProp
+                            Set-PSFConfig -FullName fscps.tools.settings.$prop -Value $srcProp
                             #$dst."$prop" = $srcProp
                         }
                     }
@@ -183,7 +185,7 @@ function Get-FSCPSSettings {
     
         foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
             $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
-            $res.$propertyName = $config
+            $res.$propertyName = $config.Value
         }
         
         $settingsFiles | ForEach-Object {

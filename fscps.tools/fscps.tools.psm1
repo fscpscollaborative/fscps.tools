@@ -55,18 +55,15 @@ if ($importIndividualFiles)
 {
 	# Execute Preimport actions
 	. Import-ModuleFile -Path "$($script:ModuleRoot)\internal\scripts\preimport.ps1"
-	Write-Host "Import Individiuals "
 	# Import all internal functions
 	foreach ($function in (Get-ChildItem "$($script:ModuleRoot)\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
-		Write-Host "Import internal\functions " $function
 		. Import-ModuleFile -Path $function.FullName
 	}
 
 	# Import all public functions
 	foreach ($function in (Get-ChildItem "$($script:ModuleRoot)\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
-		Write-Host "Import functions " $function
 		. Import-ModuleFile -Path $function.FullName
 	}
 
@@ -77,7 +74,6 @@ else
 {
 	if (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\resourcesBefore.ps1" -SingleItem -NewChild))
 	{
-		Write-Host "Import resourcesBefore "
 		. Import-ModuleFile -Path "$($script:ModuleRoot)\resourcesBefore.ps1"
 	}
 
@@ -85,7 +81,6 @@ else
 
 	if (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\resourcesAfter.ps1" -SingleItem -NewChild))
 	{
-		Write-Host "Import resourcesAfter "
 		. Import-ModuleFile -Path "$($script:ModuleRoot)\resourcesAfter.ps1"
 	}
 }
