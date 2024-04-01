@@ -61,10 +61,13 @@ function Get-FSCPSSettings {
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
+                Write-PSFMessage -Level Important -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
             }
             $fscpsFolderPath = Join-Path $RepositoryRootPath $fscpsFolderName
             $reposytoryName = "$env:GITHUB_REPOSITORY"
+            Write-PSFMessage -Level Important -Message "GITHUB_REPOSITORY is: $reposytoryName"
             $branchName = "$env:GITHUB_REF"
+            Write-PSFMessage -Level Important -Message "GITHUB_REF is: $branchName"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })      
             $gitHubFolder = ".github"
             if (!(Test-Path (Join-Path $RepositoryRootPath $gitHubFolder) -PathType Container)) {
@@ -72,6 +75,7 @@ function Get-FSCPSSettings {
                 $gitHubFolder = "..\$gitHubFolder"
             }
             $workflowName = "$env:GITHUB_WORKFLOW"
+            Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
 
             $settingsFiles += $fscmRepoSettingsFile
@@ -87,6 +91,7 @@ function Get-FSCPSSettings {
             if($RepositoryRootPath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
+                Write-PSFMessage -Level Important -Message "RepositoryRootPath is: $RepositoryRootPath"
             }
             $fscpsFolderPath = Join-Path $RepositoryRootPath $fscpsFolderName
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
