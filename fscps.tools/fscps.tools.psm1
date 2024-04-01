@@ -18,7 +18,7 @@ $importIndividualFiles = Get-PSFConfigValue -FullName fscps.tools.Import.Individ
 if ($fscps.tools_importIndividualFiles) { $importIndividualFiles = $true }
 if (Test-Path (Resolve-PSFPath -Path "$($script:ModuleRoot)\..\.git" -SingleItem -NewChild)) { $importIndividualFiles = $true }
 if (-not (Test-Path (Resolve-PSFPath "$($script:ModuleRoot)\commands.ps1" -SingleItem -NewChild))) { $importIndividualFiles = $true }
-	
+
 function Import-ModuleFile
 {
 	<#
@@ -54,23 +54,24 @@ function Import-ModuleFile
 
 if ($importIndividualFiles)
 {
+	throw
 	# Execute Preimport actions
-	. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\preimport.ps1"
+	. Import-ModuleFile -Path "$($script:ModuleRoot)\internal\scripts\preimport.ps1"
 
 	# Import all internal functions
-	foreach ($function in (Get-ChildItem "$ModuleRoot\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
+	foreach ($function in (Get-ChildItem "$($script:ModuleRoot)\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
 		. Import-ModuleFile -Path $function.FullName
 	}
 
 	# Import all public functions
-	foreach ($function in (Get-ChildItem "$ModuleRoot\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
+	foreach ($function in (Get-ChildItem "$($script:ModuleRoot)\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
 	{
 		. Import-ModuleFile -Path $function.FullName
 	}
 
 	# Execute Postimport actions
-	. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\postimport.ps1"
+	. Import-ModuleFile -Path "$($script:ModuleRoot)\internal\scripts\postimport.ps1"
 }
 else
 {
