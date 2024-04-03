@@ -97,7 +97,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
 
-Author: Mötz Jensen (@Splaxi)
+Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
 

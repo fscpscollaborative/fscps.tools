@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Get the LCS configuration details
+        Get the FSCPS configuration details
         
     .DESCRIPTION
-        Get the LCS configuration details from the configuration store
+        Get the FSCPS configuration details from the configuration store
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
         
@@ -17,13 +17,13 @@
     .EXAMPLE
         PS C:\> Get-FSCPSSettings
         
-        This will output the current LCS API configuration.
+        This will output the current FSCPS configuration.
         The object returned will be a PSCustomObject.
         
     .EXAMPLE
         PS C:\> Get-FSCPSSettings -OutputAsHashtable
         
-        This will output the current LCS API configuration.
+        This will output the current LFSCPS configuration.
         The object returned will be a Hashtable.
         
     .LINK
@@ -32,7 +32,7 @@
     .NOTES
         Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
         
-        Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 
@@ -44,9 +44,9 @@ function Get-FSCPSSettings {
         [switch] $OutputAsHashtable
     )
     begin{
-        $fscpsFolderName = (Get-PSFConfig -FullName "fscps.tools.settings.fscpsFolder").Value
-        $fscmSettingsFile = (Get-PSFConfig -FullName "fscps.tools.settings.fscpsSettingsFile").Value
-        $fscmRepoSettingsFile = (Get-PSFConfig -FullName "fscps.tools.settings.fscpsRepoSettingsFile").Value
+        $fscpsFolderName = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsFolder"
+        $fscmSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsSettingsFile"
+        $fscmRepoSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsRepoSettingsFile"
 
         $fscpsFolderPath = ""
         $settingsFiles = @()
@@ -70,19 +70,18 @@ function Get-FSCPSSettings {
             Write-PSFMessage -Level Important -Message "GITHUB_REF is: $branchName"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })      
             $gitHubFolder = ".github"
-            if (!(Test-Path (Join-Path $RepositoryRootPath $gitHubFolder) -PathType Container)) {
+           <#if (!(Test-Path (Join-Path $RepositoryRootPath $gitHubFolder) -PathType Container)) {
                 $fscmRepoSettingsFile = "..\$fscmRepoSettingsFile"
                 $gitHubFolder = "..\$gitHubFolder"
-            }
+            }#> 
             $workflowName = "$env:GITHUB_WORKFLOW"
             Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
 
-            $settingsFiles += $fscmRepoSettingsFile
             $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += (Join-Path $gitHubFolder $fscmRepoSettingsFile)            
             $settingsFiles += (Join-Path $gitHubFolder "$workflowName.settings.json")
-            $settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
-            $settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
+            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
             
         }
         elseif($env:AGENT_ID)# If Azure DevOps context
@@ -98,10 +97,10 @@ function Get-FSCPSSettings {
             $branchName = "$env:BUILD_SOURCEBRANCHNAME"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
-            $settingsFiles += $fscmRepoSettingsFile
+            #$settingsFiles += $fscmRepoSettingsFile
             $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
-            $settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
-            $settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
+            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
+            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
 
         }
         else { # If Desktop or other
@@ -186,25 +185,23 @@ function Get-FSCPSSettings {
     }
     process{
         Invoke-TimeSignal -Start
-        Write-PSFMessage -Level Verbose -Message "//------------------------------- Reading current FSC-PS settings -------------------------------//"
+        Write-PSFMessage -Level Important -Message "//------------------------------- Reading current FSC-PS settings -------------------------------//"
     
         foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
             $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
             $res.$propertyName = $config.Value
         }
-        
+        Write-PSFMessage -Level Important -Message "SettingsFiles $settingsFiles" 
+
         $settingsFiles | ForEach-Object {
             $settingsFile = $_
             $settingsPath = Join-Path $RepositoryRootPath $settingsFile
-            Write-PSFMessage -Level Verbose -Message "Checking $settingsFile"
+            Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
             if (Test-Path $settingsPath) {
                 try {
-                    Write-PSFMessage -Level Verbose -Message "Reading $settingsFile"
                     $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
            
                     # check settingsJson.version and do modifications if needed
-                    Write-PSFMessage -Level Important -Message $res
-                    Write-PSFMessage -Level Important -Message $settingsJson
                     MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
     
                     <#if ($settingsJson.PSObject.Properties.Name -eq "ConditionalSettings") {

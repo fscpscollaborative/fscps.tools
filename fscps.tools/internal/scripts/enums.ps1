@@ -27,3 +27,10 @@ enum LcsAssetFileType {
     RetailSelfServicePackage = 28
     CommerceCloudScaleUnitExtension = 29
 }
+
+enum NuGetType {
+    ApplicationSuiteDevALM
+    ApplicationDevALM
+    PlatformDevALM
+    PlatformCompilerPackage
+}
