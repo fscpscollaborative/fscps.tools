@@ -40,7 +40,7 @@
         
 #>
 
-Function Get-FSCPSNuget {
+function Get-FSCPSNuget {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
@@ -49,7 +49,7 @@ Function Get-FSCPSNuget {
         [string] $Version,
         [Parameter(Mandatory = $true)]
         [NuGetType] $Type,
-        [string] $Path = $PSScriptRoot,
+        [string] $Path,
         [switch] $Force
     )
 
@@ -80,7 +80,6 @@ Function Get-FSCPSNuget {
             Default {}
         }
         $storageAccountContext = New-AzStorageContext -StorageAccountName $Script:NuGetStorageAccountName -SasToken $Script:NuGetStorageSASToken
-        
         if($Force)
         {
             $null = Test-PathExists $Path -Create -Type Container 
@@ -88,14 +87,11 @@ Function Get-FSCPSNuget {
         else{
             $null = Test-PathExists $Path -Type Container
         }
-        
     }
     
     PROCESS {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
-
         try {
             $destinationNugetFilePath = Join-Path $Path $packageName 
             
@@ -111,10 +107,15 @@ Function Get-FSCPSNuget {
                 $download = $blobSize -ne $localSize
             }
 
+            if($Force)
+            {
+                $download = $true
+            }
+
             if($download)
             {
                 $blob = Get-AzStorageBlobContent -Context $storageAccountContext -Container $Script:NuGetStorageContainer -Blob $packageName -Destination $destinationNugetFilePath -ConcurrentTaskCount 10 -Force
-                $blob | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$packageName.Length } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($blob.LastModified) } }
+                $blob | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$blob.Length } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($blob.LastModified) } }
             }
         }
         catch {

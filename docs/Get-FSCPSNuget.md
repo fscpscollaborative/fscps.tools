@@ -26,21 +26,21 @@ Full list of NuGet: https://lcs.dynamics.com/V2/SharedAssetLibrary and select Nu
 
 ### EXAMPLE 1
 ```
-Get-FSCPSNugetPackage -Version "10.0.1777.99" -Type PlatformCompilerPackage
+Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage
 ```
 
 This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the current folder
 
 ### EXAMPLE 2
 ```
-Get-FSCPSNugetPackage -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp"
+Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp"
 ```
 
 This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the c:\temp folder
 
 ### EXAMPLE 3
 ```
-Get-FSCPSNugetPackage -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp" -Force
+Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp" -Force
 ```
 
 This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the c:\temp folder and override if the package with the same name exists.

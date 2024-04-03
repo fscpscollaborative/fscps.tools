@@ -15,15 +15,15 @@
         Instruct the cmdlet to return a hashtable object
 
     .EXAMPLE
-        PS C:\> Get-FSCPSSettings
+        PS C:\> Get-FSCPSSettingsList
         
         This will output the current FSCPS configuration.
         The object returned will be a PSCustomObject.
         
     .EXAMPLE
-        PS C:\> Get-FSCPSSettings -OutputAsHashtable
+        PS C:\> Get-FSCPSSettingsList -OutputAsHashtable
         
-        This will output the current LFSCPS configuration.
+        This will output the current FSCPS configuration.
         The object returned will be a Hashtable.
         
     .LINK
@@ -36,9 +36,9 @@
         
 #>
 
-function Get-FSCPSSettings {
+function Get-FSCPSSettingsList {
     [CmdletBinding()]
-    [OutputType()]
+    [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
         [string] $RepositoryRootPath,
         [switch] $OutputAsHashtable
@@ -48,7 +48,6 @@ function Get-FSCPSSettings {
         $fscmSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsSettingsFile"
         $fscmRepoSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsRepoSettingsFile"
 
-        $fscpsFolderPath = ""
         $settingsFiles = @()
         $res = [Ordered]@{}
 
@@ -63,17 +62,14 @@ function Get-FSCPSSettings {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
                 Write-PSFMessage -Level Important -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
             }
-            $fscpsFolderPath = Join-Path $RepositoryRootPath $fscpsFolderName
+
             $reposytoryName = "$env:GITHUB_REPOSITORY"
             Write-PSFMessage -Level Important -Message "GITHUB_REPOSITORY is: $reposytoryName"
             $branchName = "$env:GITHUB_REF"
             Write-PSFMessage -Level Important -Message "GITHUB_REF is: $branchName"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })      
             $gitHubFolder = ".github"
-           <#if (!(Test-Path (Join-Path $RepositoryRootPath $gitHubFolder) -PathType Container)) {
-                $fscmRepoSettingsFile = "..\$fscmRepoSettingsFile"
-                $gitHubFolder = "..\$gitHubFolder"
-            }#> 
+
             $workflowName = "$env:GITHUB_WORKFLOW"
             Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
@@ -81,7 +77,6 @@ function Get-FSCPSSettings {
             $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
             $settingsFiles += (Join-Path $gitHubFolder $fscmRepoSettingsFile)            
             $settingsFiles += (Join-Path $gitHubFolder "$workflowName.settings.json")
-            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
             
         }
         elseif($env:AGENT_ID)# If Azure DevOps context
@@ -92,15 +87,13 @@ function Get-FSCPSSettings {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
                 Write-PSFMessage -Level Important -Message "RepositoryRootPath is: $RepositoryRootPath"
             }
-            $fscpsFolderPath = Join-Path $RepositoryRootPath $fscpsFolderName
+            
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
             $branchName = "$env:BUILD_SOURCEBRANCHNAME"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
             #$settingsFiles += $fscmRepoSettingsFile
             $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
-            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
-            #$settingsFiles += (Join-Path $fscpsFolderPath "$userName.settings.json")
 
         }
         else { # If Desktop or other
