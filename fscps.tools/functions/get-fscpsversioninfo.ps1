@@ -37,7 +37,7 @@ Function Get-FSCPSVersionInfo {
         
         $versionsData = (Get-Content $versionsDefaultFile) | ConvertFrom-Json 
 
-        ### CREATE GETPROJECTROOTFOLDER function
+        # TODO CREATE GETPROJECTROOTFOLDER function
         <#
         $versionsFile = Join-Path $ENV:GITHUB_WORKSPACE '.FSC-PS\versions.json' 
         

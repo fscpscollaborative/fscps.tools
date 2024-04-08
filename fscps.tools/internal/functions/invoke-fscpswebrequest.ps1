@@ -1,32 +1,33 @@
 
 <#
-.SYNOPSIS
+    .SYNOPSIS
+        HTTP request wrapper
 
-.DESCRIPTION
-Long description
+    .DESCRIPTION
+        HTTP request wrapper
 
-.PARAMETER headers
-Parameter description
+    .PARAMETER headers
+        HTTP request headers parameter
 
-.PARAMETER method
-Parameter description
+    .PARAMETER method
+        HTTP request method parameter
 
-.PARAMETER body
-    Parameter description
+    .PARAMETER body
+        HTTP request body parameter
 
-.PARAMETER outFile
-    Parameter description
+    .PARAMETER outFile
+        HTTP outfile parameter
 
-.PARAMETER uri
-    Parameter description
+    .PARAMETER uri
+        Parameter description
 
-.EXAMPLE
-    PS C:\> Invoke-FSCPSWebRequest -Uri "google.com"
+    .EXAMPLE
+        PS C:\> Invoke-FSCPSWebRequest -Uri "google.com"
 
-    This will invoke google.com
+        This will invoke google.com
 
-.NOTES
-General notes
+    .NOTES
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Invoke-FSCPSWebRequest {
     Param(

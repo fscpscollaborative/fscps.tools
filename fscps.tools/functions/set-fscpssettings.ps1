@@ -8,26 +8,20 @@
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
         
-    .PARAMETER RepositoryRootPath
-        Set root path of the project folder
+    .PARAMETER SettingsFilePath
+        Set path to the settings.json file
         
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
 
     .EXAMPLE
-        PS C:\> Get-FSCPSSettingsList
-        
-        This will output the current FSCPS configuration.
-        The object returned will be a PSCustomObject.
-        
-    .EXAMPLE
-        PS C:\> Get-FSCPSSettingsList -OutputAsHashtable
+        PS C:\> Set-FSCPSSettings -OutputAsHashtable -SettingsFilePath "c:\temp\settings.json"
         
         This will output the current FSCPS configuration.
         The object returned will be a Hashtable.
         
     .LINK
-        Set-D365LcsApiConfig
+        Get-FSCPSSettingsList
         
     .NOTES
         Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
@@ -36,11 +30,12 @@
         
 #>
 
-function Get-FSCPSSettingsList {
+function Set-FSCPSSettings {
     [CmdletBinding()]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [string] $RepositoryRootPath,
+        [Parameter(Mandatory = $true)]
+        [string] $SettingsFilePath,
         [switch] $OutputAsHashtable
     )
     begin{
@@ -74,7 +69,7 @@ function Get-FSCPSSettingsList {
             Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
 
-            $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
             $settingsFiles += (Join-Path $gitHubFolder $fscmRepoSettingsFile)            
             $settingsFiles += (Join-Path $gitHubFolder "$workflowName.settings.json")
             
@@ -93,7 +88,7 @@ function Get-FSCPSSettingsList {
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
             #$settingsFiles += $fscmRepoSettingsFile
-            $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
 
         }
         else { # If Desktop or other
@@ -103,7 +98,7 @@ function Get-FSCPSSettingsList {
                 #throw "RepositoryRootPath variable should be passed if running on the cloud/personal computer"
             }
             $reposytoryName = "windows host"
-            $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
         }
         Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value $currentBranchName
         Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value $reposytoryName
@@ -182,11 +177,18 @@ function Get-FSCPSSettingsList {
             $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
             $res.$propertyName = $config.Value
         }
-        if(Test-Path $RepositoryRootPath)
+        if(Test-Path $SettingsFilePath)
         {
             $settingsFiles | ForEach-Object {
                 $settingsFile = $_
-                $settingsPath = Join-Path $RepositoryRootPath $settingsFile
+                if($settingsFile.Contains(":\"))
+                {
+                    $settingsPath = $SettingsFilePath
+                }
+                else {
+                    $settingsPath = Join-Path $RepositoryRootPath $settingsFile
+                }
+               
                 Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
                 if (Test-Path $settingsPath) {
                     try {
@@ -194,16 +196,6 @@ function Get-FSCPSSettingsList {
             
                         # check settingsJson.version and do modifications if needed
                         MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
-        
-                        <#if ($settingsJson.PSObject.Properties.Name -eq "ConditionalSettings") {
-                            $settingsJson.ConditionalSettings | ForEach-Object {
-                                $conditionalSetting = $_
-                                if ($conditionalSetting.branches | Where-Object { $ENV:GITHUB_REF_NAME -like $_ }) {
-                                    Write-Host "Applying conditional settings for $ENV:GITHUB_REF_NAME"
-                                    MergeCustomObjectIntoOrderedDictionary -dst $settings -src $conditionalSetting.settings
-                                }
-                            }
-                        }#>
                     }
                     catch {
                         Write-PSFMessage -Level Host -Message "Settings file $settingsFile, is wrongly formatted." -Exception $PSItem.Exception
