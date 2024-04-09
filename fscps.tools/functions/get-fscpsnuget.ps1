@@ -10,16 +10,16 @@
         
     .PARAMETER Version
         The version of the NuGet package to download
-
+        
     .PARAMETER Type
         The type of the NuGet package to download
-
+        
     .PARAMETER Path
         The destination folder of the NuGet package to download
-
+        
     .PARAMETER Force
         Instruct the cmdlet to override the package if exists
-
+        
     .EXAMPLE
         PS C:\> Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage
         
@@ -29,12 +29,12 @@
         PS C:\> Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp"
         
         This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the c:\temp folder
-
+        
     .EXAMPLE
         PS C:\> Get-FSCPSNuget -Version "10.0.1777.99" -Type PlatformCompilerPackage -Path "c:\temp" -Force
         
         This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the c:\temp folder and override if the package with the same name exists.
-               
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
         

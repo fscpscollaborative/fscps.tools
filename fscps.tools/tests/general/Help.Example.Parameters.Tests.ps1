@@ -1,6 +1,5 @@
 ﻿$excludeCommands = @(
-      'Invoke-D365SCDPBundleInstall'
-    , 'Test-D365Command'
+    , 'Test-FSCPSCommand'
     , 'Test-PathExists'
 )
 
@@ -13,6 +12,7 @@ $excludeParameters = @(
     , 'ShowOriginalProgress'
     , 'OutputAsHashtable'
     , 'LogPath'
+    , 'Rebuild'
     , 'FailOnErrorMessage'
 )
 
@@ -38,7 +38,7 @@ foreach ( $commandName in $commands) {
     $parameters = (Get-Help $commandName -Full).parameters
 
     # make a describe block that will contain tests for this
-    Describe "Parameters without default vaules from $commandName" {
+    Describe "Parameters without default values from $commandName" {
         
         foreach ($parm in $parameters.parameter) {
             if ($parm.defaultValue -ne "False") { continue }
@@ -52,11 +52,9 @@ foreach ( $commandName in $commands) {
             foreach ($exampleObject in $examples.Examples.Example) {
                 if ($res) { continue }
 
-                $example = $exampleObject.Code -replace "`n.*" -replace "PS C:\\>"
-
+                $example = $exampleObject.Code -replace "`n.*" -replace "PS C:\>"
                 $res = $example -match "-$parmName( *|\:)"
             }
-
             It "$parmName is present in an example" {
                 $res | Should -BeTrue
             }

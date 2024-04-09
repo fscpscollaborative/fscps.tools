@@ -8,26 +8,26 @@
         
     .PARAMETER Version
         The version of the D365FSC used to build
-
+        
     .PARAMETER SourcesPath
         The folder contains a metadata files with binaries
-
+        
     .PARAMETER BuildFolderPath
         The destination build folder
-
+        
     .PARAMETER Force
         Cleanup destination build folder befor build
-
+        
     .EXAMPLE
         PS C:\> Invoke-FSCPSCompile -Version "10.0.39"
         
         This will build D365FSC package with version "10.0.39" to the current folder
-
+        
     .EXAMPLE
         PS C:\> Invoke-FSCPSCompile -Version "10.0.39" -Path "c:\Temp"
         
-        This will build D365FSC package with version "10.0.39" to the Temp folder       
-               
+        This will build D365FSC package with version "10.0.39" to the Temp folder
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
         

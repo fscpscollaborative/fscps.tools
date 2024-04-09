@@ -1,23 +1,24 @@
+
 <#
     .SYNOPSIS
         Installation of Nuget CLI
-
+        
     .DESCRIPTION
         Download latest Nuget CLI
-
+        
     .PARAMETER Path
         Download destination
-
+        
     .PARAMETER Url
         Url/Uri to where the latest nuget download is located
-            
+        
         The default value is "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-
+        
     .EXAMPLE
         PS C:\> Install-FSCPSNugetCLI -Path "C:\temp\fscps.tools\nuget" -Url "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-
+        
         This will download the latest version of nuget.
-
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
 #>

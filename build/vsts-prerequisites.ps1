@@ -1,10 +1,9 @@
 ﻿Write-Host "Working on the machine named: $($env:computername)"
 Write-Host "The user running is: $($env:UserName)"
 
-# $modules = @("PSFramework", "Az.Storage", "AzureAd", "PSNotification", "PSOAuthHelper", "PowerShellGet", "PackageManagement","ImportExcel","PSScriptAnalyzer")
-$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "AzureAd", "PSNotification", "PSOAuthHelper", "ImportExcel")
+$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "PSOAuthHelper", "ImportExcel", "Invoke-MsBuild")
 
-Install-Module "Pester" -MaximumVersion 4.99.99 -Force -Confirm:$false -Scope CurrentUser -AllowClobber -SkipPublisherCheck
+Install-Module "Pester" -MaximumVersion 5.5.0 -Force -Confirm:$false -Scope CurrentUser -AllowClobber -SkipPublisherCheck
 
 foreach ($item in $modules) {
     

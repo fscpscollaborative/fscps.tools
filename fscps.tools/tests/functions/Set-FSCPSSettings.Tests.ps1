@@ -24,19 +24,6 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter OutputAsHashtable' {
-			$parameter = (Get-Command Set-FSCPSSettings).Parameters['OutputAsHashtable']
-			$parameter.Name | Should -Be 'OutputAsHashtable'
-			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.SwitchParameter
-			$parameter.IsDynamic | Should -Be $False
-			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
-			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
-			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
-			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
-		}
 		It 'Should have the expected parameter ProgressAction' {
 			$parameter = (Get-Command Set-FSCPSSettings).Parameters['ProgressAction']
 			$parameter.Name | Should -Be 'ProgressAction'
@@ -55,7 +42,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -
-		__AllParameterSets -SettingsFilePath -OutputAsHashtable -ProgressAction
+		__AllParameterSets -SettingsFilePath -ProgressAction
 		#>
 	}
 

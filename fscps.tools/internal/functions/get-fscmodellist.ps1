@@ -8,10 +8,10 @@
         
     .PARAMETER MetadataPath
         Path to the metadata folder (PackagesLocalDirectory)
-
+        
     .PARAMETER IncludeTest
         Includes test models
-
+        
     .PARAMETER All
         Return all models even without source code
         
@@ -19,12 +19,12 @@
         PS C:\> Get-FSCModels -MetadataPath "J:\AosService\PackagesLocalDirectory"
         
         This will return the list of models without test models and models without source code
-
+        
     .EXAMPLE
         PS C:\> Get-FSCModels -MetadataPath "J:\AosService\PackagesLocalDirectory" -IncludeTest
         
         This will return the list of models with test models and models without source code
-
+        
     .EXAMPLE
         PS C:\> Get-FSCModels -MetadataPath "J:\AosService\PackagesLocalDirectory" -IncludeTest -All
         

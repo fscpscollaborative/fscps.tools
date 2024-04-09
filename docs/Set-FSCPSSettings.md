@@ -13,8 +13,7 @@ Get the FSCPS configuration details
 ## SYNTAX
 
 ```
-Set-FSCPSSettings [[-SettingsFilePath] <String>] [-OutputAsHashtable] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Set-FSCPSSettings [[-SettingsFilePath] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,7 +25,7 @@ All settings retrieved from this cmdlets is to be considered the default paramet
 
 ### EXAMPLE 1
 ```
-Set-FSCPSSettings -OutputAsHashtable -SettingsFilePath "c:\temp\settings.json"
+Set-FSCPSSettings -SettingsFilePath "c:\temp\settings.json"
 ```
 
 This will output the current FSCPS configuration.
@@ -45,21 +44,6 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -OutputAsHashtable
-Instruct the cmdlet to return a hashtable object
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -88,7 +72,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Collections.Specialized.OrderedDictionary
 ## NOTES
-Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
+Tags: Environment, Url, Config, Configuration, Upload, ClientId, Settings
 
 Author: Oleksandr Nikolaiev (@onikolaiev)
 

@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Get the FSCPS configuration details
@@ -11,11 +11,8 @@
     .PARAMETER SettingsFilePath
         Set path to the settings.json file
         
-    .PARAMETER OutputAsHashtable
-        Instruct the cmdlet to return a hashtable object
-
     .EXAMPLE
-        PS C:\> Set-FSCPSSettings -OutputAsHashtable -SettingsFilePath "c:\temp\settings.json"
+        PS C:\> Set-FSCPSSettings -SettingsFilePath "c:\temp\settings.json"
         
         This will output the current FSCPS configuration.
         The object returned will be a Hashtable.
@@ -24,7 +21,7 @@
         Get-FSCPSSettings
         
     .NOTES
-        Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
+        Tags: Environment, Url, Config, Configuration, Upload, ClientId, Settings
         
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
@@ -36,8 +33,7 @@ function Set-FSCPSSettings {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [string] $SettingsFilePath,
-        [switch] $OutputAsHashtable
+        [string] $SettingsFilePath
     )
     begin{
         $fscpsFolderName = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsFolder"
@@ -178,19 +174,20 @@ function Set-FSCPSSettings {
     }
     process{
         Invoke-TimeSignal -Start    
-        foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
-            $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
-            $res.$propertyName = $config.Value
-        }
+        #foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
+        #    $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
+        #    $res.$propertyName = $config.Value
+        #}
+        $res = Get-FSCPSSettings -OutputAsHashtable
 
         $settingsFiles | ForEach-Object {
             $settingsFile = $_
             if($RepositoryRootPath)
             {
-                $settingsPath = $SettingsFilePath
+                $settingsPath = Join-Path $RepositoryRootPath $settingsFile
             }
             else {
-                $settingsPath = Join-Path $RepositoryRootPath $settingsFile
+                $settingsPath = $SettingsFilePath
             }
             
             Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
@@ -209,19 +206,6 @@ function Set-FSCPSSettings {
                 }
             }
         }
-
-        # reread settings
-        foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
-            $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
-            $res.$propertyName = $config.Value
-        }
-
-        if($OutputAsHashtable) {
-            $res
-        } else {
-            [PSCustomObject]$res
-        }
-    
         Invoke-TimeSignal -End
     }
     end{

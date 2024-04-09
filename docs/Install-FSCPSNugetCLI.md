@@ -48,7 +48,7 @@ Accept wildcard characters: False
 
 ### -Url
 Url/Uri to where the latest nuget download is located
-    
+
 The default value is "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 ```yaml

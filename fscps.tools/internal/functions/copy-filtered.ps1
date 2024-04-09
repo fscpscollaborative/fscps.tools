@@ -1,3 +1,4 @@
+
 <#
     .SYNOPSIS
         Copy files with filter parameters
@@ -7,18 +8,18 @@
         
     .PARAMETER Source
         The source path of copying files
-
+        
     .PARAMETER Target
         The destination path of copying files
-
+        
     .PARAMETER Filter
         The filter parameter
-
+        
     .EXAMPLE
-        PS C:\> Copy-Filtered -Source "c:\temp\source" -Target "c:\temp\target" -Filter *.*       
-
+        PS C:\> Copy-Filtered -Source "c:\temp\source" -Target "c:\temp\target" -Filter *.*
+        
         This will build copy all the files to the destination folder
-
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
         

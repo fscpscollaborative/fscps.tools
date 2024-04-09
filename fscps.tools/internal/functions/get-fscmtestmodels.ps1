@@ -5,11 +5,11 @@
         
     .DESCRIPTION
         Get the list of D365FSC components versions (NuGets, Packages, Frameworks etc.)
-
+        
         
     .PARAMETER Version
         The version of the D365FSC
-
+        
     .EXAMPLE
         PS C:\> Get-FSCPSVersionInfo -Version "10.0.39"
         

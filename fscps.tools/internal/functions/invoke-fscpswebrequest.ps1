@@ -2,30 +2,30 @@
 <#
     .SYNOPSIS
         HTTP request wrapper
-
+        
     .DESCRIPTION
         HTTP request wrapper
-
+        
     .PARAMETER headers
         HTTP request headers parameter
-
+        
     .PARAMETER method
         HTTP request method parameter
-
+        
     .PARAMETER body
         HTTP request body parameter
-
+        
     .PARAMETER outFile
         HTTP outfile parameter
-
+        
     .PARAMETER uri
         Parameter description
-
+        
     .EXAMPLE
         PS C:\> Invoke-FSCPSWebRequest -Uri "google.com"
-
+        
         This will invoke google.com
-
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
 #>

@@ -76,7 +76,7 @@ FormatsToProcess = 'xml\fscps.tools.Format.ps1xml'
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Install-FSCPSSoftware', 
                'Get-FSCPSNuget', 'Get-FSCPSVersionInfo', 'Invoke-FSCPSCompile', 
-               'Install-FSCPSNugetCLI'
+               'Install-FSCPSNugetCLI', 'Find-FSCPSCommand'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

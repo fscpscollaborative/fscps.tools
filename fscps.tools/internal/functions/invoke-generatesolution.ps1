@@ -8,21 +8,21 @@
         
     .PARAMETER ModelsList
         The list of models to generate a solution
-
+        
     .PARAMETER DynamicsVersion
         The version of the D365FSC to build
-
+        
     .PARAMETER MetadataPath
         The path to the metadata folder
-
+        
     .PARAMETER SolutionBasePath
         The path to the generated solution folder. Dafault is c:\temp\fscps.tools\
-
+        
     .EXAMPLE
-        PS C:\> Invoke-GenerateSolution -Models "Test, SuperTest, SuperTestExtension" -Version "10.0.39" -MetadataPath "c:\temp\TestMetadataFolder" 
+        PS C:\> Invoke-GenerateSolution -Models "Test, SuperTest, SuperTestExtension" -Version "10.0.39" -MetadataPath "c:\temp\TestMetadataFolder"
         
         This will generate a solution of 10.0.39 version
-               
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
         

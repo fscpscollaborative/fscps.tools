@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Get the FSCPS configuration details
@@ -7,10 +7,10 @@
         Get the FSCPS configuration details from the configuration store
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
-               
+        
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
-
+        
     .EXAMPLE
         PS C:\> Get-FSCPSSettings
         
@@ -43,6 +43,7 @@ function Get-FSCPSSettings {
     )
     begin{
         Invoke-TimeSignal -Start   
+        $res = [Ordered]@{}
     }
     process{         
 
