@@ -27,6 +27,8 @@ Download latest Nuget CLI
 Install-FSCPSNugetCLI -Path "C:\temp\fscps.tools\nuget" -Url "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 ```
 
+This will download the latest version of nuget.
+
 ## PARAMETERS
 
 ### -Path
