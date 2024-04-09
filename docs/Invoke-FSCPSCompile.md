@@ -13,7 +13,7 @@ Invoke the D365FSC models compilation
 ## SYNTAX
 
 ```
-Invoke-FSCPSCompile [-Version] <String> [-SourcesPath] <String> [[-BuildFolderPath] <String>] [-Force]
+Invoke-FSCPSCompile [[-Version] <String>] [-SourcesPath] <String> [[-BuildFolderPath] <String>] [-Force]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -46,7 +46,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False

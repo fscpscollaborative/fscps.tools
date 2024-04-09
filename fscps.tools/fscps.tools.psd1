@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.44'
+ModuleVersion = '0.1.46'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -54,9 +54,7 @@ PowerShellVersion = '5.0'
 RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.10.318'; }, 
                @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; }, 
                @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.9'; }, 
-               @{ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.3.0'; }, 
-               @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; }, 
-               @{ModuleName = 'Pester'; ModuleVersion = '5.5.0'; })
+               @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; })
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = 'bin\fscps.tools.dll'

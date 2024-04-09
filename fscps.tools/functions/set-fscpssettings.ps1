@@ -205,7 +205,9 @@ function Set-FSCPSSettings {
                     throw 
                 }
             }
+            Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - processed"
         }
+        Write-PSFMessage -Level Important -Message "Settings were updated succesfully."
         Invoke-TimeSignal -End
     }
     end{

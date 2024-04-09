@@ -38,7 +38,6 @@ function Invoke-FSCPSCompile {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
         [string] $Version,
         [Parameter(Mandatory = $true)]
         [string] $SourcesPath,
@@ -48,63 +47,85 @@ function Invoke-FSCPSCompile {
 
     BEGIN {
         Invoke-TimeSignal -Start
-
-        Write-PSFMessage -Level Important -Message "//=============================== Reading current FSC-PS settings ===============================//"
-        $settings = Get-FSCPSSettingsList
-       # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
-        # Gather version info
-        $versionData = Get-FSCPSVersionInfo -Version $Version
-        $PlatformVersion = $versionData.PlatformVersion
-        $ApplicationVersion = $versionData.AppVersion
-
-        $tools_package_name =  'Microsoft.Dynamics.AX.Platform.CompilerPackage.' + $PlatformVersion
-        $plat_package_name =  'Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.' + $PlatformVersion
-        $app_package_name =  'Microsoft.Dynamics.AX.Application.DevALM.BuildXpp.' + $ApplicationVersion
-        $appsuite_package_name =  'Microsoft.Dynamics.AX.ApplicationSuite.DevALM.BuildXpp.' + $ApplicationVersion 
-
-        $NuGetPackagesPath = (Join-Path $BuildFolderPath packages)
-        $SolutionBuildFolderPath = (Join-Path $BuildFolderPath "$($Version)_build")
-        $NuGetPackagesConfigFilePath = (Join-Path $SolutionBuildFolderPath packages.config)
-        $NuGetConfigFilePath = (Join-Path $SolutionBuildFolderPath nuget.config)
-        
-        if(Test-Path "$($SourcesPath)/PackagesLocalDirectory")
-        {
-            $SourceMetadataPath = (Join-Path $($SourcesPath) "/PackagesLocalDirectory")
-        }
-        elseif(Test-Path "$($SourcesPath)/Metadata")
-        {
-            $SourceMetadataPath = (Join-Path $($SourcesPath) "/Metadata")
-        }
-        else {
-            $SourceMetadataPath = $($SourcesPath)
-        }
-        
-        $BuidPropsFile = (Join-Path $SolutionBuildFolderPath \Build\build.props)
-        
-        $msReferenceFolder = "$($NuGetPackagesPath)\$($app_package_name)\ref\net40;$($NuGetPackagesPath)\$($plat_package_name)\ref\net40;$($NuGetPackagesPath)\$($appsuite_package_name)\ref\net40;$($SourceMetadataPath);$($BuildFolderPath)\bin"
-        $msBuildTasksDirectory = "$NuGetPackagesPath\$($tools_package_name)\DevAlm".Trim()
-        $msMetadataDirectory = "$($SourceMetadataPath)".Trim()
-        $msFrameworkDirectory = "$($NuGetPackagesPath)\$($tools_package_name)".Trim()
-        $msReferencePath = "$($NuGetPackagesPath)\$($tools_package_name)".Trim()
-        $msOutputDirectory = "$($BuildFolderPath)\bin".Trim()     
-
-        Write-PSFMessage -Level Important -Message "//=============================== Getting the list of models to build ============================//"
-        if($($settings.specifyModelsManually) -eq "true")
-        {
-            $mtdtdPath = ("$($SourcesPath)\$($settings.metadataPath)".Trim())
-            $mdls = $($settings.models).Split(",")
-            if($($settings.includeTestModel) -eq "true")
-            {
-                $testModels = Get-FSCMTestModel -modelNames $($mdls -join ",") -metadataPath $mtdtdPath
-                ($testModels.Split(",").ForEach({$mdls+=($_)}))
+        try{
+            $CMDOUT = @{
+                Verbose = If ($PSBoundParameters.Verbose -eq $true) { $true } else { $false };
+                Debug = If ($PSBoundParameters.Debug -eq $true) { $true } else { $false }
             }
-            $models = $mdls -join ","
-        }
-        else {
-            $models = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true')
-        }
 
-        Write-PSFMessage -Level Important -Message "Models to build: $models"
+            Write-PSFMessage -Level Important -Message "//=============================== Reading current FSC-PS settings ===============================//"
+            $settings = Get-FSCPSSettings @CMDOUT
+            if($Version -eq "")
+            {
+                $Version = $settings.buildVersion
+            }
+            if($Version -eq "")
+            {
+                throw "D365FSC Version should be specified."
+            }
+        # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
+            # Gather version info
+            $versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
+            $PlatformVersion = $versionData.PlatformVersion
+            $ApplicationVersion = $versionData.AppVersion
+
+            $tools_package_name =  'Microsoft.Dynamics.AX.Platform.CompilerPackage.' + $PlatformVersion
+            $plat_package_name =  'Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.' + $PlatformVersion
+            $app_package_name =  'Microsoft.Dynamics.AX.Application.DevALM.BuildXpp.' + $ApplicationVersion
+            $appsuite_package_name =  'Microsoft.Dynamics.AX.ApplicationSuite.DevALM.BuildXpp.' + $ApplicationVersion 
+
+            $NuGetPackagesPath = (Join-Path $BuildFolderPath packages)
+            $SolutionBuildFolderPath = (Join-Path $BuildFolderPath "$($Version)_build")
+            $NuGetPackagesConfigFilePath = (Join-Path $SolutionBuildFolderPath packages.config)
+            $NuGetConfigFilePath = (Join-Path $SolutionBuildFolderPath nuget.config)
+            
+            if(Test-Path "$($SourcesPath)/PackagesLocalDirectory")
+            {
+                $SourceMetadataPath = (Join-Path $($SourcesPath) "/PackagesLocalDirectory")
+            }
+            elseif(Test-Path "$($SourcesPath)/Metadata")
+            {
+                $SourceMetadataPath = (Join-Path $($SourcesPath) "/Metadata")
+            }
+            else {
+                $SourceMetadataPath = $($SourcesPath)
+            }
+            
+            $BuidPropsFile = (Join-Path $SolutionBuildFolderPath \Build\build.props)
+            
+            $msReferenceFolder = "$($NuGetPackagesPath)\$($app_package_name)\ref\net40;$($NuGetPackagesPath)\$($plat_package_name)\ref\net40;$($NuGetPackagesPath)\$($appsuite_package_name)\ref\net40;$($SourceMetadataPath);$($BuildFolderPath)\bin"
+            $msBuildTasksDirectory = "$NuGetPackagesPath\$($tools_package_name)\DevAlm".Trim()
+            $msMetadataDirectory = "$($SourceMetadataPath)".Trim()
+            $msFrameworkDirectory = "$($NuGetPackagesPath)\$($tools_package_name)".Trim()
+            $msReferencePath = "$($NuGetPackagesPath)\$($tools_package_name)".Trim()
+            $msOutputDirectory = "$($BuildFolderPath)\bin".Trim()     
+
+            Write-PSFMessage -Level Important -Message "//=============================== Getting the list of models to build ============================//"
+            if($($settings.specifyModelsManually) -eq "true")
+            {
+                $mtdtdPath = ("$($SourcesPath)\$($settings.metadataPath)".Trim())
+                $mdls = $($settings.models).Split(",")
+                if($($settings.includeTestModel) -eq "true")
+                {
+                    $testModels = Get-FSCMTestModel -modelNames $($mdls -join ",") -metadataPath $mtdtdPath @CMDOUT
+                    ($testModels.Split(",").ForEach({$mdls+=($_)}))
+                }
+                $models = $mdls -join ","
+            }
+            else {
+                $models = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true') @CMDOUT
+            }
+
+            Write-PSFMessage -Level Important -Message "Models to build: $models"
+        }
+        catch {
+            Write-PSFMessage -Level Host -Message "Something went wrong while compiling D365FSC package" -Exception $PSItem.Exception
+            Stop-PSFFunction -Message "Stopping because of errors"
+            return
+        }
+        finally{
+            
+        }
     }
     
     PROCESS {
@@ -118,24 +139,24 @@ function Invoke-FSCPSCompile {
             }
 
             Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
-            Invoke-GenerateSolution -ModelsList $models -DynamicsVersion $Version -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath
+            Invoke-GenerateSolution -ModelsList $models -DynamicsVersion $Version -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
             Write-PSFMessage -Level Important -Message "Generating complete"
     
             Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
-            $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create
-            $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create
-            Copy-Item $SourcesPath\* -Destination $BuildFolderPath -Recurse -Force
+            $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
+            $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
+            Copy-Item $SourcesPath\* -Destination $BuildFolderPath -Recurse -Force @CMDOUT
             #Copy-Item $SolutionBuildFolderPath -Destination $BuildFolderPath -Recurse -Force
             Write-PSFMessage -Level Important -Message "Copying complete"
     
             Write-PSFMessage -Level Important -Message "//=============================== Download NuGet packages ========================================//"
             if($settings.useLocalNuGetStorage)
             {
-                $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create
-                Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath
-                Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath
-                Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath
-                Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath
+                $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
+                Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath @CMDOUT
+                Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath @CMDOUT
+                Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath @CMDOUT
+                Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath @CMDOUT
             }
             Write-PSFMessage -Level Important -Message "NuGet`s downloading complete"
 
@@ -160,7 +181,7 @@ function Invoke-FSCPSCompile {
             Write-PSFMessage -Level Important -Message "//=============================== Build solution ================================================//"
             Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
-            $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow
+            $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
 
             if ($msbuildresult.BuildSucceeded -eq $true)
             {
