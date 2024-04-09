@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-FSCPSSettingsList
+# Set-FSCPSSettings
 
 ## SYNOPSIS
 Get the FSCPS configuration details
@@ -13,8 +13,8 @@ Get the FSCPS configuration details
 ## SYNTAX
 
 ```
-Get-FSCPSSettingsList [[-RepositoryRootPath] <String>] [-OutputAsHashtable]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Set-FSCPSSettings [[-SettingsFilePath] <String>] [-OutputAsHashtable] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,15 +26,7 @@ All settings retrieved from this cmdlets is to be considered the default paramet
 
 ### EXAMPLE 1
 ```
-Get-FSCPSSettingsList
-```
-
-This will output the current FSCPS configuration.
-The object returned will be a PSCustomObject.
-
-### EXAMPLE 2
-```
-Get-FSCPSSettingsList -OutputAsHashtable
+Set-FSCPSSettings -OutputAsHashtable -SettingsFilePath "c:\temp\settings.json"
 ```
 
 This will output the current FSCPS configuration.
@@ -42,8 +34,8 @@ The object returned will be a Hashtable.
 
 ## PARAMETERS
 
-### -RepositoryRootPath
-Set root path of the project folder
+### -SettingsFilePath
+Set path to the settings.json file
 
 ```yaml
 Type: String
@@ -68,6 +60,37 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -102,5 +125,5 @@ Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
 
-[Set-D365LcsApiConfig]()
+[Get-FSCPSSettings]()
 

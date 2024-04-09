@@ -21,7 +21,7 @@
         The object returned will be a Hashtable.
         
     .LINK
-        Get-FSCPSSettingsList
+        Get-FSCPSSettings
         
     .NOTES
         Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
@@ -32,9 +32,10 @@
 
 function Set-FSCPSSettings {
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [Parameter(Mandatory = $true)]
         [string] $SettingsFilePath,
         [switch] $OutputAsHashtable
     )
@@ -52,10 +53,14 @@ function Set-FSCPSSettings {
         if($env:GITHUB_REPOSITORY)# If GitHub context
         {
             Write-PSFMessage -Level Important -Message "Running on GitHub"
-            if($RepositoryRootPath -eq "")
+            if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
                 Write-PSFMessage -Level Important -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
+                $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            }
+            else{
+                $settingsFiles += $SettingsFilePath
             }
 
             $reposytoryName = "$env:GITHUB_REPOSITORY"
@@ -69,7 +74,6 @@ function Set-FSCPSSettings {
             Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
 
-            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
             $settingsFiles += (Join-Path $gitHubFolder $fscmRepoSettingsFile)            
             $settingsFiles += (Join-Path $gitHubFolder "$workflowName.settings.json")
             
@@ -77,28 +81,29 @@ function Set-FSCPSSettings {
         elseif($env:AGENT_ID)# If Azure DevOps context
         {
             Write-PSFMessage -Level Important -Message "Running on Azure"
-            if($RepositoryRootPath -eq "")
+            if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
                 Write-PSFMessage -Level Important -Message "RepositoryRootPath is: $RepositoryRootPath"
             }
-            
+            else{
+                $settingsFiles += $SettingsFilePath
+            }
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
             $branchName = "$env:BUILD_SOURCEBRANCHNAME"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
-            #$settingsFiles += $fscmRepoSettingsFile
-            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
 
         }
         else { # If Desktop or other
             Write-PSFMessage -Level Important -Message "Running on desktop"
-            if($RepositoryRootPath -eq "")
+            if($SettingsFilePath -eq "")
             {
-                #throw "RepositoryRootPath variable should be passed if running on the cloud/personal computer"
+                throw "SettingsFilePath variable should be passed if running on the cloud/personal computer"
             }
             $reposytoryName = "windows host"
-            $settingsFiles += $SettingsFilePath #(Join-Path $fscpsFolderName $fscmSettingsFile)
+            $settingsFiles += $SettingsFilePath
         }
         Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value $currentBranchName
         Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value $reposytoryName
@@ -177,36 +182,35 @@ function Set-FSCPSSettings {
             $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
             $res.$propertyName = $config.Value
         }
-        if(Test-Path $SettingsFilePath)
-        {
-            $settingsFiles | ForEach-Object {
-                $settingsFile = $_
-                if($settingsFile.Contains(":\"))
-                {
-                    $settingsPath = $SettingsFilePath
-                }
-                else {
-                    $settingsPath = Join-Path $RepositoryRootPath $settingsFile
-                }
-               
-                Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
-                if (Test-Path $settingsPath) {
-                    try {
-                        $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
+
+        $settingsFiles | ForEach-Object {
+            $settingsFile = $_
+            if($RepositoryRootPath)
+            {
+                $settingsPath = $SettingsFilePath
+            }
+            else {
+                $settingsPath = Join-Path $RepositoryRootPath $settingsFile
+            }
             
-                        # check settingsJson.version and do modifications if needed
-                        MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
-                    }
-                    catch {
-                        Write-PSFMessage -Level Host -Message "Settings file $settingsFile, is wrongly formatted." -Exception $PSItem.Exception
-                        Stop-PSFFunction -Message "Stopping because of errors"
-                        return
-                        throw 
-                    }
+            Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
+            if (Test-Path $settingsPath) {
+                try {
+                    $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
+        
+                    # check settingsJson.version and do modifications if needed
+                    MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
+                }
+                catch {
+                    Write-PSFMessage -Level Host -Message "Settings file $settingsFile, is wrongly formatted." -Exception $PSItem.Exception
+                    Stop-PSFFunction -Message "Stopping because of errors"
+                    return
+                    throw 
                 }
             }
         }
-        #readSettingsAgain
+
+        # reread settings
         foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
             $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
             $res.$propertyName = $config.Value

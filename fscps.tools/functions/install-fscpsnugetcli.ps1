@@ -14,7 +14,9 @@
         The default value is "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
     .EXAMPLE
-        PS C:\>Install-FSCPSNugetCLI
+        PS C:\> Install-FSCPSNugetCLI -Path "C:\temp\fscps.tools\nuget" -Url "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+
+        This will download the latest version of nuget.
 
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
@@ -22,7 +24,6 @@
 function Install-FSCPSNugetCLI {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
-    [OutputType()]
     param (
         [string] $Path = "C:\temp\fscps.tools\nuget",
         [string] $Url = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
