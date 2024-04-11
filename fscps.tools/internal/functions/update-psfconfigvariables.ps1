@@ -12,7 +12,10 @@
         This will read all relevant PSF Configuration values and create matching module variables.
         
     .NOTES
-        Author: Mötz Jensen (@splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Update-PsfConfigVariables {

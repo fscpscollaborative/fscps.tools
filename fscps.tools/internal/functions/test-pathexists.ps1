@@ -28,7 +28,10 @@
         This will test if the mentioned paths (folders) exists and the current context has enough permission.
         
     .NOTES
-        Author: Mötz Jensen (@splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 function Test-PathExists {

@@ -18,7 +18,10 @@
         This will query the LocalMachine hive and the sub directories "HKLM:\SOFTWARE\Microsoft\Dynamics\Deployment\" for a registry key with the name of "InstallationInfoDirectory".
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 Function Test-RegistryValue {

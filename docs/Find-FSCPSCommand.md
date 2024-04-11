@@ -235,7 +235,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 Tags: Find, Help, Command
-Author: Mötz Jensen (@Splaxi)
+This is refactored function from d365fo.tools
+
+Original Author: Mötz Jensen (@Splaxi)
+Author: Oleksandr Nikolaiev (@onikolaiev)
 
 License: MIT https://opensource.org/licenses/MIT
 

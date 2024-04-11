@@ -32,6 +32,9 @@
         This will install VSCode and fiddler on the system.
         
     .NOTES
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>

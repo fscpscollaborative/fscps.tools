@@ -89,7 +89,7 @@ function Set-FSCPSSettings {
             $branchName = "$env:BUILD_SOURCEBRANCHNAME"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
-            $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
+            #$settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
 
         }
         else { # If Desktop or other
@@ -205,9 +205,9 @@ function Set-FSCPSSettings {
                     throw 
                 }
             }
-            Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - processed"
+            Write-PSFMessage -Level Host -Message "Settings file '$settingsPath' - processed"
         }
-        Write-PSFMessage -Level Important -Message "Settings were updated succesfully."
+        Write-PSFMessage -Level Host  -Message "Settings were updated succesfully."
         Invoke-TimeSignal -End
     }
     end{

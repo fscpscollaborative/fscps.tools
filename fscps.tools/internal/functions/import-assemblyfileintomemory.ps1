@@ -31,7 +31,10 @@
         After the file has been imported, it will be deleted from disk.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 

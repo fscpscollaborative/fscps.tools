@@ -24,7 +24,10 @@
         This will help you do it right.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 function Select-DefaultView {

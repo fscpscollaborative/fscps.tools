@@ -12,7 +12,10 @@
         This will update internal variables that the module is dependent on.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Update-ModuleVariables {

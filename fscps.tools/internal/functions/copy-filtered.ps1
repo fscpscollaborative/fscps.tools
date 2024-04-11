@@ -21,6 +21,9 @@
         This will build copy all the files to the destination folder
         
     .NOTES
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>

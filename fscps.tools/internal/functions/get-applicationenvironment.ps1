@@ -12,7 +12,10 @@
         This will load all the different dll files into memory.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 function Get-ApplicationEnvironment {

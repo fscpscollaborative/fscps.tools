@@ -26,6 +26,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.fscpsRepoSettingsFile' -Value 'FSC
 
 Set-PSFConfig -FullName 'fscps.tools.settings.companyName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscpsFolder' -Value '.FSC-PS' -Initialize -Description ''
+
 Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value 'FSCM' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.runs-on' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value 'v1.3' -Initialize -Description ''
@@ -80,10 +81,12 @@ Set-PSFConfig -FullName 'fscps.tools.settings.azClientsecretSecretname' -Value '
 Set-PSFConfig -FullName 'fscps.tools.settings.azVmname' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.azVmrg' -Value '' -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.artifactsPath' -Value 'artifacts' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.artifactsPath' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.artifactsFolderName' -Value 'artifacts' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.generatePackages' -Value $true -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.namingStrategy' -Value 'Default' -Initialize -Description 'Default / Custom'
 Set-PSFConfig -FullName 'fscps.tools.settings.packageNamePattern' -Value 'BRANCHNAME-PACKAGENAME-FNSCMVERSION_DATE.RUNNUMBER' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.packageName' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.packageName' -Value '' -Initialize -Description 'Name of the package'
 
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKVersion' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKZipPath' -Value 'C:\RSDK' -Initialize -Description ''

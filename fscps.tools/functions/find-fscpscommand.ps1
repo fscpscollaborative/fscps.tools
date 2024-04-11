@@ -1,4 +1,4 @@
-
+﻿
 <#
     .SYNOPSIS
         Finds fscps.tools commands searching through the inline help text
@@ -73,7 +73,10 @@
         
     .NOTES
         Tags: Find, Help, Command
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
         License: MIT https://opensource.org/licenses/MIT
         

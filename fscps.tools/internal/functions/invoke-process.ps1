@@ -49,9 +49,10 @@
         The error output will be outputted directly to the console / host.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
         
-        https://stackoverflow.com/questions/24370814/how-to-capture-process-output-asynchronously-in-powershell/36539226#36539226
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Invoke-Process {

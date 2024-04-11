@@ -15,7 +15,10 @@
         This will clone the $HashTable variable into a new object and return it to you.
         
     .NOTES
-        Author: Mötz Jensen (@Splaxi)
+        This is refactored function from d365fo.tools
+        
+        Original Author: Mötz Jensen (@Splaxi)
+        Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 function Get-DeepClone {
