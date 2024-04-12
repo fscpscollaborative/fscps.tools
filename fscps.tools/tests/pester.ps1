@@ -19,6 +19,9 @@ Write-PSFMessage -Level Important -Message "Importing Module"
 $global:testroot = $PSScriptRoot
 $global:__pester_data = @{ }
 
+
+dotnet build "$global:testroot\..\..\library\fscps.tools.sln"
+
 Remove-Module fscps.tools -ErrorAction Ignore
 Import-Module "$global:testroot\..\fscps.tools.psd1"
 Import-Module "$global:testroot\..\fscps.tools.psm1" -Force
