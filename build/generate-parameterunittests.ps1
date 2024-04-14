@@ -3,7 +3,7 @@
 # See also https://github.com/d365collaborative/d365fo.tools/wiki/Building-tools
 $path = "$PSScriptRoot\..\fscps.tools"
 
-Import-Module $path -Force
+Import-Module $path -Force -ErrorAction SilentlyContinue
 
 $excludeCommands = @()
 

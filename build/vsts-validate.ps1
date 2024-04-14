@@ -20,7 +20,7 @@ Write-Host "The user running is: $($env:UserName)"
 #region Installing d365fo.tools and dbatools <--
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
+#Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
 $modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "PSOAuthHelper", "ImportExcel", "d365fo.tools", "Invoke-MsBuild","dbatools")
 #Register-PSRepository -Default -Verbose
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -32,7 +32,7 @@ foreach ($module in  $modules) {
         }
         else {
             Write-Host "....updating module" $module -ForegroundColor Gray
-            Update-Module -Name $module
+            #Update-Module -Name $module
         }
 }
 Set-DbatoolsConfig -Name Import.EncryptionMessageCheck -Value $false -PassThru | Register-DbatoolsConfig

@@ -27,12 +27,38 @@ Invoke the D365FSC models compilation
 Invoke-FSCPSCompile -Version "10.0.39"
 ```
 
-This will build D365FSC package with version "10.0.39" to the current folder
+Example output:
+
+msMetadataDirectory  : D:\a\8\s\Metadata
+msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
+msOutputDirectory    : C:\temp\buildbuild\bin
+solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
+nugetPackagesPath    : C:\temp\buildbuild\packages
+buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
+PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
+PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
+ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
+ARTIFACTS_LIST       : \["C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip"\]
+
+This will build D365FSC package with version "10.0.39" to the Temp folder
 
 ### EXAMPLE 2
 ```
 Invoke-FSCPSCompile -Version "10.0.39" -Path "c:\Temp"
 ```
+
+Example output:
+
+msMetadataDirectory  : D:\a\8\s\Metadata
+msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
+msOutputDirectory    : C:\temp\buildbuild\bin
+solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
+nugetPackagesPath    : C:\temp\buildbuild\packages
+buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
+PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
+PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
+ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
+ARTIFACTS_LIST       : \["C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip"\]
 
 This will build D365FSC package with version "10.0.39" to the Temp folder
 

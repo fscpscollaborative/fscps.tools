@@ -1,27 +1,28 @@
+
 <#
     .SYNOPSIS
         Finds files using match patterns.
-
+        
     .DESCRIPTION
         Determines the find root from a list of patterns. Performs the find and then applies the glob patterns. Supports interleaved exclude patterns. Unrooted patterns are rooted using defaultRoot, unless matchOptions.matchBase is specified and the pattern is a basename only. For matchBase cases, the defaultRoot is used as the find root.
-
+        
     .PARAMETER DefaultRoot
         Default path to root unrooted patterns. Falls back to System.DefaultWorkingDirectory or current location.
-
+        
     .PARAMETER Pattern
         Patterns to apply. Supports interleaved exclude patterns.
-
+        
     .PARAMETER FindOptions
         When the FindOptions parameter is not specified, defaults to (New-FindOptions -FollowSymbolicLinksTrue). Following soft links is generally appropriate unless deleting files.
-
+        
     .PARAMETER MatchOptions
         When the MatchOptions parameter is not specified, defaults to (New-MatchOptions -Dot -NoBrace -NoCase).
-
+        
     .EXAMPLE
         PS C:\> Find-FSCPSMatch -DefaultRoot "c:\temp\PackagesLocalDirectory" -Pattern '*.*' -FindOptions FollowSymbolicLinksTrue
-
+        
         This will return all files
-
+        
     .NOTES
         This if refactored Find-VSTSMatch function
 #>

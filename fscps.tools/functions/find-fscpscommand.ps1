@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Finds fscps.tools commands searching through the inline help text

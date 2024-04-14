@@ -108,22 +108,7 @@ function Invoke-GenerateSolution {
              
             Set-Content $ModelProjectFile $ProjectFileData
         }
-        function Get-AXModelName {
-            param (
-                [Alias('ModelName')]
-                [string]$_modelName,
-                [Alias('ModelPath')]
-                [string]$_modelPath
-            )
-            process{
-                $descriptorSearchPath = (Join-Path $_modelPath (Join-Path $_modelName "Descriptor"))
-                $descriptor = (Get-ChildItem -Path $descriptorSearchPath -Filter '*.xml')
-                Write-PSFMessage -Level Verbose -Message "Descriptor found at $descriptor"
-                [xml]$xmlData = Get-Content $descriptor.FullName
-                $modelDisplayName = $xmlData.SelectNodes("//AxModelInfo/Name")
-                return $modelDisplayName.InnerText
-            }
-        }
+        
     }
 
     PROCESS

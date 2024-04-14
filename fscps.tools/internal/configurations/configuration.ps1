@@ -16,7 +16,8 @@ Set-PSFConfig -Module 'fscps.tools' -Name 'Import.IndividualFiles' -Value $false
 
 Set-PSFConfig -FullName "fscps.tools.path.azcopy" -Value "C:\temp\fscps.tools\AzCopy\AzCopy.exe" -Initialize -Description "Path to the default location where AzCopy.exe is located."
 Set-PSFConfig -FullName "fscps.tools.path.nuget" -Value "C:\temp\fscps.tools\nuget\nuget.exe" -Initialize -Description "Path to the default location where nuget.exe is located."
-
+Set-PSFConfig -FullName 'fscps.tools.settings.templateUrl' -Value 'https://github.com/ciellosinc/FSC-PS-Template' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.templateBranch' -Value 'main' -Initialize -Description ''
 
 Set-PSFConfig -FullName "fscps.tools.path.sqlpackage" -Value "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\SqlPackage.exe" -Initialize -Description "Path to the default location where SqlPackage.exe is located."
 Set-PSFConfig -FullName "fscps.tools.azure.common.oauth.token" -Value "https://login.microsoftonline.com/common/oauth2/token" -Initialize -Description "URI / URL for the Azure Active Directory OAuth 2.0 endpoint for tokens"
@@ -27,15 +28,19 @@ Set-PSFConfig -FullName 'fscps.tools.settings.fscpsRepoSettingsFile' -Value 'FSC
 Set-PSFConfig -FullName 'fscps.tools.settings.companyName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscpsFolder' -Value '.FSC-PS' -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value 'FSCM' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value '' -Initialize -Description 'Project type should be provided via settings json'
 Set-PSFConfig -FullName 'fscps.tools.settings.runs-on' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value 'v1.3' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.templateUrl' -Value 'https://github.com/ciellosinc/FSC-PS-Template' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.templateBranch' -Value 'main' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value '' -Initialize -Description 'GitHub/AzureDevOps/Other'
+Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value '' -Initialize -Description 'GitHub/Azure run_id'
+
 Set-PSFConfig -FullName 'fscps.tools.settings.githubRunner' -Value 'windows-latest' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value '' -Initialize -Description 'The name of the GitHub Workflow/AzureDO Task'
+
 Set-PSFConfig -FullName 'fscps.tools.settings.buildVersion' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.solutionName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.exportModel' -Value $false -Initialize -Description ''
@@ -88,6 +93,10 @@ Set-PSFConfig -FullName 'fscps.tools.settings.namingStrategy' -Value 'Default' -
 Set-PSFConfig -FullName 'fscps.tools.settings.packageNamePattern' -Value 'BRANCHNAME-PACKAGENAME-FNSCMVERSION_DATE.RUNNUMBER' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.packageName' -Value '' -Initialize -Description 'Name of the package'
 
+Set-PSFConfig -FullName 'fscps.tools.settings.fscFinalQualityUpdatePackageId' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.fscPreviewVersionPackageId' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.fscServiseUpdatePackageId' -Value '' -Initialize -Description ''
+
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKVersion' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKZipPath' -Value 'C:\RSDK' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKBuildPath' -Value 'C:\Temp\RetailSDK' -Initialize -Description ''
@@ -103,9 +112,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.deploy' -Value $false -Initialize 
 Set-PSFConfig -FullName 'fscps.tools.settings.deployOnlyNew' -Value $true -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.deploymentScheduler' -Value $true -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.signArtifacts' -Value $false -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.fscFinalQualityUpdatePackageId' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.fscPreviewVersionPackageId' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.fscServiseUpdatePackageId' -Value '' -Initialize -Description ''
+
 Set-PSFConfig -FullName 'fscps.tools.settings.cleanupNugets' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.cleanupCSUPackage' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.secretsList' -Value @('nugetFeedPasswordSecretName','nugetFeedUserSecretName','lcsUsernameSecretname','lcsPasswordSecretname','azClientsecretSecretname','repoTokenSecretName','codeSignDigiCertUrlSecretName','codeSignDigiCertPasswordSecretName','codeSignDigiCertAPISecretName','codeSignDigiCertHashSecretName','codeSignKeyVaultClientSecretName') -Initialize -Description ''

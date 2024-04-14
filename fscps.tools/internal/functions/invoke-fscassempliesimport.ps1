@@ -1,18 +1,19 @@
+
 <#
     .SYNOPSIS
-    This will import D365FSC base assemblies
-
+        This will import D365FSC base assemblies
+        
     .DESCRIPTION
-    This will import D365FSC base assemblies. For package generating process 
-
+        This will import D365FSC base assemblies. For package generating process
+        
     .PARAMETER binDir
-    XppTools directory path
-
+        XppTools directory path
+        
     .EXAMPLE
-    PS C:\> Invoke-FSCAssembliesImport -DefaultRoot "C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.7.0.7120.99\ref\net40"
-
+        PS C:\> Invoke-FSCAssembliesImport -DefaultRoot "C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.7.0.7120.99\ref\net40"
+        
     .NOTES
-    General notes
+        General notes
 #>
 function Invoke-FSCAssembliesImport([string]$binDir)
 {

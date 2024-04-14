@@ -49,10 +49,16 @@ function Set-FSCPSSettings {
         if($env:GITHUB_REPOSITORY)# If GitHub context
         {
             Write-PSFMessage -Level Important -Message "Running on GitHub"
+            Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'GitHub'
+            Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"
+            Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:GITHUB_RUN_NUMBER"
+            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:GITHUB_WORKFLOW"
+
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
                 Write-PSFMessage -Level Important -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
+                
                 $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
             }
             else{
@@ -77,6 +83,10 @@ function Set-FSCPSSettings {
         elseif($env:AGENT_ID)# If Azure DevOps context
         {
             Write-PSFMessage -Level Important -Message "Running on Azure"
+            Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'AzureDevOps'
+            Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
+            Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:Build_BuildNumber"
+            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:Build_DefinitionName"	
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
@@ -94,6 +104,7 @@ function Set-FSCPSSettings {
         }
         else { # If Desktop or other
             Write-PSFMessage -Level Important -Message "Running on desktop"
+            Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'Other'
             if($SettingsFilePath -eq "")
             {
                 throw "SettingsFilePath variable should be passed if running on the cloud/personal computer"
