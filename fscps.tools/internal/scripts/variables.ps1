@@ -107,16 +107,14 @@ $Script:DefaultTempPath = "c:\temp\fscps.tools"
 #default nuget storage account settings
 $Script:NuGetStorageAccountName = "ciellosarchive"
 $Script:NuGetStorageContainer = "nuget"
-$Script:NuGetStorageSASToken = "sp=r&st=2022-10-20T15:35:07Z&se=2032-10-20T23:35:07Z&spr=https&sv=2021-06-08&sr=c&sig=LZ94qSS%2FRmRObp6Fs%2FuTXM6KZKdSDY3kLZf02mF9ihc%3D"
+$Script:NuGetStorageSASToken = "sv=2022-11-02&ss=b&srt=co&sp=rl&se=2034-04-25T13:22:09Z&st=2024-04-25T05:22:09Z&spr=https&sig=qFXo8sVBTpVdER5vOJfnsxAJbEmIk9WadEP5L%2BSiG5s%3D"
 
 foreach ($item in (Get-PSFConfig -FullName fscps.tools.active*)) {
     $nameTemp = $item.FullName -replace "^fscps.tools.", ""
     $name = ($nameTemp -Split "\." | ForEach-Object { (Get-Culture).TextInfo.ToTitleCase($_) } ) -Join ""
     
-    New-Variable -Name $name -Value $item.Value -Scope Script
+    New-Variable -Name $name -Value $item.Value -Scope Script -Force
 }
-
-
 
 #Active LCS Upload config extraction
 Update-LcsApiVariables
@@ -132,6 +130,10 @@ $maskOutput = @(
     "AzureStorageSAS"
 )
 
+#init
+Init-AzureNugetStorageDefault
+
+
 #Active broadcast message config extraction
 #Update-BroadcastVariables
 
@@ -140,6 +142,8 @@ Update-PsfConfigVariables
 
 #Active Azure Storage Configuration variables values
 Update-AzureStorageVariables
+
+
 
 (Get-Variable -Scope Script) | ForEach-Object {
     $val = $null

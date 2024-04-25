@@ -96,6 +96,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.packageName' -Value '' -Initialize
 Set-PSFConfig -FullName 'fscps.tools.settings.fscFinalQualityUpdatePackageId' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPreviewVersionPackageId' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.fscServiseUpdatePackageId' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.versionStrategy' -Value 'GA' -Initialize -Description 'Values: GA/Latest'
 
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKVersion' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKZipPath' -Value 'C:\RSDK' -Initialize -Description ''
@@ -116,3 +117,6 @@ Set-PSFConfig -FullName 'fscps.tools.settings.signArtifacts' -Value $false -Init
 Set-PSFConfig -FullName 'fscps.tools.settings.cleanupNugets' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.cleanupCSUPackage' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.secretsList' -Value @('nugetFeedPasswordSecretName','nugetFeedUserSecretName','lcsUsernameSecretname','lcsPasswordSecretname','azClientsecretSecretname','repoTokenSecretName','codeSignDigiCertUrlSecretName','codeSignDigiCertPasswordSecretName','codeSignDigiCertAPISecretName','codeSignDigiCertHashSecretName','codeSignKeyVaultClientSecretName') -Initialize -Description ''
+
+Set-PSFConfig -FullName "fscps.tools.azure.storage.accounts" -Value @{} -Initialize -Description "Object that stores different Azure Storage Account and their details."
+Set-PSFConfig -FullName "fscps.tools.active.azure.storage.account" -Value @{} -Initialize -Description "Object that stores the Azure Storage Account details that should be used during the module."

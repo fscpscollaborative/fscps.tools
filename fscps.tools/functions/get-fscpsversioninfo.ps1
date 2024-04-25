@@ -25,12 +25,13 @@ Function Get-FSCPSVersionInfo {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
         [string] $Version
     )
 
     BEGIN {
         Invoke-TimeSignal -Start
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $VersionStrategy = Get-PSFConfigValue -FullName "fscps.tools.settings.versionStrategy"
         $versionsDefaultFile = Join-Path "$Script:DefaultTempPath" "versions.default.json"
 
         Invoke-FSCPSWebRequest -method GET -Uri "https://raw.githubusercontent.com/ciellosinc/FSC-PS/main/Actions/Helpers/versions.default.json" -outFile $versionsDefaultFile
@@ -87,14 +88,52 @@ Function Get-FSCPSVersionInfo {
     }
     
     PROCESS {
-        if (Test-PSFFunctionInterrupt) { return }
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        if (Test-PSFFunctionInterrupt) { return }      
+
         try {
-            foreach($d in $versionsData)
+            if($Version)
             {
-                if($d.version -eq $Version)
+                foreach($d in $versionsData)
                 {
-                    $d.data | Select-PSFObject -TypeName "FSCPS.TOOLS.Versions" "*"
+                    if($d.version -eq $Version)
+                    {
+                        $hash = @{
+                            version = $Version
+                            data = @{
+                                AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
+                                PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
+                                RetailSDKVersion                = $d.data.retailSDKVersion
+                                RetailSDKURL                    = $d.data.retailSDKURL
+                                FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
+                                FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
+                                FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
+                                FSCFinalQualityUpdatePackageId  = $d.data.fscFinalQualityUpdatePackageId
+                                ECommerceMicrosoftRepoBranch    = $d.data.ecommerceMicrosoftRepoBranch
+                            }
+                        }                             
+                        New-Object PSObject -Property $hash | Select-PSFObject -TypeName "FSCPS.TOOLS.Versions" "*"
+                    }
+                }
+            }
+            else
+            {
+                foreach($d in $versionsData)
+                {
+                        $hash = @{
+                            version = $d.version
+                            data = @{
+                                AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
+                                PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
+                                RetailSDKVersion                = $d.data.retailSDKVersion
+                                RetailSDKURL                    = $d.data.retailSDKURL
+                                FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
+                                FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
+                                FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
+                                FSCFinalQualityUpdatePackageId  = $d.data.fscFinalQualityUpdatePackageId
+                                ECommerceMicrosoftRepoBranch    = $d.data.ecommerceMicrosoftRepoBranch
+                            }
+                        }                             
+                        New-Object PSObject -Property $hash | Select-PSFObject -TypeName "FSCPS.TOOLS.Versions" "*"
                 }
             }
         }

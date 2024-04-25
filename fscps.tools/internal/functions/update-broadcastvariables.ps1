@@ -27,7 +27,7 @@ function Update-BroadcastVariables {
 
     $configName = (Get-PSFConfig -FullName "fscps.tools.active.broadcast.message.config.name").Value.ToString().ToLower()
     if (-not ($configName -eq "")) {
-        $hashParameters = Get-D365ActiveBroadcastMessageConfig -OutputAsHashtable
+        $hashParameters = Get-FSCPSActiveBroadcastMessageConfig -OutputAsHashtable
         foreach ($item in $hashParameters.Keys) {
             if ($item -eq "name") { continue }
             

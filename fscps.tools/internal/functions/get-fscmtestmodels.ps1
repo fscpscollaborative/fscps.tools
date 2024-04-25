@@ -7,13 +7,16 @@
         Get the list of D365FSC components versions (NuGets, Packages, Frameworks etc.)
         
         
-    .PARAMETER Version
-        The version of the D365FSC
+    .PARAMETER ModelsList
+        The list of D365FSC models
+        
+    .PARAMETER MetadataPath
+        The path to the D365FSC metadata
         
     .EXAMPLE
-        PS C:\> Get-FSCPSVersionInfo -Version "10.0.39"
+        PS C:\> Get-FSCMTestModel -ModelsList "test" $MetadataPath "c:\temp\Metadata"
         
-        This will show the list of file versions for the FSCPS module of the 10.0.39 D365FSC.
+        This will show the list of test models.
         
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)

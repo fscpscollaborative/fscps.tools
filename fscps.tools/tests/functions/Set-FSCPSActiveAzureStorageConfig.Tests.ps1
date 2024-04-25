@@ -1,4 +1,4 @@
-﻿Describe "Get-FSCPSSettings Unit Tests" -Tag "Unit" {
+﻿Describe "Set-FSCPSActiveAzureStorageConfig Unit Tests" -Tag "Unit" {
 	BeforeAll {
 		# Place here all things needed to prepare for the tests
 	}
@@ -8,12 +8,12 @@
 	
 	Describe "Ensuring unchanged command signature" {
 		It "should have the expected parameter sets" {
-			(Get-Command Get-FSCPSSettings).ParameterSets.Name | Should -Be '__AllParameterSets'
+			(Get-Command Set-FSCPSActiveAzureStorageConfig).ParameterSets.Name | Should -Be '__AllParameterSets'
 		}
 		
-		It 'Should have the expected parameter SettingsJsonString' {
-			$parameter = (Get-Command Get-FSCPSSettings).Parameters['SettingsJsonString']
-			$parameter.Name | Should -Be 'SettingsJsonString'
+		It 'Should have the expected parameter Name' {
+			$parameter = (Get-Command Set-FSCPSActiveAzureStorageConfig).Parameters['Name']
+			$parameter.Name | Should -Be 'Name'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -24,9 +24,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SettingsJsonPath' {
-			$parameter = (Get-Command Get-FSCPSSettings).Parameters['SettingsJsonPath']
-			$parameter.Name | Should -Be 'SettingsJsonPath'
+		It 'Should have the expected parameter ConfigStorageLocation' {
+			$parameter = (Get-Command Set-FSCPSActiveAzureStorageConfig).Parameters['ConfigStorageLocation']
+			$parameter.Name | Should -Be 'ConfigStorageLocation'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -37,9 +37,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter OutputAsHashtable' {
-			$parameter = (Get-Command Get-FSCPSSettings).Parameters['OutputAsHashtable']
-			$parameter.Name | Should -Be 'OutputAsHashtable'
+		It 'Should have the expected parameter Temporary' {
+			$parameter = (Get-Command Set-FSCPSActiveAzureStorageConfig).Parameters['Temporary']
+			$parameter.Name | Should -Be 'Temporary'
 			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.SwitchParameter
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -51,7 +51,7 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
 		It 'Should have the expected parameter ProgressAction' {
-			$parameter = (Get-Command Get-FSCPSSettings).Parameters['ProgressAction']
+			$parameter = (Get-Command Set-FSCPSActiveAzureStorageConfig).Parameters['ProgressAction']
 			$parameter.Name | Should -Be 'ProgressAction'
 			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.ActionPreference
 			$parameter.IsDynamic | Should -Be $False
@@ -68,7 +68,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -
-		__AllParameterSets -SettingsJsonString -SettingsJsonPath -OutputAsHashtable -ProgressAction
+		__AllParameterSets -Name -ConfigStorageLocation -Temporary -ProgressAction
 		#>
 	}
 

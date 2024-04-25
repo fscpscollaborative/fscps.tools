@@ -5,32 +5,54 @@ online version:
 schema: 2.0.0
 ---
 
-# Enable-FSCPSException
+# Get-FSCPSActiveAzureStorageConfig
 
 ## SYNOPSIS
-Enable exceptions to be thrown
+Get active Azure Storage Account configuration
 
 ## SYNTAX
 
 ```
-Enable-FSCPSException [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-FSCPSActiveAzureStorageConfig [-OutputAsPsCustomObject] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Change the default exception behavior of the module to support throwing exceptions
-
-Useful when the module is used in an automated fashion, like inside Azure DevOps pipelines and large PowerShell scripts
+Get active Azure Storage Account configuration object from the configuration store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Enable-FSCPSException
+Get-FSCPSActiveAzureStorageConfig
 ```
 
-This will for the rest of the current PowerShell session make sure that exceptions will be thrown.
+This will get the active Azure Storage configuration.
+
+### EXAMPLE 2
+```
+Get-FSCPSActiveAzureStorageConfig -OutputAsPsCustomObject:$true
+```
+
+This will get the active Azure Storage configuration.
+The object will be output as a PsCustomObject, for you to utilize across your scripts.
 
 ## PARAMETERS
+
+### -OutputAsPsCustomObject
+Instruct the cmdlet to return a PsCustomObject object
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
@@ -55,13 +77,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: Exception, Exceptions, Warning, Warnings
+Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, Container
+
 This is refactored function from d365fo.tools
 
 Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
-
-[Disable-FSCPSException]()
-

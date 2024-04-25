@@ -25,13 +25,13 @@ function Update-AzureStorageVariables {
     [OutputType()]
     param ( )
     
-    $hashParameters = Get-D365ActiveAzureStorageConfig
+    $hashParameters = Get-FSCPSActiveAzureStorageConfig
 
     foreach ($item in $hashParameters.Keys) {
             
         $name = "AzureStorage" + (Get-Culture).TextInfo.ToTitleCase($item)
         
         Write-PSFMessage -Level Verbose -Message "$name - $($hashParameters[$item])" -Target $hashParameters[$item]
-        Set-Variable -Name $name -Value $hashParameters[$item] -Scope Script
+        Set-Variable -Name $name -Value $hashParameters[$item] -Scope Script -Force
     }
 }

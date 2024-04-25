@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-FSCPSSettings
 
 ## SYNOPSIS
-Get the FSCPS configuration details
+Set the FSCPS configuration details
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Set-FSCPSSettings [[-SettingsFilePath] <String>] [-ProgressAction <ActionPrefere
 ```
 
 ## DESCRIPTION
-Get the FSCPS configuration details from the configuration store
+Set the FSCPS configuration details from the configuration store
 
 All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
 

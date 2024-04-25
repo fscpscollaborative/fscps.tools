@@ -1,4 +1,4 @@
-﻿Describe "Get-FSCPSVersionInfo Unit Tests" -Tag "Unit" {
+﻿Describe "Register-FSCPSAzureStorageConfig Unit Tests" -Tag "Unit" {
 	BeforeAll {
 		# Place here all things needed to prepare for the tests
 	}
@@ -8,12 +8,12 @@
 	
 	Describe "Ensuring unchanged command signature" {
 		It "should have the expected parameter sets" {
-			(Get-Command Get-FSCPSVersionInfo).ParameterSets.Name | Should -Be '__AllParameterSets'
+			(Get-Command Register-FSCPSAzureStorageConfig).ParameterSets.Name | Should -Be '__AllParameterSets'
 		}
 		
-		It 'Should have the expected parameter Version' {
-			$parameter = (Get-Command Get-FSCPSVersionInfo).Parameters['Version']
-			$parameter.Name | Should -Be 'Version'
+		It 'Should have the expected parameter ConfigStorageLocation' {
+			$parameter = (Get-Command Register-FSCPSAzureStorageConfig).Parameters['ConfigStorageLocation']
+			$parameter.Name | Should -Be 'ConfigStorageLocation'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -25,7 +25,7 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
 		It 'Should have the expected parameter ProgressAction' {
-			$parameter = (Get-Command Get-FSCPSVersionInfo).Parameters['ProgressAction']
+			$parameter = (Get-Command Register-FSCPSAzureStorageConfig).Parameters['ProgressAction']
 			$parameter.Name | Should -Be 'ProgressAction'
 			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.ActionPreference
 			$parameter.IsDynamic | Should -Be $False
@@ -42,7 +42,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -
-		__AllParameterSets -Version -ProgressAction
+		__AllParameterSets -ConfigStorageLocation -ProgressAction
 		#>
 	}
 

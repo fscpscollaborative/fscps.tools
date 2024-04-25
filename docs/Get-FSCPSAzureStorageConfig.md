@@ -5,45 +5,44 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-FSCPSSettings
+# Get-FSCPSAzureStorageConfig
 
 ## SYNOPSIS
-Get the FSCPS configuration details
+Get Azure Storage Account configs
 
 ## SYNTAX
 
 ```
-Get-FSCPSSettings [[-SettingsJsonString] <String>] [[-SettingsJsonPath] <String>] [-OutputAsHashtable]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-FSCPSAzureStorageConfig [[-Name] <String>] [-OutputAsHashtable] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get the FSCPS configuration details from the configuration store
-
-All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
+Get all Azure Storage Account configuration objects from the configuration store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-FSCPSSettings
+Get-FSCPSAzureStorageConfig
 ```
 
-This will output the current FSCPS configuration.
-The object returned will be a PSCustomObject.
+This will show all Azure Storage Account configs
 
 ### EXAMPLE 2
 ```
-Get-FSCPSSettings -OutputAsHashtable
+Get-FSCPSAzureStorageConfig -OutputAsHashtable
 ```
 
-This will output the current FSCPS configuration.
-The object returned will be a Hashtable.
+This will show all Azure Storage Account configs.
+Every object will be output as a hashtable, for you to utilize as parameters for other cmdlets.
 
 ## PARAMETERS
 
-### -SettingsJsonString
-String contains settings JSON
+### -Name
+The name of the Azure Storage Account you are looking for
+
+Default value is "*" to display all Azure Storage Account configs
 
 ```yaml
 Type: String
@@ -52,28 +51,13 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SettingsJsonPath
-String contains path to the settings.json
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
+Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -OutputAsHashtable
-Instruct the cmdlet to return a hashtable object
+Instruct the cmdlet to return a hastable object
 
 ```yaml
 Type: SwitchParameter
@@ -110,11 +94,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: Environment, Url, Config, Configuration, LCS, Upload, ClientId
+Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, Container
 
+This is refactored function from d365fo.tools
+
+Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
-
-[Set-FSCPSSettings]()
-

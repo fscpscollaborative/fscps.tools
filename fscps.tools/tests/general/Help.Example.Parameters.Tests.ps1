@@ -11,8 +11,10 @@ $excludeParameters = @(
     , 'OutputCommandOnly'
     , 'ShowOriginalProgress'
     , 'OutputAsHashtable'
+    , 'Latest'
     , 'LogPath'
     , 'Rebuild'
+    , 'OutputAsPsCustomObject'
     , 'FailOnErrorMessage'
 )
 

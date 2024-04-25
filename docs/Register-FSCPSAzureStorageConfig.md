@@ -5,32 +5,54 @@ online version:
 schema: 2.0.0
 ---
 
-# Enable-FSCPSException
+# Register-FSCPSAzureStorageConfig
 
 ## SYNOPSIS
-Enable exceptions to be thrown
+Register Azure Storage Configurations
 
 ## SYNTAX
 
 ```
-Enable-FSCPSException [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Register-FSCPSAzureStorageConfig [[-ConfigStorageLocation] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Change the default exception behavior of the module to support throwing exceptions
-
-Useful when the module is used in an automated fashion, like inside Azure DevOps pipelines and large PowerShell scripts
+Register all Azure Storage Configurations
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Enable-FSCPSException
+Register-FSCPSAzureStorageConfig -ConfigStorageLocation "System"
 ```
 
-This will for the rest of the current PowerShell session make sure that exceptions will be thrown.
+This will store all Azure Storage Configurations as defaults for all users on the machine.
 
 ## PARAMETERS
+
+### -ConfigStorageLocation
+Parameter used to instruct where to store the configuration objects
+
+The default value is "User" and this will store all configuration for the active user
+
+Valid options are:
+"User"
+"System"
+
+"System" will store the configuration as default for all users, so they can access the configuration objects
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: User
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
@@ -55,13 +77,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: Exception, Exceptions, Warning, Warnings
+Tags: Configuration, Azure, Storage
 This is refactored function from d365fo.tools
 
 Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
-
-[Disable-FSCPSException]()
-

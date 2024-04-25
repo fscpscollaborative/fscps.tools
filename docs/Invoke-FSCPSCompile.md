@@ -146,6 +146,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Collections.Specialized.OrderedDictionary
 ## NOTES
 Author: Oleksandr Nikolaiev (@onikolaiev)
 

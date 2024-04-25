@@ -8,9 +8,12 @@
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
         
+    .PARAMETER SettingsJsonString
+        String contains settings JSON
+    .PARAMETER SettingsJsonPath
+        String contains path to the settings.json
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
-        
     .EXAMPLE
         PS C:\> Get-FSCPSSettings
         
@@ -37,13 +40,35 @@ function Get-FSCPSSettings {
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
-    [OutputType([System.Collections.Specialized.OrderedDictionary])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseOutputTypeCorrectly", "")]
     param (
+        [string] $SettingsJsonString,
+        [string] $SettingsJsonPath,
         [switch] $OutputAsHashtable
     )
     begin{
         Invoke-TimeSignal -Start   
+        $helperPath = Join-Path -Path $($Script:ModuleRoot) -ChildPath "\internal\scripts\helpers.ps1" -Resolve
+        . ($helperPath)    
         $res = [Ordered]@{}
+
+        if((-not ($SettingsJsonString -eq "")) -and (-not ($SettingsJsonPath -eq "")))
+        {
+            throw "Both settings parameters should not be provided. Please provide only one of them."
+        }
+
+        if(-not ($SettingsJsonString -eq ""))
+        {
+            $tmpSettingsFilePath = "C:\temp\settings.json"
+            $null = Test-PathExists -Path "C:\temp\" -Type Container -Create
+            $null = Set-Content $tmpSettingsFilePath $SettingsJsonString -Force -PassThru
+            $null = Set-FSCPSSettings -SettingsFilePath $tmpSettingsFilePath
+        }
+
+        if(-not ($SettingsJsonPath -eq ""))
+        {
+            $null = Set-FSCPSSettings -SettingsFilePath $SettingsJsonPath
+        }        
     }
     process{         
 

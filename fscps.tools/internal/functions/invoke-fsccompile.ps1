@@ -63,6 +63,7 @@ function Invoke-FSCCompile {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
+    [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
         [string] $Version,
         [Parameter(Mandatory = $true)]
@@ -80,7 +81,7 @@ function Invoke-FSCCompile {
             }
             $responseObject = [Ordered]@{}
             Write-PSFMessage -Level Important -Message "//=============================== Reading current FSC-PS settings ================================//"
-            
+            Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
             $settings = Get-FSCPSSettings @CMDOUT
 
             if($settings.artifactsPath -eq "")
@@ -91,8 +92,9 @@ function Invoke-FSCCompile {
                 $artifactDirectory = $settings.artifactsPath
             }
 
-            if (!(Test-Path -Path $artifactDirectory))
+            if (Test-Path -Path $artifactDirectory)
             {
+                Remove-Item -Path $artifactDirectory -Recurse -Force
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
             }
 
@@ -104,15 +106,13 @@ function Invoke-FSCCompile {
             if($Version -eq "")
             {
                 throw "D365FSC Version should be specified."
-            }
-
-            
+            }            
 
             # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
             # Gather version info
             $versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
-            $PlatformVersion = $versionData.PlatformVersion
-            $ApplicationVersion = $versionData.AppVersion
+            $PlatformVersion = $versionData.data.PlatformVersion
+            $ApplicationVersion = $versionData.data.AppVersion
 
             $tools_package_name =  'Microsoft.Dynamics.AX.Platform.CompilerPackage.' + $PlatformVersion
             $plat_package_name =  'Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.' + $PlatformVersion
@@ -148,6 +148,7 @@ function Invoke-FSCCompile {
             $responseObject.msMetadataDirectory = $msMetadataDirectory
             $responseObject.msFrameworkDirectory = $msFrameworkDirectory
             $responseObject.msOutputDirectory = $msOutputDirectory
+            $responseObject.BUILD_FOLDER_PATH = $BuildFolderPath
 
             Write-PSFMessage -Level Important -Message "//=============================== Getting the list of models to build ============================//"
             if($($settings.specifyModelsManually) -eq "true")
@@ -191,7 +192,7 @@ function Invoke-FSCCompile {
             }
 
             Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
-            $null = Invoke-GenerateSolution -ModelsList $models -DynamicsVersion $Version -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
+            $null = Invoke-GenerateSolution -ModelsList $models -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
             $responseObject.solutionFolderPath = Join-Path $BuildFolderPath "$($Version)_build"
             Write-PSFMessage -Level Important -Message "Generating complete"
     
@@ -214,7 +215,7 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "NuGet`s downloading complete"
             $responseObject.nugetPackagesPath = $NuGetPackagesPath
             
-            Write-PSFMessage -Level Important -Message "//=============================== Install NuGet packages ========================================//"
+            Write-PSFMessage -Level Important -Message "//=============================== Install NuGet packages =========================================//"
             #validata NuGet installation
             $nugetPath = Get-PSFConfigValue -FullName "fscps.tools.path.nuget"
             if(-not (Test-Path $nugetPath))
@@ -228,11 +229,11 @@ function Invoke-FSCCompile {
             $null = (& $nugetPath restore $NuGetPackagesConfigFilePath -PackagesDirectory $NuGetPackagesPath -ConfigFile $NuGetConfigFilePath)
             Write-PSFMessage -Level Important -Message "NuGet`s installation complete"
 
-            Write-PSFMessage -Level Important -Message "//=============================== Copy binaries to the build folder =============================//"
+            Write-PSFMessage -Level Important -Message "//=============================== Copy binaries to the build folder ==============================//"
             Copy-Filtered -Source $SourceMetadataPath -Target (Join-Path $BuildFolderPath bin) -Filter *.*
             Write-PSFMessage -Level Important -Message "Copying binaries complete"
 
-            Write-PSFMessage -Level Important -Message "//=============================== Build solution ================================================//"
+            Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
             Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
             $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
@@ -265,7 +266,7 @@ function Invoke-FSCCompile {
                             $packageName = $settings.packageName
                         }
                         else {
-                            $packageName = $settings.packageName + ".zip"
+                            $packageName = $settings.packageName# + ".zip"
                         }
                         $packageNamePattern = $packageNamePattern.Replace("BRANCHNAME", $($settings.sourceBranch))
                         if($settings.deploy)
@@ -276,7 +277,7 @@ function Invoke-FSCCompile {
                         {
                             $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $packageName)
                         }
-                        $packageNamePattern = $packageNamePattern.Replace("FNSCMVERSION", $DynamicsVersion)
+                        $packageNamePattern = $packageNamePattern.Replace("FNSCMVERSION", $Version)
                         $packageNamePattern = $packageNamePattern.Replace("DATE", (Get-Date -Format "yyyyMMdd").ToString())
                         
                         $packageNamePattern = $packageNamePattern.Replace("RUNNUMBER", $settings.runId)
@@ -306,8 +307,6 @@ function Invoke-FSCCompile {
                 $xppToolsPath = $msFrameworkDirectory
                 $xppBinariesPath = (Join-Path $($BuildFolderPath) bin)
                 $xppBinariesSearch = $modelsToPackage
-
-
 
                 $deployablePackagePath = Join-Path $artifactDirectory ($packageName)
 
@@ -368,18 +367,20 @@ function Invoke-FSCCompile {
                             $null = New-XppRuntimePackage -packageName $packageName -packageDrop $packagePath -outputDir $outputDir -metadataDir $xppBinariesPath -packageVersion $version -binDir $xppToolsPath -enforceVersionCheck $True
                         }
 
-                        Write-PSFMessage -Level Verbose -Message "Creating deployable package"
+                        Write-PSFMessage -Level Important "Creating deployable package"
                         Add-Type -Path "$xppToolsPath\Microsoft.Dynamics.AXCreateDeployablePackageBase.dll"
-                        Write-PSFMessage -Level Verbose -Message "  - Creating combined metadata package"
+                        Write-PSFMessage -Level Important "  - Creating combined metadata package"
                         $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::CreateMetadataPackage($outputDir, $tempCombinedPackage)
-                        Write-PSFMessage -Level Verbose -Message "  - Creating merged deployable package"
+                        Write-PSFMessage -Level Important "  - Creating merged deployable package"
                         $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::MergePackage("$xppToolsPath\BaseMetadataDeployablePackage.zip", $tempCombinedPackage, $deployablePackagePath, $true, [String]::Empty)
-                        Write-PSFMessage -Level Verbose -Message "Deployable package '$deployablePackagePath' successfully created."
+                        Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
 
                         $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
                     
                         if($settings.exportModel)
                         {
+                            Write-PSFMessage -Level Important -Message "//=============================== Export models ===============================================//"
+
                             $null = Test-PathExists -Path $artifactDirectory\AxModels -Type Container -Create
                             if($models.Split(","))
                             {                                
@@ -422,17 +423,7 @@ function Invoke-FSCCompile {
                     catch {
                         throw $_.Exception.Message
                     }
-                    finally
-                    {
-                        if (Test-Path -Path $outputDir)
-                        {
-                            Remove-Item -Path $outputDir -Recurse -Force
-                        }
-                        if (Test-Path -Path $tempCombinedPackage)
-                        {
-                            Remove-Item -Path $tempCombinedPackage -Force
-                        }
-                    }
+
                 }
                 else
                 {
@@ -445,8 +436,43 @@ function Invoke-FSCCompile {
             Stop-PSFFunction -Message "Stopping because of errors" -EnableException $true
             return
         }
-        finally{
-            [PSCustomObject]$responseObject | Select-PSFObject -TypeName "FSCPS.TOOLS.Build" "*"
+        finally
+        {
+            try {
+                if($SolutionBuildFolderPath)
+                {
+                    if (Test-Path -Path $SolutionBuildFolderPath -ErrorAction SilentlyContinue)
+                    {
+                        Remove-Item -Path $SolutionBuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+                if($NuGetPackagesPath)
+                {
+                    if (Test-Path -Path $NuGetPackagesPath -ErrorAction SilentlyContinue)
+                    {
+                        Remove-Item -Path $NuGetPackagesPath -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+                if($outputDir)
+                {
+                    if (Test-Path -Path $outputDir -ErrorAction SilentlyContinue)
+                    {
+                        Remove-Item -Path $outputDir -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+                if($tempCombinedPackage)
+                {
+                    if (Test-Path -Path $tempCombinedPackage -ErrorAction SilentlyContinue)
+                    {
+                        Remove-Item -Path $tempCombinedPackage -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+            }
+            catch {
+                Write-PSFMessage -Level Verbose -Message "Cleanup warning: $($PSItem.Exception)" 
+            }
+            
+            $responseObject
         }
     }
     END {

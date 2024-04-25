@@ -39,6 +39,11 @@ function Update-FSCPSModelVersion {
 
     begin{
         Invoke-TimeSignal -Start
+        Write-PSFMessage -Level Important -Message "xppSourcePath: $xppSourcePath"
+        Write-PSFMessage -Level Important -Message "xppDescriptorSearch: $xppDescriptorSearch"
+        Write-PSFMessage -Level Important -Message "xppLayer: $xppLayer"
+        Write-PSFMessage -Level Important -Message "versionNumber: $versionNumber"
+
         if ($xppDescriptorSearch.Contains("`n"))
         {
             [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"

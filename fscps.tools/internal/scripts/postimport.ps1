@@ -32,3 +32,6 @@ foreach ($file in (Get-ChildItem "$ModuleRoot\internal\tepp\*.tepp.ps1" -ErrorAc
 
 # Load dot net assemblies
 . Import-ModuleFile -Path "$ModuleRoot\internal\scripts\load-dotnet-assemblies.ps1"
+
+# Load helpers
+. Import-ModuleFile -Path "$ModuleRoot\internal\scripts\helpers.ps1"

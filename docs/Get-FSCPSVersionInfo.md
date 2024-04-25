@@ -13,7 +13,7 @@ Get the list of D365FSC components versions
 ## SYNTAX
 
 ```
-Get-FSCPSVersionInfo [-Version] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-FSCPSVersionInfo [[-Version] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False

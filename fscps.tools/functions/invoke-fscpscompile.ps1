@@ -63,6 +63,7 @@ function Invoke-FSCPSCompile {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
+    [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
         [string] $Version,
         [Parameter(Mandatory = $true)]
@@ -74,7 +75,7 @@ function Invoke-FSCPSCompile {
     BEGIN {
         Invoke-TimeSignal -Start
         try {            
-            $settings = Get-FSCPSSettings
+            $settings = Get-FSCPSSettings -OutputAsHashtable 
             $responseObject = [Ordered]@{}
             if($settings.type -eq '')
             {
@@ -107,8 +108,11 @@ function Invoke-FSCPSCompile {
                     #break;
                 }
                 'Commerce' { 
-                    #$responseObject = (Invoke-CommerceCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force) 
-                    #break;
+                    $responseObject = (Invoke-CommerceCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force) 
+                    break;
+                }
+                Default{
+                    throw "Project type should be provided!"
                 }
             }
         }
@@ -118,7 +122,7 @@ function Invoke-FSCPSCompile {
             return
         }
         finally{
-            [PSCustomObject]$responseObject | Select-PSFObject -TypeName "FSCPS.TOOLS.Build" "*"
+            $responseObject
         }
     }
     END {

@@ -21,7 +21,7 @@
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
     .LINK
-        Disable-D365Exception
+        Disable-FSCPSException
 #>
 
 function Enable-FSCPSException {

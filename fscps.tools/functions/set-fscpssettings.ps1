@@ -1,10 +1,10 @@
 
 <#
     .SYNOPSIS
-        Get the FSCPS configuration details
+        Set the FSCPS configuration details
         
     .DESCRIPTION
-        Get the FSCPS configuration details from the configuration store
+        Set the FSCPS configuration details from the configuration store
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
         
@@ -201,7 +201,7 @@ function Set-FSCPSSettings {
                 $settingsPath = $SettingsFilePath
             }
             
-            Write-PSFMessage -Level Important -Message "Settings file '$settingsPath' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
+            Write-PSFMessage -Level Important -Message "Settings file '$settingsFile' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
             if (Test-Path $settingsPath) {
                 try {
                     $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
@@ -210,13 +210,13 @@ function Set-FSCPSSettings {
                     MergeCustomObjectIntoOrderedDictionary -dst $res -src $settingsJson
                 }
                 catch {
-                    Write-PSFMessage -Level Host -Message "Settings file $settingsFile, is wrongly formatted." -Exception $PSItem.Exception
+                    Write-PSFMessage -Level Host -Message "Settings file $settingsPath, is wrongly formatted." -Exception $PSItem.Exception
                     Stop-PSFFunction -Message "Stopping because of errors"
                     return
                     throw 
                 }
             }
-            Write-PSFMessage -Level Host -Message "Settings file '$settingsPath' - processed"
+            Write-PSFMessage -Level Host -Message "Settings file '$settingsFile' - processed"
         }
         Write-PSFMessage -Level Host  -Message "Settings were updated succesfully."
         Invoke-TimeSignal -End

@@ -43,6 +43,7 @@
 function Get-FSCPSNuget {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignment", "")]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -79,7 +80,21 @@ function Get-FSCPSNuget {
             }
             Default {}
         }
-        $storageAccountContext = New-AzStorageContext -StorageAccountName $Script:NuGetStorageAccountName -SasToken $Script:NuGetStorageSASToken
+
+        $storageConfigs = Get-FSCPSAzureStorageConfig
+        $activeStorageConfigName = "NugetStorage"
+        if($storageConfigs)
+        {
+            $activeStorageConfig = Get-FSCPSActiveAzureStorageConfig
+            $storageConfigs | ForEach-Object {
+                if($_.AccountId -eq $activeStorageConfig.AccountId -and $_.Container -eq $activeStorageConfig.Container -and $_.SAS -eq $activeStorageConfig.SAS)
+                {
+                    $activeStorageConfigName = $_.Name
+                    $activeStorageConfigName
+                }
+            }
+        }        
+
         if($Force)
         {
             $null = Test-PathExists $Path -Create -Type Container 
@@ -93,6 +108,8 @@ function Get-FSCPSNuget {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         try {
+            Set-FSCPSActiveAzureStorageConfig NugetStorage
+
             $destinationNugetFilePath = Join-Path $Path $packageName 
             
             $download = (-not(Test-Path $destinationNugetFilePath))
@@ -100,7 +117,8 @@ function Get-FSCPSNuget {
             if(!$download)
             {
                 Write-PSFMessage -Level Host -Message $packageName
-                $blobSize = (Get-AzStorageBlob -Context $storageAccountContext -Container $Script:NuGetStorageContainer -Blob $packageName  -ConcurrentTaskCount 10).Length
+                $blobFile = Get-FSCPSAzureStorageFile -Name $packageName
+                $blobSize = $blobFile.Length
                 $localSize = (Get-Item $destinationNugetFilePath).length
                 Write-PSFMessage -Level Host -Message "BlobSize is: $blobSize"
                 Write-PSFMessage -Level Host -Message "LocalSize is: $blobSize"
@@ -114,17 +132,16 @@ function Get-FSCPSNuget {
 
             if($download)
             {
-                $blob = Get-AzStorageBlobContent -Context $storageAccountContext -Container $Script:NuGetStorageContainer -Blob $packageName -Destination $destinationNugetFilePath -ConcurrentTaskCount 10 -Force
-                $blob | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$blob.Length } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($blob.LastModified) } }
+                Get-FSCPSAzureStorageFile -Name $packageName -DestinationPath $Path
             }
         }
-        catch {
+        catch {            
             Write-PSFMessage -Level Host -Message "Something went wrong while downloading NuGet package" -Exception $PSItem.Exception
             Stop-PSFFunction -Message "Stopping because of errors"
             return
         }
         finally{
-            
+            Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
         }
     }
     END {

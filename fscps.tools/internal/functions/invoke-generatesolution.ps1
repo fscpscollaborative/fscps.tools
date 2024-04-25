@@ -193,13 +193,11 @@ function Invoke-GenerateSolution {
             $tempFile = (Get-Content $buildSolutionTemplateFolder\$NugetConfigFileName).Replace('<add key="NugetFeedName" value="NugetSourcePath" />', '')
         }
         Set-Content $NewNugetFile $tempFile    
-    
-        $version = Get-FSCPSVersionInfo -Version $DynamicsVersion
-    
+        $version = Get-FSCPSVersionInfo -Version "$DynamicsVersion"
         #generate packages.config
         $PackagesConfigFileName = 'packages.config'
         $NewPackagesFile = Join-Path $NugetFolderPath $PackagesConfigFileName
-        $tempFile = (Get-Content $buildSolutionTemplateFolder\$PackagesConfigFileName).Replace('PlatformVersion', $version.PlatformVersion).Replace('ApplicationVersion', $version.AppVersion)
+        $tempFile = (Get-Content $buildSolutionTemplateFolder\$PackagesConfigFileName).Replace('PlatformVersion', $version.data.PlatformVersion).Replace('ApplicationVersion', $version.data.AppVersion)
         Set-Content $NewPackagesFile $tempFile
     }   
 
