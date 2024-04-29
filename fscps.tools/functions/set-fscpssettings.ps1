@@ -44,6 +44,7 @@ function Set-FSCPSSettings {
         $res = [Ordered]@{}
 
         $reposytoryName = ""
+        $reposytoryOwner = ""
         $currentBranchName = ""
 
         if($env:GITHUB_REPOSITORY)# If GitHub context
@@ -51,13 +52,14 @@ function Set-FSCPSSettings {
             Write-PSFMessage -Level Important -Message "Running on GitHub"
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'GitHub'
             Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"
+            
             Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:GITHUB_RUN_NUMBER"
             Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:GITHUB_WORKFLOW"
 
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:GITHUB_WORKSPACE"
-                Write-PSFMessage -Level Important -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
+                Write-PSFMessage -Level Verbose -Message "GITHUB_WORKSPACE is: $RepositoryRootPath"
                 
                 $settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
             }
@@ -65,15 +67,16 @@ function Set-FSCPSSettings {
                 $settingsFiles += $SettingsFilePath
             }
 
-            $reposytoryName = "$env:GITHUB_REPOSITORY"
-            Write-PSFMessage -Level Important -Message "GITHUB_REPOSITORY is: $reposytoryName"
+            $reposytoryOwner = "$env:GITHUB_REPOSITORY".Split("/")[0]
+            $reposytoryName = "$env:GITHUB_REPOSITORY".Split("/")[1]
+            Write-PSFMessage -Level Verbose -Message "GITHUB_REPOSITORY is: $reposytoryName"
             $branchName = "$env:GITHUB_REF"
-            Write-PSFMessage -Level Important -Message "GITHUB_REF is: $branchName"
+            Write-PSFMessage -Level Verbose -Message "GITHUB_REF is: $branchName"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })      
             $gitHubFolder = ".github"
 
             $workflowName = "$env:GITHUB_WORKFLOW"
-            Write-PSFMessage -Level Important -Message "GITHUB_WORKFLOW is: $workflowName"
+            Write-PSFMessage -Level Verbose -Message "GITHUB_WORKFLOW is: $workflowName"
             $workflowName = ($workflowName.Split([System.IO.Path]::getInvalidFileNameChars()) -join "").Replace("(", "").Replace(")", "").Replace("/", "")
 
             $settingsFiles += (Join-Path $gitHubFolder $fscmRepoSettingsFile)            
@@ -82,7 +85,7 @@ function Set-FSCPSSettings {
         }
         elseif($env:AGENT_ID)# If Azure DevOps context
         {
-            Write-PSFMessage -Level Important -Message "Running on Azure"
+            Write-PSFMessage -Level Verbose -Message "Running on Azure"
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'AzureDevOps'
             Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
             Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:Build_BuildNumber"
@@ -90,11 +93,13 @@ function Set-FSCPSSettings {
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
-                Write-PSFMessage -Level Important -Message "RepositoryRootPath is: $RepositoryRootPath"
+                Write-PSFMessage -Level Verbose -Message "RepositoryRootPath is: $RepositoryRootPath"
             }
             else{
                 $settingsFiles += $SettingsFilePath
             }
+            
+            $reposytoryOwner = $($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI.replace('https://dev.azure.com/', '').replace('/', ''))
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
             $branchName = "$env:BUILD_SOURCEBRANCHNAME"
             $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
@@ -103,7 +108,7 @@ function Set-FSCPSSettings {
 
         }
         else { # If Desktop or other
-            Write-PSFMessage -Level Important -Message "Running on desktop"
+            Write-PSFMessage -Level Verbose -Message "Running on desktop"
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'Other'
             if($SettingsFilePath -eq "")
             {
@@ -113,6 +118,7 @@ function Set-FSCPSSettings {
             $settingsFiles += $SettingsFilePath
         }
         Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value $currentBranchName
+        Set-PSFConfig -FullName 'fscps.tools.settings.repoOwner' -Value $reposytoryOwner
         Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value $reposytoryName
 
         
@@ -201,7 +207,7 @@ function Set-FSCPSSettings {
                 $settingsPath = $SettingsFilePath
             }
             
-            Write-PSFMessage -Level Important -Message "Settings file '$settingsFile' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
+            Write-PSFMessage -Level Verbose -Message "Settings file '$settingsFile' - $(If (Test-Path $settingsPath) {"exists. Processing..."} Else {"not exists. Skip."})"
             if (Test-Path $settingsPath) {
                 try {
                     $settingsJson = Get-Content $settingsPath -Encoding UTF8 | ConvertFrom-Json
@@ -216,7 +222,7 @@ function Set-FSCPSSettings {
                     throw 
                 }
             }
-            Write-PSFMessage -Level Host -Message "Settings file '$settingsFile' - processed"
+            Write-PSFMessage -Level Verbose -Message "Settings file '$settingsFile' - processed"
         }
         Write-PSFMessage -Level Host  -Message "Settings were updated succesfully."
         Invoke-TimeSignal -End

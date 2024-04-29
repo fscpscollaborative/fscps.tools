@@ -33,6 +33,8 @@ Set-PSFConfig -FullName 'fscps.tools.settings.runs-on' -Value '' -Initialize -De
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value 'v1.3' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description ''
+
+Set-PSFConfig -FullName 'fscps.tools.settings.repoOwner' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value '' -Initialize -Description 'GitHub/AzureDevOps/Other'
 Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value '' -Initialize -Description ''
@@ -43,6 +45,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value '' -Initializ
 
 Set-PSFConfig -FullName 'fscps.tools.settings.buildVersion' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.solutionName' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.enableBuildCaching' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.exportModel' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.uploadPackageToLCS' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.models' -Value '' -Initialize -Description ''

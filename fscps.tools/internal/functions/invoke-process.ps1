@@ -65,7 +65,7 @@ function Invoke-Process {
 
         [Parameter(Mandatory = $true)]
         [string[]] $Params,
-
+        [Parameter(Mandatory = $false)]
         [string] $LogPath,
 
         [switch] $ShowOriginalProgress,

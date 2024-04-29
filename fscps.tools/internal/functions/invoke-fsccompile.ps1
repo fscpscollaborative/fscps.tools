@@ -75,6 +75,8 @@ function Invoke-FSCCompile {
     BEGIN {
         Invoke-TimeSignal -Start
         try{
+            $helperPath = Join-Path -Path $($Script:ModuleRoot) -ChildPath "\internal\scripts\helpers.ps1" -Resolve
+            . ($helperPath)        
             $CMDOUT = @{
                 Verbose = If ($PSBoundParameters.Verbose -eq $true) { $true } else { $false };
                 Debug = If ($PSBoundParameters.Debug -eq $true) { $true } else { $false }
@@ -164,11 +166,47 @@ function Invoke-FSCCompile {
                 $modelsToPackage = $models
             }
             else {
-                $models = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true') @CMDOUT                
+                $models = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true') @CMDOUT         
+                
+                if($settings.enableBuildCaching)
+                {
+                    Write-PSFMessage -Level Important -Message "Model caching is enabled."
+                    if(($settings.repoProvider -eq "GitHub") -or ($settings.repoProvider -eq "AzureDevOps"))
+                    {
+                        $modelsHash = [Ordered]@{}
+                        $modelsToCache = @()
+                        Write-PSFMessage -Level Important -Message "Running in $($settings.repoProvider). Start processing"
+
+                        foreach ($model in $models.Split(","))
+                        {                            
+                            $modelName = $model
+                            Write-PSFMessage -Level Important -Message "Model: $modelName cache validation"
+                            $modelRootPath = (Join-Path $SourceMetadataPath $modelName )
+                            $modelHash = Get-FolderHash $modelRootPath
+                            $modelsHash.$modelName = $modelHash
+
+                            $validation = Validate-FSCModelCache -MetadataDirectory $SourceMetadataPath -RepoOwner $settings.repoOwner -RepoName $settings.repoName -ModelName $modelName -Version $Version
+                            if(-not $validation)
+                            {
+                                $modelsToCache += ($modelName)
+                            }
+                        }
+                        if($modelsToCache)
+                        {
+                            $modelsToBuild = $modelsToCache -join ","
+                        }
+                    }
+                    else {
+                        $modelsToBuild = $models
+                    }
+                }
+                else {
+                    $modelsToBuild = $models
+                }
                 $modelsToPackage = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true') -All @CMDOUT    
             }
-
-            Write-PSFMessage -Level Important -Message "Models to build: $models"
+            if(-not $modelsToBuild){$modelsToBuild = ""}
+            Write-PSFMessage -Level Important -Message "Models to build: $modelsToBuild"
             Write-PSFMessage -Level Important -Message "Models to package: $modelsToPackage"
         }
         catch {
@@ -191,10 +229,13 @@ function Invoke-FSCCompile {
                 Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
             }
 
-            Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
-            $null = Invoke-GenerateSolution -ModelsList $models -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
-            $responseObject.solutionFolderPath = Join-Path $BuildFolderPath "$($Version)_build"
-            Write-PSFMessage -Level Important -Message "Generating complete"
+           # if($modelsToBuild)
+           # {
+                Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
+                $null = Invoke-GenerateSolution -ModelsList $modelsToBuild -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
+                $responseObject.solutionFolderPath = Join-Path $BuildFolderPath "$($Version)_build"
+                Write-PSFMessage -Level Important -Message "Generating complete"
+         #   }
     
             Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
@@ -233,26 +274,63 @@ function Invoke-FSCCompile {
             Copy-Filtered -Source $SourceMetadataPath -Target (Join-Path $BuildFolderPath bin) -Filter *.*
             Write-PSFMessage -Level Important -Message "Copying binaries complete"
 
-            Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
-            Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
-
-            $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
-
-            $responseObject.buildLogFilePath = $msbuildresult.BuildLogFilePath
-
-            if ($msbuildresult.BuildSucceeded -eq $true)
+            if($modelsToBuild)
             {
-                Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)
-            }
-            elseif ($msbuildresult.BuildSucceeded -eq $false)
-            {
-               throw ("Build failed after {0:N1} seconds. Check the build log file '$($msbuildresult.BuildLogFilePath)' for errors." -f $msbuildresult.BuildDuration.TotalSeconds)
-            }
-            elseif ($null -eq $msbuildresult.BuildSucceeded)
-            {
-                throw "Unsure if build passed or failed: $($msbuildresult.Message)"
-            }
+                Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
+                Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
+                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
+
+                $responseObject.buildLogFilePath = $msbuildresult.BuildLogFilePath
+
+                if ($msbuildresult.BuildSucceeded -eq $true)
+                {
+                    Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)
+                    if($settings.enableBuildCaching)
+                    {
+                        foreach ($model in $modelsToBuild.Split(","))
+                        {
+                            $modelName = $model
+                            $modelHash = $modelsHash.$modelName
+                            $modelBinPath = (Join-Path $msOutputDirectory $modelName)
+                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($modelHash)_$($Version).7z"
+                            $modelArchivePath = (Join-Path $BuildFolderPath $modelFileNameWithHash)
+
+                            $storageConfigs = Get-FSCPSAzureStorageConfig
+                            $activeStorageConfigName = "ModelStorage"
+                            if($storageConfigs)
+                            {
+                                $activeStorageConfig = Get-FSCPSActiveAzureStorageConfig
+                                $storageConfigs | ForEach-Object {
+                                    if($_.AccountId -eq $activeStorageConfig.AccountId -and $_.Container -eq $activeStorageConfig.Container -and $_.SAS -eq $activeStorageConfig.SAS)
+                                    {
+                                        if($activeStorageConfigName)
+                                        {
+                                            $activeStorageConfigName = $_.Name
+                                        }
+                                    }
+                                }
+                            }
+                            Write-PSFMessage -Level Host -Message "Uploading compiled model binaries: $modelName"
+                            Write-PSFMessage -Level Host -Message "File: $modelFileNameWithHash"
+                            Compress-7zipArchive -Path $modelBinPath\* -DestinationPath $modelArchivePath
+                            Set-FSCPSActiveAzureStorageConfig ModelStorage
+                            $null = Invoke-FSCPSAzureStorageUpload -FilePath $modelArchivePath
+                            Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+                        }
+                    }
+
+                }
+                elseif ($msbuildresult.BuildSucceeded -eq $false)
+                {
+                throw ("Build failed after {0:N1} seconds. Check the build log file '$($msbuildresult.BuildLogFilePath)' for errors." -f $msbuildresult.BuildDuration.TotalSeconds)
+                }
+                elseif ($null -eq $msbuildresult.BuildSucceeded)
+                {
+                    throw "Unsure if build passed or failed: $($msbuildresult.Message)"
+                }
+            }
+            
             if($settings.generatePackages)
             {
                 Write-PSFMessage -Level Important -Message "//=============================== Generate package ==============================================//"

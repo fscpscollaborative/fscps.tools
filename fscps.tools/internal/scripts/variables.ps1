@@ -107,7 +107,9 @@ $Script:DefaultTempPath = "c:\temp\fscps.tools"
 #default nuget storage account settings
 $Script:NuGetStorageAccountName = "ciellosarchive"
 $Script:NuGetStorageContainer = "nuget"
-$Script:NuGetStorageSASToken = "sv=2022-11-02&ss=b&srt=co&sp=rl&se=2034-04-25T13:22:09Z&st=2024-04-25T05:22:09Z&spr=https&sig=qFXo8sVBTpVdER5vOJfnsxAJbEmIk9WadEP5L%2BSiG5s%3D"
+$Script:NuGetStorageSASToken = "sp=rl&st=2024-04-26T01:44:36Z&se=2034-04-26T09:44:36Z&spr=https&sv=2022-11-02&sr=c&sig=svD1T8qTAFTb8MmquBQ3ljWP83FNJ5ev5gPuQUpNmEE%3D"
+$Script:ModelsStorageContainer = "models-hash"
+$Script:ModelCacheStorageSASToken = "sp=racwdl&st=2024-04-26T21:17:33Z&se=2034-04-27T05:17:33Z&spr=https&sv=2022-11-02&sr=c&sig=YQj8BKjGyZoqheoe9MqCcUEnqPy7Twtfd0ZTq1e9%2BfQ%3D"
 
 foreach ($item in (Get-PSFConfig -FullName fscps.tools.active*)) {
     $nameTemp = $item.FullName -replace "^fscps.tools.", ""
@@ -131,8 +133,7 @@ $maskOutput = @(
 )
 
 #init
-Init-AzureNugetStorageDefault
-
+Init-AzureStorageDefault
 
 #Active broadcast message config extraction
 #Update-BroadcastVariables

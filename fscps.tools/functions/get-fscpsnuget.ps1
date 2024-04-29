@@ -94,7 +94,7 @@ function Get-FSCPSNuget {
                 }
             }
         }        
-
+        Write-PSFMessage -Level Verbose -Message "ActiveStorageConfigName: $activeStorageConfigName"
         if($Force)
         {
             $null = Test-PathExists $Path -Create -Type Container 
@@ -108,7 +108,7 @@ function Get-FSCPSNuget {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         try {
-            Set-FSCPSActiveAzureStorageConfig NugetStorage
+            Set-FSCPSActiveAzureStorageConfig "NuGetStorage"
 
             $destinationNugetFilePath = Join-Path $Path $packageName 
             
@@ -120,8 +120,8 @@ function Get-FSCPSNuget {
                 $blobFile = Get-FSCPSAzureStorageFile -Name $packageName
                 $blobSize = $blobFile.Length
                 $localSize = (Get-Item $destinationNugetFilePath).length
-                Write-PSFMessage -Level Host -Message "BlobSize is: $blobSize"
-                Write-PSFMessage -Level Host -Message "LocalSize is: $blobSize"
+                Write-PSFMessage -Level Verbose -Message "BlobSize is: $blobSize"
+                Write-PSFMessage -Level Verbose -Message "LocalSize is: $blobSize"
                 $download = $blobSize -ne $localSize
             }
 
@@ -132,7 +132,7 @@ function Get-FSCPSNuget {
 
             if($download)
             {
-                Get-FSCPSAzureStorageFile -Name $packageName -DestinationPath $Path
+                Invoke-FSCPSAzureStorageDownload -FileName $packageName -Path $Path
             }
         }
         catch {            
@@ -141,7 +141,14 @@ function Get-FSCPSNuget {
             return
         }
         finally{
-            Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+            if($activeStorageConfigName){
+                Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+            }
+            else
+            {
+                Set-FSCPSActiveAzureStorageConfig "NuGetStorage"
+            }
+            
         }
     }
     END {

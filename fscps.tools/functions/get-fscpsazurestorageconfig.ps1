@@ -43,7 +43,13 @@ function Get-FSCPSAzureStorageConfig {
     )
     
     $StorageAccounts = [hashtable](Get-PSFConfigValue -FullName "fscps.tools.azure.storage.accounts")
-        
+     
+    if(!$StorageAccounts)
+    {
+        Init-AzureStorageDefault
+        $StorageAccounts = [hashtable](Get-PSFConfigValue -FullName "fscps.tools.azure.storage.accounts")
+    }
+
     foreach ($item in $StorageAccounts.Keys) {
         if ($item -NotLike $Name) { continue }
         $res = [ordered]@{Name = $item }

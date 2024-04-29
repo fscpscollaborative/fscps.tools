@@ -10,11 +10,7 @@ $excludeParameters = @(
     , 'Temporary'
     , 'OutputCommandOnly'
     , 'ShowOriginalProgress'
-    , 'OutputAsHashtable'
-    , 'Latest'
-    , 'LogPath'
     , 'Rebuild'
-    , 'OutputAsPsCustomObject'
     , 'FailOnErrorMessage'
 )
 
@@ -42,19 +38,21 @@ foreach ( $commandName in $commands) {
     # make a describe block that will contain tests for this
     Describe "Parameters without default values from $commandName" {
         
-        foreach ($parm in $parameters.parameter) {
+        foreach ($parm in $parameters.parameter) {            
             if ($parm.defaultValue -ne "False") { continue }
-            
+            if ($parm.parameterValue -eq "SwitchParameter" -and $parm.defaultValue -ne "" ) { continue }
             $parmName = $parm.name
             
             if ($parmName -in $excludeParameters) { continue }
-
+            
+            
             $res = $false
-
+            
             foreach ($exampleObject in $examples.Examples.Example) {
                 if ($res) { continue }
 
                 $example = $exampleObject.Code -replace "`n.*" -replace "PS C:\>"
+
                 $res = $example -match "-$parmName( *|\:)"
             }
             It "$parmName is present in an example" {

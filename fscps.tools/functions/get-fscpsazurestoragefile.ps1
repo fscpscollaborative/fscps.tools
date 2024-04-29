@@ -17,10 +17,10 @@
         
     .PARAMETER DestinationPath
         The destination folder of the Azure file to download. If enpty just show the info
-
+        
     .PARAMETER Container
-        Name of the blob container inside the storage account you want to look for files  
-
+        Name of the blob container inside the storage account you want to look for files
+        
     .PARAMETER Name
         Name of the file you are looking for
         
