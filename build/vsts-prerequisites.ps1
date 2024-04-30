@@ -1,7 +1,7 @@
 ﻿Write-Host "Working on the machine named: $($env:computername)"
 Write-Host "The user running is: $($env:UserName)"
 
-Install-Module "Pester" -MaximumVersion 5.5.0 -Force -Confirm:$false -Scope CurrentUser -AllowClobber -SkipPublisherCheck
+Install-Module "Pester" -Force -Scope CurrentUser -AllowClobber -SkipPublisherCheck
 
 #region Installing d365fo.tools and dbatools <--
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
