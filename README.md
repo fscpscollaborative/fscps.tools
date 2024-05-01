@@ -1,7 +1,6 @@
 ﻿# **fscps.tools**
 
-A PowerShell module to handle different management tasks related to Microsoft Dynamics 365 Finance & Operations (D365FO).
-Read more about D365FO on [docs.microsoft.com](https://docs.microsoft.com/en-us/dynamics365/unified-operations/fin-and-ops/index).
+A PowerShell module to handle setup and maintain professional DevOps processes for your Dynamics 365 products.
 
 Available on PowerShell Gallery:
 [fscps.tools](https://www.powershellgallery.com/packages/fscps.tools).
