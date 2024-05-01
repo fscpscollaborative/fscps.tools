@@ -86,6 +86,10 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
             $settings = Get-FSCPSSettings @CMDOUT
 
+            if($settings.sourceBranch -eq "")
+            {
+                $settings.sourceBranch = $settings.currentBranch
+            }
             if($settings.artifactsPath -eq "")
             {
                 $artifactDirectory = (Join-Path $BuildFolderPath $settings.artifactsFolderName)
@@ -185,7 +189,7 @@ function Invoke-FSCCompile {
                             $modelHash = Get-FolderHash $modelRootPath
                             $modelsHash.$modelName = $modelHash
 
-                            $validation = Validate-FSCModelCache -MetadataDirectory $SourceMetadataPath -RepoOwner $settings.repoOwner -RepoName $settings.repoName -ModelName $modelName -Version $Version
+                            $validation = Validate-FSCModelCache -MetadataDirectory $SourceMetadataPath -RepoOwner $settings.repoOwner -RepoName $settings.repoName -ModelName $modelName -Version $Version -BranchName $settings.sourceBranch
                             if(-not $validation)
                             {
                                 $modelsToCache += ($modelName)
@@ -293,7 +297,7 @@ function Invoke-FSCCompile {
                             $modelName = $model
                             $modelHash = $modelsHash.$modelName
                             $modelBinPath = (Join-Path $msOutputDirectory $modelName)
-                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($modelHash)_$($Version).7z"
+                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($settings.sourceBranch.ToLower())_$($Version)_$($modelHash).7z"
                             $modelArchivePath = (Join-Path $BuildFolderPath $modelFileNameWithHash)
 
                             $storageConfigs = Get-FSCPSAzureStorageConfig
@@ -319,7 +323,6 @@ function Invoke-FSCCompile {
                             Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
                         }
                     }
-
                 }
                 elseif ($msbuildresult.BuildSucceeded -eq $false)
                 {
@@ -379,15 +382,12 @@ function Invoke-FSCCompile {
                         $packageName = $settings.packageName
                         break;
                     }
-                }             
-                
+                }                
 
                 $xppToolsPath = $msFrameworkDirectory
                 $xppBinariesPath = (Join-Path $($BuildFolderPath) bin)
                 $xppBinariesSearch = $modelsToPackage
-
                 $deployablePackagePath = Join-Path $artifactDirectory ($packageName)
-
 
                 if ($xppBinariesSearch.Contains(","))
                 {
@@ -417,8 +417,6 @@ function Invoke-FSCCompile {
                             Write-PSFMessage -Level Verbose -Message "  - $package (not an X++ binary folder, skip)"
                         }
                     }
-
-
 
                     Import-Module (Join-Path -Path $xppToolsPath -ChildPath "CreatePackage.psm1")
                     $outputDir = Join-Path -Path $BuildFolderPath -ChildPath ((New-Guid).ToString())

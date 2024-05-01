@@ -72,7 +72,7 @@ function Set-FSCPSSettings {
             Write-PSFMessage -Level Verbose -Message "GITHUB_REPOSITORY is: $reposytoryName"
             $branchName = "$env:GITHUB_REF"
             Write-PSFMessage -Level Verbose -Message "GITHUB_REF is: $branchName"
-            $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })      
+            $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper()})      
             $gitHubFolder = ".github"
 
             $workflowName = "$env:GITHUB_WORKFLOW"
@@ -89,7 +89,7 @@ function Set-FSCPSSettings {
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'AzureDevOps'
             Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
             Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:Build_BuildNumber"
-            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:Build_DefinitionName"	
+            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:Build_DefinitionName"
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
@@ -101,8 +101,8 @@ function Set-FSCPSSettings {
             
             $reposytoryOwner = $($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI.replace('https://dev.azure.com/', '').replace('/', ''))
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
-            $branchName = "$env:BUILD_SOURCEBRANCHNAME"
-            $currentBranchName = [regex]::Replace($branchName.Replace("refs/heads/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
+            $branchName = "$env:BUILD_SOURCEBRANCH"
+            $currentBranchName = [regex]::Replace($branchName.Replace("/Metadata","").Replace("$/$($reposytoryName)/","").Replace("$/$($reposytoryName)","").Replace("Trunk/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
 
             #$settingsFiles += (Join-Path $fscpsFolderName $fscmSettingsFile)
 
