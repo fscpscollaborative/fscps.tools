@@ -10,9 +10,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Prerequisites
-      run: .\build\vsts-prerequisites.ps1
-      shell: powershell 
+    #- name: Install Prerequisites
+    #  run: .\build\vsts-prerequisites.ps1
+    #  shell: powershell 
     - name: Validate
       run: .\build\vsts-validate.ps1
       shell: pwsh
