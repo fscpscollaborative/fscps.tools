@@ -251,4 +251,4 @@ function Get-MediaTypeByFilename {
         $matchingMediaType # output
       }
     }
-  }
+}

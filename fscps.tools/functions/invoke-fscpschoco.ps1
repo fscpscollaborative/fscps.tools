@@ -8,45 +8,42 @@
         
         Full list of software: https://community.chocolatey.org/packages
         
-    .PARAMETER Name
-        The name of the software to install
+    .PARAMETER Command
+        The command of the choco to execute
         
         Support a list of softwares that you want to have installed on the system
-        
+
+    .PARAMETER Silent
+        Disable output
+
+    .PARAMETER Command
+        The command of the choco to execute
+
+    .PARAMETER RemainingArguments
+        List of arguments
+
     .PARAMETER Force
-        Instruct the cmdlet to install the latest version of the software, regardless if it is already present on the system
-        
+        Force command. Reinstall latest version if command is install or upgrade to latest version
+
     .EXAMPLE
-        PS C:\> Install-FSCPSSoftware -Name vscode
+        PS C:\> Invoke-FSCPSChoco install gh -y --allow-unofficial -Silent
         
-        This will install VSCode on the system.
-        
-    .EXAMPLE
-        PS C:\> Install-FSCPSSoftware -Name vscode -Force
-        
-        This will install VSCode on the system, forcing it to be (re)installed.
-        
-    .EXAMPLE
-        PS C:\> Install-FSCPSSoftware -Name "vscode","fiddler"
-        
-        This will install VSCode and fiddler on the system.
+        This will install GH tools on the system without console output
         
     .NOTES
-        This is refactored function from d365fo.tools
-        
-        Original Author: Mötz Jensen (@Splaxi)
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
 #>
 
-Function Install-FSCPSSoftware {
+Function Invoke-FSCPSChoco {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
-        [Alias('SoftwareName')]
-        [string[]] $Name,
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string] $Command,
+        [Parameter(Mandatory = $false, Position = 1, ValueFromRemainingArguments = $true)] $RemainingArguments,
+        [switch] $Silent,
         [switch] $Force
     )
 
@@ -54,8 +51,14 @@ Function Install-FSCPSSoftware {
         Invoke-TimeSignal -Start
         try {
             if (Test-Path -Path "$env:ProgramData\Chocolatey") {
-                choco upgrade chocolatey -y -r
-                choco upgrade all --ignore-checksums -y -r
+                if (!$Silent) {
+                    choco upgrade chocolatey -y -r 
+                    choco upgrade all --ignore-checksums -y -r
+                }
+                else{
+                    $null = choco upgrade chocolatey -y -r -silent
+                    $null = choco upgrade all --ignore-checksums -y -r
+                }
             }
             else {
                 Write-PSFMessage -Level InternalComment -Message "Installing Chocolatey"
@@ -84,6 +87,7 @@ Function Install-FSCPSSoftware {
         $chocoExePath = Join-Path $chocoPath 'bin\choco.exe'
 
         if (-not (Test-PathExists -Path $chocoExePath -Type Leaf)) { return }
+
     }
     
     PROCESS {
@@ -93,20 +97,27 @@ Function Install-FSCPSSoftware {
             foreach ($item in $Name) {
                 Write-PSFMessage -Level InternalComment -Message "Installing $item"
 
-                $params = New-Object System.Collections.Generic.List[System.Object]
+                $arguments = New-Object System.Collections.Generic.List[System.Object]
 
-                $params.AddRange(@(
-                        "install"
-                        "$item",
-                        "-y",
-                        "-r"
-                    ))
 
-                if ($Force) {
-                    $params.Add("-f")
+                $arguments.Add("$Command ")
+                $RemainingArguments | ForEach-Object {
+                    if ("$_".IndexOf(" ") -ge 0 -or "$_".IndexOf('"') -ge 0) {
+                        $arguments.Add("""$($_.Replace('"','\"'))"" ")
+                    }
+                    else {
+                        $arguments.Add("$_ ")
+                    }
                 }
-
-                Invoke-Process -Executable $chocoExePath -Params $($params.ToArray()) -ShowOriginalProgress:$true
+                if ($Force) {
+                    $arguments.Add("-f")
+                }
+                if (!$Silent) {
+                    Invoke-Process -Executable $chocoExePath -Params $($arguments.ToArray()) -ShowOriginalProgress:$true
+                }
+                else {
+                    $null = Invoke-Process -Executable $chocoExePath -Params $($arguments.ToArray()) -ShowOriginalProgress:$false
+                }
             }
         }
         catch {

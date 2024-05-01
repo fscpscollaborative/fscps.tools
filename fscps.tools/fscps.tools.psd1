@@ -72,7 +72,7 @@ FormatsToProcess = 'xml\fscps.tools.Format.ps1xml'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Install-FSCPSSoftware', 
+FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Invoke-FSCPSChoco', 
                'Get-FSCPSNuget', 'Get-FSCPSVersionInfo', 'Invoke-FSCPSCompile', 
                'Install-FSCPSNugetCLI', 'Find-FSCPSCommand', 
                'Disable-FSCPSException', 'Enable-FSCPSException', 

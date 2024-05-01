@@ -336,6 +336,10 @@ function Invoke-FSCCompile {
             
             if($settings.generatePackages)
             {
+                if($PSVersionTable.PSVersion.Major -gt 5) {
+                    Write-PSFMessage -Level Warning -Message "Current PS version is $($PSVersionTable.PSVersion). The latest PS version acceptable to generate the D365FSC deployable package is 5."
+                    continue;
+                }
                 Write-PSFMessage -Level Important -Message "//=============================== Generate package ==============================================//"
 
                 switch ($settings.namingStrategy) {

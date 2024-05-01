@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Install-FSCPSSoftware
+# Invoke-FSCPSChoco
 
 ## SYNOPSIS
 Install software from Choco
@@ -13,7 +13,8 @@ Install software from Choco
 ## SYNTAX
 
 ```
-Install-FSCPSSoftware [-Name] <String[]> [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Invoke-FSCPSChoco [-Command] <String> [[-RemainingArguments] <Object>] [-Silent] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,36 +26,22 @@ Full list of software: https://community.chocolatey.org/packages
 
 ### EXAMPLE 1
 ```
-Install-FSCPSSoftware -Name vscode
+Invoke-FSCPSChoco install gh -y --allow-unofficial -Silent
 ```
 
-This will install VSCode on the system.
-
-### EXAMPLE 2
-```
-Install-FSCPSSoftware -Name vscode -Force
-```
-
-This will install VSCode on the system, forcing it to be (re)installed.
-
-### EXAMPLE 3
-```
-Install-FSCPSSoftware -Name "vscode","fiddler"
-```
-
-This will install VSCode and fiddler on the system.
+This will install GH tools on the system.
 
 ## PARAMETERS
 
-### -Name
-The name of the software to install
+### -Command
+The command of the choco to execute
 
 Support a list of softwares that you want to have installed on the system
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
-Aliases: SoftwareName
+Aliases:
 
 Required: True
 Position: 1
@@ -63,8 +50,39 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RemainingArguments
+List of arguments
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Silent
+Disable output
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
-Instruct the cmdlet to install the latest version of the software, regardless if it is already present on the system
+Force command.
+Reinstall latest version if command is install or upgrade to latest version
 
 ```yaml
 Type: SwitchParameter
@@ -101,9 +119,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-This is refactored function from d365fo.tools
-
-Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS
