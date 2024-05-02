@@ -96,31 +96,33 @@ function Validate-FSCModelCache {
         Write-PSFMessage -Level Verbose -Message "Looking for $modelFileNameWithHash blob."
         $modelFile = Get-FSCPSAzureStorageFile -Name $modelFileNameWithHash
     
-        if($modelFile)
-        {
-            Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash found.The model $ModelName will be skipped for building."
-            $null = Invoke-FSCPSAzureStorageDownload -FileName $modelFileNameWithHash -Path $tempFolder -Force
-    
-            $modelFileTmpPath = (Join-Path $tempFolder $modelFileNameWithHash)
-            Expand-7zipArchive -Path $modelFileTmpPath -DestinationPath $modelRootPath
-            
-            return $true;
-        }
-        else {
-            Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash not found.The model $ModelName will be compiled."
-
-            Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameWithoutHash
-
-            return $false;
-        }
+        try
+        {        
+            if($modelFile)
+            {
+                Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash found.The model $ModelName will be skipped for building."
+                $null = Invoke-FSCPSAzureStorageDownload -FileName $modelFileNameWithHash -Path $tempFolder -Force
         
+                $modelFileTmpPath = (Join-Path $tempFolder $modelFileNameWithHash)
+                Expand-7zipArchive -Path $modelFileTmpPath -DestinationPath $modelRootPath
+                
+                return $true;
+            }
+            else {
+                Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash not found.The model $ModelName will be compiled."
+
+                Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameWithoutHash
+
+                return $false;
+            }
+        }
+        catch{
+            return $false;
+        }        
     }
     end{
         Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
-    }
-
-
-    
+    }    
 }
 
 function Update-7ZipInstallation
