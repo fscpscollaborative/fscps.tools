@@ -51,8 +51,8 @@ function Set-FSCPSSettings {
         {
             Write-PSFMessage -Level Important -Message "Running on GitHub"
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'GitHub'
-            Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"
-            
+            Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"            
+
             Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:GITHUB_RUN_NUMBER"
             Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:GITHUB_WORKFLOW"
 
@@ -89,7 +89,7 @@ function Set-FSCPSSettings {
             Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value 'AzureDevOps'
             Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
             Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value "$ENV:Build_BuildNumber"
-            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:Build_DefinitionName"
+            Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value "$ENV:Build_DefinitionName" 
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"

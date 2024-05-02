@@ -39,6 +39,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -D
 Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value '' -Initialize -Description 'GitHub/AzureDevOps/Other'
 Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value '' -Initialize -Description 'GitHub/Azure run_id'
+Set-PSFConfig -FullName 'fscps.tools.settings.repoToken' -Value '' -Initialize -Description ''
 
 Set-PSFConfig -FullName 'fscps.tools.settings.githubRunner' -Value 'windows-latest' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.workflowName' -Value '' -Initialize -Description 'The name of the GitHub Workflow/AzureDO Task'

@@ -164,7 +164,11 @@ function Compress-7zipArchive {
         Update-7ZipInstallation
     }
 
-
+    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.repoToken"
+    if(-not $passwd)
+    {
+        $passwd = "6E489467A6065A93CE1989C997810"
+    }
     $use7zip = $false
     if (Test-Path -Path $7zipPath -PathType Leaf) {
         try {
@@ -178,7 +182,7 @@ function Compress-7zipArchive {
     if ($use7zip) {
         Write-PSFMessage -Level Debug -Message "Using 7zip"
         Set-Alias -Name 7z -Value $7zipPath
-        $command = '7z a -t7z "{0}" "{1}"' -f $DestinationPath, $Path
+        $command = '7z a -t7z "{0}" "{1}" {2}' -f $DestinationPath, $Path, "-p$passwd"
         Invoke-Expression -Command $command | Out-Null
     }
     else {
@@ -199,6 +203,12 @@ function Expand-7zipArchive {
         Update-7ZipInstallation
     }
 
+    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.repoToken"
+    if(-not $passwd)
+    {
+        $passwd = "6E489467A6065A93CE1989C997810"
+    }
+
     $use7zip = $false
     if (Test-Path -Path $7zipPath -PathType Leaf) {
         try {
@@ -212,7 +222,7 @@ function Expand-7zipArchive {
     if ($use7zip) {
         Write-PSFMessage -Level Debug -Message "Using 7zip"
         Set-Alias -Name 7z -Value $7zipPath
-        $command = '7z x "{0}" -o"{1}" -aoa -r' -f $Path, $DestinationPath
+        $command = '7z x "{0}" -o"{1}" -aoa -r  {2}' -f $Path, $DestinationPath, "-p$passwd"
         Invoke-Expression -Command $command | Out-Null
     }
     else {
