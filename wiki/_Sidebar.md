@@ -10,13 +10,10 @@
 * [Start, Stop and List services](https://github.com/onikolaiev/fscps.tools/wiki/How-To-Start-Stop-List-D365FO-Services)
 
 ## **Guides**
-* [[Configure Azure Logic App]]
 * [[Fix AzureStorageConfig]]
 * [[Run a runnable class]]
-* [[Update users in environment]]
 * [[Work with Azure Storage Account]]
 * [Work with packages, resource label files, language and lables](https://github.com/onikolaiev/fscps.tools/wiki/Work-with-packages,-resource---label-files,-language-and-lables)
-* [[Working with the different D365 services]]
 
 # **Documentation**
 
