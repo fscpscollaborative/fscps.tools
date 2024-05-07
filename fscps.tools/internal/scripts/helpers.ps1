@@ -90,8 +90,8 @@ function Validate-FSCModelCache {
     process{
         $modelRootPath = (Join-Path $MetadataDirectory $modelName)
         $hash = Get-FolderHash $modelRootPath
-        $modelFileNameWithHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_$($hash).7z"
-        $modelFileNameWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_*.7z"
+        $modelFileNameWithHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_$($hash).7z".Replace(" ", "-")
+        $modelFileNameWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_*.7z".Replace(" ", "-")
     
         Write-PSFMessage -Level Verbose -Message "Looking for $modelFileNameWithHash blob."
         $modelFile = Get-FSCPSAzureStorageFile -Name $modelFileNameWithHash
