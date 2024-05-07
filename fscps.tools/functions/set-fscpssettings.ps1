@@ -99,7 +99,7 @@ function Set-FSCPSSettings {
                 $settingsFiles += $SettingsFilePath
             }
             
-            $reposytoryOwner = $($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI.replace('https://dev.azure.com/', '').replace('/', ''))
+            $reposytoryOwner = $($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI.replace('https://dev.azure.com/', '').replace('/', '').replace('https:',''))
             $reposytoryName = "$env:SYSTEM_TEAMPROJECT"
             $branchName = "$env:BUILD_SOURCEBRANCH"
             $currentBranchName = [regex]::Replace($branchName.Replace("/Metadata","").Replace("$/$($reposytoryName)/","").Replace("$/$($reposytoryName)","").Replace("Trunk/","").Replace("/","_"), '(?i)(?:^|-|_)(\p{L})', { $args[0].Groups[1].Value.ToUpper() })   
