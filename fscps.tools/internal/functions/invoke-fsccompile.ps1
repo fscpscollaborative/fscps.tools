@@ -100,10 +100,12 @@ function Invoke-FSCCompile {
             {
                 $settings.sourceBranch = $settings.currentBranch
             }
+
             if($settings.artifactsPath -eq "")
             {
                 $artifactDirectory = (Join-Path $BuildFolderPath $settings.artifactsFolderName)
             }
+            
             else {
                 $artifactDirectory = $settings.artifactsPath
             }
