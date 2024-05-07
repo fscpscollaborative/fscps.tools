@@ -117,7 +117,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/onikolaiev/fscps.tools'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/fscpscollaborative/fscps.tools/master/images/fscps-logo.png'
 
         # ReleaseNotes of this module
         # ReleaseNotes = ''
