@@ -255,6 +255,8 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
+            Write-PSFMessage -Level Important -Message "Source folder: $SourcesPath"
+            Write-PSFMessage -Level Important -Message "Destination folder: $BuildFolderPath"
             Copy-Item $SourcesPath\* -Destination $BuildFolderPath -Recurse -Force @CMDOUT
             #Copy-Item $SolutionBuildFolderPath -Destination $BuildFolderPath -Recurse -Force
             Write-PSFMessage -Level Important -Message "Copying complete"
@@ -308,7 +310,7 @@ function Invoke-FSCCompile {
                             $modelName = $model
                             $modelHash = $modelsHash.$modelName
                             $modelBinPath = (Join-Path $msOutputDirectory $modelName)
-                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($settings.sourceBranch.ToLower())_$($Version)_$($modelHash).7z"
+                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($settings.sourceBranch.ToLower())_$($Version)_$($modelHash).7z".Replace(" ", "-")
                             $modelArchivePath = (Join-Path $BuildFolderPath $modelFileNameWithHash)
 
                             $storageConfigs = Get-FSCPSAzureStorageConfig
@@ -495,7 +497,7 @@ function Invoke-FSCCompile {
                         $responseObject.ARTIFACTS_PATH = $artifactDirectory
 
 
-                        $artifacts = Get-ChildItem $artifactDirectory -Leaf -Recurse
+                        $artifacts = Get-ChildItem $artifactDirectory -Recurse
                         $artifactsList = $artifacts.FullName -join ","
 
                         if($artifactsList.Contains(','))
