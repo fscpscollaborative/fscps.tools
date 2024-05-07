@@ -98,7 +98,7 @@ function Invoke-FSCCompile {
 
             if($BuildFolderPath -eq (Join-Path $script:DefaultTempPath _bld))
             {
-                $BuildFolderPath = (Join-Path $script:DefaultTempPath $($Version"_bld"))
+                $BuildFolderPath = Join-Path $script:DefaultTempPath $($Version+"_bld")
             }
 
             if($settings.sourceBranch -eq "")
