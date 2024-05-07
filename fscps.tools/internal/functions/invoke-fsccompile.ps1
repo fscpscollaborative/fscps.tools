@@ -484,7 +484,7 @@ function Invoke-FSCCompile {
                         $responseObject.ARTIFACTS_PATH = $artifactDirectory
 
 
-                        $artifacts = Get-ChildItem $artifactDirectory
+                        $artifacts = Get-ChildItem $artifactDirectory -Leaf -Recurse
                         $artifactsList = $artifacts.FullName -join ","
 
                         if($artifactsList.Contains(','))
