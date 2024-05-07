@@ -96,11 +96,6 @@ function Invoke-FSCCompile {
                 throw "D365FSC Version should be specified."
             }   
 
-            if($BuildFolderPath -eq (Join-Path $script:DefaultTempPath _bld))
-            {
-                $BuildFolderPath = Join-Path $script:DefaultTempPath $($Version+"_bld")
-            }
-
             if($settings.sourceBranch -eq "")
             {
                 $settings.sourceBranch = $settings.currentBranch
