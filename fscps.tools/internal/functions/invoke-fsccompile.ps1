@@ -86,6 +86,21 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
             $settings = Get-FSCPSSettings @CMDOUT
 
+            if($Version -eq "")
+            {
+                $Version = $settings.buildVersion
+            }
+
+            if($Version -eq "")
+            {
+                throw "D365FSC Version should be specified."
+            }   
+
+            if($BuildFolderPath -eq (Join-Path $script:DefaultTempPath _bld))
+            {
+                $BuildFolderPath = (Join-Path $script:DefaultTempPath $($Version"_bld"))
+            }
+
             if($settings.sourceBranch -eq "")
             {
                 $settings.sourceBranch = $settings.currentBranch
@@ -104,15 +119,9 @@ function Invoke-FSCCompile {
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
             }
 
-            if($Version -eq "")
-            {
-                $Version = $settings.buildVersion
-            }
 
-            if($Version -eq "")
-            {
-                throw "D365FSC Version should be specified."
-            }            
+
+         
 
             # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
             # Gather version info
