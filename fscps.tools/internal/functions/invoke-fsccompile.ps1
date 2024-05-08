@@ -100,7 +100,7 @@ function Invoke-FSCCompile {
             {
                 $BuildFolderPath = (Join-Path $script:DefaultTempPath _bld)
             }
-            
+
             if($settings.sourceBranch -eq "")
             {
                 $settings.sourceBranch = $settings.currentBranch

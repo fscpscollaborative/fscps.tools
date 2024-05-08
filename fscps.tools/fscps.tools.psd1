@@ -111,10 +111,10 @@ PrivateData = @{
         Tags = 'd365fo','d365fsc','Dynamics365','D365','Finance&Operations','FinanceOperations','FinanceAndOperations','Dynamics365FO','fscps','fsc-ps'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://opensource.org/licenses/MIT'
+        LicenseUri = 'https://opensource.org/licenses/apache-2-0'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/onikolaiev/fscps.tools'
+        ProjectUri = 'https://github.com/fscpscollaborative/fscps.tools'
 
         # A URL to an icon representing this module.
         IconUri = 'https://raw.githubusercontent.com/fscpscollaborative/fscps.tools/master/images/fscps-logo.png'
