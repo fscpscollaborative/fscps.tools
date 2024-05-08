@@ -94,7 +94,7 @@ function Invoke-FSCCompile {
             if($Version -eq "")
             {
                 throw "D365FSC Version should be specified."
-            }   
+            }
 
             if([string]::IsNullOrEmpty($BuildFolderPath))
             {
