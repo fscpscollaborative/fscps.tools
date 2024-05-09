@@ -1,4 +1,4 @@
-﻿
+
 <#
     .SYNOPSIS
         Delete a file to Azure
@@ -23,10 +23,10 @@
         
     .PARAMETER Force
         Instruct the cmdlet to overwrite the file in the container if it already exists
-
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
-        This is less user friendly, but allows catching exceptions in calling scripts        
+        This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
         PS C:\> $AzureParams = Get-FSCActiveAzureStorageConfig

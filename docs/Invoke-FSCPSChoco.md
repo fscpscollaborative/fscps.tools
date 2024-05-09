@@ -29,7 +29,7 @@ Full list of software: https://community.chocolatey.org/packages
 Invoke-FSCPSChoco install gh -y --allow-unofficial -Silent
 ```
 
-This will install GH tools on the system.
+This will install GH tools on the system without console output
 
 ## PARAMETERS
 
