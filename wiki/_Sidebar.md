@@ -11,9 +11,7 @@
 
 ## **Guides**
 * [[Fix AzureStorageConfig]]
-* [[Run a runnable class]]
 * [[Work with Azure Storage Account]]
-* [Work with packages, resource label files, language and lables](https://github.com/fscpscollaborative/fscps.tools/wiki/Work-with-packages,-resource---label-files,-language-and-lables)
 
 # **Documentation**
 
@@ -32,10 +30,7 @@
 * [[Implementing the messaging system]]
 * [[Getting Started with GitHub]]
 * [Your First Pull Request](https://github.com/sqlcollaborative/dbatools/wiki/Your-First-Pull-Request)
-* [[Removing a file from your PR]]
-* [[Style Guide]]
 * [[Branching]]
-* [[Azure DevOps Build Configuration]]
 * [[Building-tools]]
 * [[How To Write Wiki Pages]]
 
