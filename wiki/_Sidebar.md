@@ -8,10 +8,11 @@
 
 ## **How To**
 * [Get D365FSC versions data](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Get-D365FSCVersion-List)
+* [Compile ISV model](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Compile-ISV-model)
 
 ## **Guides**
 * [[Work with Azure Storage Account]]
-* [[Compile isv model]]
+
 
 # **Documentation**
 * [[settings]]
