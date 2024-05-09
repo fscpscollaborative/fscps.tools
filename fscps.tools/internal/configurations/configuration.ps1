@@ -30,7 +30,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.fscpsFolder' -Value '.FSC-PS' -Ini
 
 Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value '' -Initialize -Description 'Project type should be provided via settings json'
 Set-PSFConfig -FullName 'fscps.tools.settings.runs-on' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value 'v1.3' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value $script:ModuleVersion -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description ''
 

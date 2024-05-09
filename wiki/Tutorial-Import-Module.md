@@ -5,7 +5,6 @@ This tutorial will show you how to import the fscps.tools on a machine where you
 You need to import / load the fscps.tools module into PowerShell every time you need to use a command from it.
 
 ## **Prerequisites**
-* Machine with D365FO installed
 * PowerShell 5.1
 * fscps.tools module installed
 
