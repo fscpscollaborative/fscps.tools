@@ -37,6 +37,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter Type' {
+			$parameter = (Get-Command Invoke-FSCPSCompile).Parameters['Type']
+			$parameter.Name | Should -Be 'Type'
+			$parameter.ParameterType.ToString() | Should -Be FSCPSType
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 2
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter BuildFolderPath' {
 			$parameter = (Get-Command Invoke-FSCPSCompile).Parameters['BuildFolderPath']
 			$parameter.Name | Should -Be 'BuildFolderPath'
@@ -45,7 +58,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 2
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -81,7 +94,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -SourcesPath
-		__AllParameterSets -Version -SourcesPath -BuildFolderPath -Force -ProgressAction
+		__AllParameterSets -Version -SourcesPath -Type -BuildFolderPath -Force -ProgressAction
 		#>
 	}
 

@@ -11,7 +11,7 @@
         
     .PARAMETER SourcesPath
         The folder contains a metadata files with binaries
-        
+
     .PARAMETER BuildFolderPath
         The destination build folder
         
@@ -86,12 +86,12 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
             $settings = Get-FSCPSSettings @CMDOUT
 
-            if($Version -eq "")
+            if([string]::IsNullOrEmpty($Version))
             {
                 $Version = $settings.buildVersion
             }
 
-            if($Version -eq "")
+            if([string]::IsNullOrEmpty($Version))
             {
                 throw "D365FSC Version should be specified."
             }
@@ -101,16 +101,15 @@ function Invoke-FSCCompile {
                 $BuildFolderPath = (Join-Path $script:DefaultTempPath _bld)
             }
 
-            if($settings.sourceBranch -eq "")
+            if([string]::IsNullOrEmpty($settings.sourceBranch))
             {
                 $settings.sourceBranch = $settings.currentBranch
             }
 
-            if($settings.artifactsPath -eq "")
+            if([string]::IsNullOrEmpty($settings.artifactsPath))
             {
                 $artifactDirectory = (Join-Path $BuildFolderPath $settings.artifactsFolderName)
-            }
-            
+            }            
             else {
                 $artifactDirectory = $settings.artifactsPath
             }
