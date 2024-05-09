@@ -40,7 +40,7 @@ Update-Module -name fscps.tools -Force
 ```
 ## Getting help
 
-[The wiki](https://github.com/onikolaiev/fscps.tools/wiki) contains more details about installation and also guides to help you with some common tasks. It also contains documentation for all the module's commands. Expand the wiki's `Pages` control at the top of the content sidebar to view and search the list of command documentation pages.
+[The wiki](https://github.com/fscpscollaborative/fscps.tools/wiki) contains more details about installation and also guides to help you with some common tasks. It also contains documentation for all the module's commands. Expand the wiki's `Pages` control at the top of the content sidebar to view and search the list of command documentation pages.
 
 Since the project started we have adopted and extended the comment based help inside each cmdlet / function. This means that every single command contains at least one fully working example on how to run it and what to expect from the cmdlet.
 
@@ -74,4 +74,4 @@ We know that when you are learning about new stuff and just want to share your f
 
 ## Dependencies
 
-This module depends on other modules. The dependencies are documented in the [dependency graph](https://github.com/onikolaiev/fscps.tools/network/dependencies) and the Dependencies section of the Package Details of the [package listing](https://www.powershellgallery.com/packages/fscps.tools) in the PowerShell Gallery.
+This module depends on other modules. The dependencies are documented in the [dependency graph](https://github.com/fscpscollaborative/fscps.tools/network/dependencies) and the Dependencies section of the Package Details of the [package listing](https://www.powershellgallery.com/packages/fscps.tools) in the PowerShell Gallery.
