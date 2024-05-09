@@ -10,10 +10,13 @@
         
     .PARAMETER SettingsJsonString
         String contains settings JSON
+        
     .PARAMETER SettingsJsonPath
         String contains path to the settings.json
+        
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
+        
     .EXAMPLE
         PS C:\> Get-FSCPSSettings
         

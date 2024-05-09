@@ -12,19 +12,19 @@
         The command of the choco to execute
         
         Support a list of softwares that you want to have installed on the system
-
+        
     .PARAMETER Silent
         Disable output
-
+        
     .PARAMETER Command
         The command of the choco to execute
-
+        
     .PARAMETER RemainingArguments
         List of arguments
-
+        
     .PARAMETER Force
         Force command. Reinstall latest version if command is install or upgrade to latest version
-
+        
     .EXAMPLE
         PS C:\> Invoke-FSCPSChoco install gh -y --allow-unofficial -Silent
         

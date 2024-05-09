@@ -8,6 +8,9 @@
         
         All settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets
         
+    .PARAMETER SettingsJsonString
+        String contains JSON with custom settings
+        
     .PARAMETER SettingsFilePath
         Set path to the settings.json file
         
@@ -33,9 +36,22 @@ function Set-FSCPSSettings {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [string] $SettingsFilePath
+        [string] $SettingsFilePath,
+        [string] $SettingsJsonString
     )
     begin{
+        if((-not ($SettingsJsonString -eq "")) -and (-not ($SettingsFilePath -eq "")))
+        {
+            throw "Both settings parameters cannot be provided. Please provide only one of them."
+        }
+
+        if(-not ($SettingsJsonString -eq ""))
+        {
+            $SettingsFilePath = "C:\temp\settings.json"
+            $null = Test-PathExists -Path "C:\temp\" -Type Container -Create
+            $null = Set-Content $SettingsFilePath $SettingsJsonString -Force -PassThru
+        }
+
         $fscpsFolderName = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsFolder"
         $fscmSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsSettingsFile"
         $fscmRepoSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.fscpsRepoSettingsFile"
@@ -47,6 +63,7 @@ function Set-FSCPSSettings {
         $reposytoryOwner = ""
         $currentBranchName = ""
 
+        
         if($env:GITHUB_REPOSITORY)# If GitHub context
         {
             Write-PSFMessage -Level Important -Message "Running on GitHub"

@@ -13,7 +13,8 @@ Set the FSCPS configuration details
 ## SYNTAX
 
 ```
-Set-FSCPSSettings [[-SettingsFilePath] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Set-FSCPSSettings [[-SettingsFilePath] <String>] [[-SettingsJsonString] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,6 +44,21 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SettingsJsonString
+String contains JSON with custom settings
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

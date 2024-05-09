@@ -42,7 +42,7 @@ $versionData
 $versionData.data
 ```
 
-[[images/tutorials/How-To-Get-D365FSCVersion-Specific.gif]]
+[[images/howto/How-To-Get-D365FSCVersion-Specific.gif]]
 
 ## **Closing comments**
 In this tutorial we showed you how to list all of the functions that is part of the fscps.tools. We also showed how you can search for a specific keyword and find all commands containing that keyword.
