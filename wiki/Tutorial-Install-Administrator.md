@@ -48,9 +48,6 @@ Answer the prompt with: **A**
 
 [[images/tutorials/First-Time-Install-Administrator-Confirm-Repository.gif]]
 
-## **Completing installation**
-[[images/tutorials/First-Time-Install-Administrator-Wait-For-Installation.gif]]
-
 ## **Import module**
 While you just installed the fscps.tools on the machine by following this tutorial, you will need to import or simply put, load the module into the PowerShell console, before you can use it. Type the following command:
 
