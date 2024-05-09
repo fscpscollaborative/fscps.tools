@@ -1,6 +1,6 @@
 # Script to generate the parameter unit tests.
 # based on https://gist.github.com/Splaxi/2a24fc3c5193089ae7047ac5b8f104db
-# See also https://github.com/d365collaborative/d365fo.tools/wiki/Building-tools
+# See also https://github.com/fscpscollaborative/fscps.tools/wiki/Building-tools
 $path = "$PSScriptRoot\..\fscps.tools"
 
 Import-Module $path -Force -ErrorAction SilentlyContinue

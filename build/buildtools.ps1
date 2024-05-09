@@ -1,5 +1,5 @@
 # Installs the modules required for the automatic text generation.
-# See also https://github.com/d365collaborative/d365fo.tools/wiki/Building-tools
+# See also https://github.com/fscpscollaborative/fscps.tools/wiki/Building-tools
 
 Write-Host "Working on the machine named: $($env:computername)"
 Write-Host "The user running is: $($env:UserName)"
