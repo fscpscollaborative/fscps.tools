@@ -132,6 +132,8 @@ function Set-FSCPSSettings {
                 throw "SettingsFilePath variable should be passed if running on the cloud/personal computer"
             }
             $reposytoryName = "windows host"
+            Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value 1
+            $currentBranchName = 'DEV'
             $settingsFiles += $SettingsFilePath
         }
         Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value $currentBranchName
