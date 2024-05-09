@@ -11,8 +11,10 @@
 
 ## **Guides**
 * [[Work with Azure Storage Account]]
+* [[Compile isv model]]
 
 # **Documentation**
+* [[settings]]
 
 ## **Concepts**
 

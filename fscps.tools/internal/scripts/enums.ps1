@@ -34,3 +34,9 @@ enum NuGetType {
     PlatformDevALM
     PlatformCompilerPackage
 }
+
+enum FSCPSType {
+    FSCM
+    Commerce
+    ECommerce
+}

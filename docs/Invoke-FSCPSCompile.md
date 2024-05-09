@@ -13,8 +13,8 @@ Invoke the D365FSC models compilation
 ## SYNTAX
 
 ```
-Invoke-FSCPSCompile [[-Version] <String>] [-SourcesPath] <String> [[-BuildFolderPath] <String>] [-Force]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Invoke-FSCPSCompile [[-Version] <String>] [-SourcesPath] <String> [[-Type] <FSCPSType>]
+ [[-BuildFolderPath] <String>] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,7 +24,7 @@ Invoke the D365FSC models compilation
 
 ### EXAMPLE 1
 ```
-Invoke-FSCPSCompile -Version "10.0.39"
+Invoke-FSCPSCompile -Version "10.0.39" -Type FSCM
 ```
 
 Example output:
@@ -94,6 +94,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Type
+The type of the FSCPS project to build
+
+```yaml
+Type: FSCPSType
+Parameter Sets: (All)
+Aliases:
+Accepted values: FSCM, Commerce, ECommerce
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BuildFolderPath
 The destination build folder
 
@@ -103,7 +119,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: (Join-Path $script:DefaultTempPath _bld)
 Accept pipeline input: False
 Accept wildcard characters: False

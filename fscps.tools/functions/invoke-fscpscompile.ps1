@@ -8,6 +8,9 @@
         
     .PARAMETER Version
         The version of the D365FSC used to build
+    
+    .PARAMETER Type
+        The type of the FSCPS project to build
         
     .PARAMETER SourcesPath
         The folder contains a metadata files with binaries
@@ -19,7 +22,7 @@
         Cleanup destination build folder befor build
         
     .EXAMPLE
-        PS C:\> Invoke-FSCPSCompile -Version "10.0.39"
+        PS C:\> Invoke-FSCPSCompile -Version "10.0.39" -Type FSCM
         
         Example output:
         
@@ -68,6 +71,7 @@ function Invoke-FSCPSCompile {
         [string] $Version,
         [Parameter(Mandatory = $true)]
         [string] $SourcesPath,
+        [FSCPSType]$Type,
         [string] $BuildFolderPath = (Join-Path $script:DefaultTempPath _bld),
         [switch] $Force
     )
@@ -77,9 +81,15 @@ function Invoke-FSCPSCompile {
         try {            
             $settings = Get-FSCPSSettings -OutputAsHashtable 
             $responseObject = [Ordered]@{}
-            if($settings.type -eq '')
+
+            if($settings.type -eq '' -and ($Type -eq $null))
             {
                 throw "Project type should be provided!"
+            }
+            
+            if($settings.type -eq '')
+            {
+                $settings.type = $Type
             }
         }
         catch {
@@ -96,7 +106,7 @@ function Invoke-FSCPSCompile {
             switch($settings.type)
             {
                 'FSCM' { 
-                    $responseObject = (Invoke-FSCCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force)
+                    $responseObject = (Invoke-FSCCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force )
                     break;
                 }
                 'ECommerce' { 
