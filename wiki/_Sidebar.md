@@ -7,10 +7,9 @@
 * [Get help content for a command](https://github.com/fscpscollaborative/fscps.tools/wiki/Tutorial-Show-Help)
 
 ## **How To**
-* [Start, Stop and List services](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Start-Stop-List-D365FO-Services)
+* [Get D365FSC versions data](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Get-D365FSCVersion-List)
 
 ## **Guides**
-* [[Fix AzureStorageConfig]]
 * [[Work with Azure Storage Account]]
 
 # **Documentation**
