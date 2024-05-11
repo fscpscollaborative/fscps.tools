@@ -82,11 +82,11 @@ function Invoke-FSCPSCompile {
             $settings = Get-FSCPSSettings -OutputAsHashtable 
             $responseObject = [Ordered]@{}
 
-            if($settings.type -eq '' -and ($Type -eq $null))
+            if($settings.type -eq '' -and ($null -eq $Type))
             {
                 throw "Project type should be provided!"
             }
-            
+
             if($settings.type -eq '')
             {
                 $settings.type = $Type
