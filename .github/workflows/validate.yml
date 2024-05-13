@@ -10,9 +10,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    #- name: Install Prerequisites
-    #  run: .\build\vsts-prerequisites.ps1
-    #  shell: powershell 
+
     - name: Validate
       run: .\build\vsts-validate.ps1
       shell: pwsh
+
+    - name: Delete workflow runs
+      if: always()
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        token: ${{ github.token }}
+        repository: ${{ github.repository }}
+        retain_days: 2
+        keep_minimum_runs: 2
+        delete_workflow_by_state_pattern: "All"
+        dry_run: false
