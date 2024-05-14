@@ -9,6 +9,7 @@
 ## **How To**
 * [Get D365FSC versions data](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Get-D365FSCVersion-List)
 * [Compile ISV model](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Compile-ISV-model)
+* [Invoke Choco](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Use-Choco)
 
 ## **Guides**
 * [[Work with Azure Storage Account]]
@@ -29,7 +30,6 @@
 
 ## **Start Here**
 * [[Do And Do Not]]
-* [[Implementing the messaging system]]
 * [[Getting Started with GitHub]]
 * [Your First Pull Request](https://github.com/sqlcollaborative/dbatools/wiki/Your-First-Pull-Request)
 * [[Branching]]
@@ -44,4 +44,3 @@
 
 ## **Troubleshooting**
 * [[Troubleshoot]]
-* [[Load individual files or dot source the files]]
