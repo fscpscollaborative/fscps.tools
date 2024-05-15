@@ -14,7 +14,10 @@ jobs:
     - name: Validate
       run: .\build\vsts-validate.ps1
       shell: pwsh
-
+      
+  del_runs:
+    runs-on: ubuntu-latest
+    steps:
     - name: Delete workflow runs
       if: always()
       uses: Mattraks/delete-workflow-runs@v2
@@ -24,4 +27,3 @@ jobs:
         retain_days: 2
         keep_minimum_runs: 2
         delete_workflow_by_state_pattern: "All"
-        dry_run: false
