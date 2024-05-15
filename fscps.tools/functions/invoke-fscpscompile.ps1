@@ -113,10 +113,6 @@ function Invoke-FSCPSCompile {
                     #$responseObject = (Invoke-ECommerceCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force)
                     #break;
                 }
-                'Retail' { 
-                    #$responseObject = (Invoke-RetailCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force)
-                    #break;
-                }
                 'Commerce' { 
                     $responseObject = (Invoke-CommerceCompile -Version $Version -SourcesPath $SourcesPath -BuildFolderPath $BuildFolderPath -Force:$Force) 
                     break;

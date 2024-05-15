@@ -66,20 +66,6 @@ Function Get-FSCPSVersionInfo {
                                 $versionDefault.data.PlatformVersion = $version.data.PlatformVersion
                             }
                         }
-                        if($version.data.PSobject.Properties.name -match "retailSDKURL")
-                        {
-                            if($version.data.retailSDKURL -ne "")
-                            {
-                                $versionDefault.data.retailSDKURL = $version.data.retailSDKURL
-                            }
-                        }
-                        if($version.data.PSobject.Properties.name -match "retailSDKVersion")
-                        {
-                            if($version.data.retailSDKVersion -ne "")
-                            {
-                                $versionDefault.data.retailSDKVersion = $version.data.retailSDKVersion
-                            }
-                        }
                     }
                 }
             }
@@ -102,8 +88,6 @@ Function Get-FSCPSVersionInfo {
                             data = @{
                                 AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
                                 PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
-                                RetailSDKVersion                = $d.data.retailSDKVersion
-                                RetailSDKURL                    = $d.data.retailSDKURL
                                 FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
                                 FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
                                 FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
@@ -124,8 +108,6 @@ Function Get-FSCPSVersionInfo {
                             data = @{
                                 AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
                                 PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
-                                RetailSDKVersion                = $d.data.retailSDKVersion
-                                RetailSDKURL                    = $d.data.retailSDKURL
                                 FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
                                 FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
                                 FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
