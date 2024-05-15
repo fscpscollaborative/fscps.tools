@@ -34,10 +34,10 @@ Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value $script:ModuleVer
 Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value '' -Initialize -Description 'The current execution branch name'
 Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.repoOwner' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.repoOwner' -Value '' -Initialize -Description 'The name of the repo owner. GitHub - repo owner. Azure - name of the organization'
+Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -Description 'The name of the repo. GitHub - name of the repo. Azure - name of the collection'
 Set-PSFConfig -FullName 'fscps.tools.settings.repoProvider' -Value '' -Initialize -Description 'GitHub/AzureDevOps/Other'
-Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.repositoryRootPath' -Value '' -Initialize -Description 'Dynamics value. Contains the path to the root of the repo'
 Set-PSFConfig -FullName 'fscps.tools.settings.runId' -Value '' -Initialize -Description 'GitHub/Azure run_id'
 Set-PSFConfig -FullName 'fscps.tools.settings.repoToken' -Value '' -Initialize -Description ''
 
@@ -74,7 +74,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.nugetPackagesPath' -Value 'NuGets'
 Set-PSFConfig -FullName 'fscps.tools.settings.useLocalNuGetStorage' -Value $true -Initialize -Description ''
 
 Set-PSFConfig -FullName 'fscps.tools.settings.githubSecrets' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.githubAgentName' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.githubAgentName' -Value '' -Initialize -Description 'Specifies which github runner will be used for the build/ci/deploy/release job in workflows. This is the most time consuming task. By default this job uses the Windows-latest github runner '
 Set-PSFConfig -FullName 'fscps.tools.settings.buildPath' -Value '_bld' -Initialize -Description 'The FSC-PS system will copy the sources into this folder and will build from it. '
 Set-PSFConfig -FullName 'fscps.tools.settings.metadataPath' -Value 'PackagesLocalDirectory' -Initialize -Description 'Specify the folder contains the sources'
 
@@ -84,16 +84,16 @@ Set-PSFConfig -FullName 'fscps.tools.settings.lcsClientId' -Value '' -Initialize
 Set-PSFConfig -FullName 'fscps.tools.settings.lcsUsernameSecretname' -Value 'AZ_TENANT_USERNAME' -Initialize -Description 'The GitHub secret name that contains the username that has at least Owner access to the LCS project. It is a highly recommend to create a separate AAD user for this purposes. E.g. lcsadmin@contoso.com'
 Set-PSFConfig -FullName 'fscps.tools.settings.lcsPasswordSecretname' -Value 'AZ_TENANT_PASSWORD' -Initialize -Description 'The GitHub secret name that contains the password of the LCS user.'
 
-Set-PSFConfig -FullName 'fscps.tools.settings.azTenantId' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.azClientId' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.azClientsecretSecretname' -Value 'AZ_CLIENTSECRET' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.azTenantId' -Value '' -Initialize -Description 'The Guid of the Azure tenant'
+Set-PSFConfig -FullName 'fscps.tools.settings.azClientId' -Value '' -Initialize -Description 'The Guid of the AAD registered application'
+Set-PSFConfig -FullName 'fscps.tools.settings.azClientsecretSecretname' -Value 'AZ_CLIENTSECRET' -Initialize -Description 'The github secret name that contains ClientSecret of the registered application'
 Set-PSFConfig -FullName 'fscps.tools.settings.azVmname' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.azVmrg' -Value '' -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.artifactsPath' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.artifactsFolderName' -Value 'artifacts' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.generatePackages' -Value $true -Initialize -Description 'Option to generate a package after build. '
-Set-PSFConfig -FullName 'fscps.tools.settings.namingStrategy' -Value 'Default' -Initialize -Description 'Default / Custom'
+Set-PSFConfig -FullName 'fscps.tools.settings.artifactsPath' -Value '' -Initialize -Description 'The destination artifacts path'
+Set-PSFConfig -FullName 'fscps.tools.settings.artifactsFolderName' -Value 'artifacts' -Initialize -Description 'The name of the folder contains the result artifacts'
+Set-PSFConfig -FullName 'fscps.tools.settings.generatePackages' -Value $true -Initialize -Description 'Option to generate a package after build.'
+Set-PSFConfig -FullName 'fscps.tools.settings.namingStrategy' -Value 'Default' -Initialize -Description 'The package naming strategy. Custom value means the result package will have the name specified in the packageName variable. Default / Custom'
 Set-PSFConfig -FullName 'fscps.tools.settings.packageNamePattern' -Value 'BRANCHNAME-PACKAGENAME-FNSCMVERSION_DATE.RUNNUMBER' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.packageName' -Value '' -Initialize -Description 'Name of the package'
 
@@ -101,11 +101,6 @@ Set-PSFConfig -FullName 'fscps.tools.settings.fscFinalQualityUpdatePackageId' -V
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPreviewVersionPackageId' -Value '' -Initialize -Description 'The AssetId of the Preview package of the FSC.'
 Set-PSFConfig -FullName 'fscps.tools.settings.fscServiseUpdatePackageId' -Value '' -Initialize -Description 'The AssetId of the Service Update (GA) package of the FSC.'
 Set-PSFConfig -FullName 'fscps.tools.settings.versionStrategy' -Value 'GA' -Initialize -Description 'Values: GA/Latest'
-
-Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKVersion' -Value '' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKZipPath' -Value 'C:\RSDK' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKBuildPath' -Value 'C:\Temp\RetailSDK' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.retailSDKURL' -Value '' -Initialize -Description ''
 
 Set-PSFConfig -FullName 'fscps.tools.settings.ecommerceMicrosoftRepoUrl' -Value 'https://github.com/microsoft/Msdyn365.Commerce.Online.git' -Initialize -Description 'The Msdyn365.Commerce.OnlineSDK repo URL what will use to build the ECommerce pacage.'
 Set-PSFConfig -FullName 'fscps.tools.settings.ecommerceMicrosoftRepoBranch' -Value 'master' -Initialize -Description 'The Msdyn365.Commerce.OnlineSDK repo branch.'
