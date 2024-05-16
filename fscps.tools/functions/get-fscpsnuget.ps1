@@ -132,7 +132,7 @@ function Get-FSCPSNuget {
 
             if($download)
             {
-                Invoke-FSCPSAzureStorageDownload -FileName $packageName -Path $Path
+                Invoke-FSCPSAzureStorageDownload -FileName $packageName -Path $Path -Force:$Force
             }
         }
         catch {            
@@ -147,8 +147,7 @@ function Get-FSCPSNuget {
             else
             {
                 Set-FSCPSActiveAzureStorageConfig "NuGetStorage"
-            }
-            
+            }            
         }
     }
     END {

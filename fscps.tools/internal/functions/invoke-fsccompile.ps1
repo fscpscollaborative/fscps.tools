@@ -120,10 +120,6 @@ function Invoke-FSCCompile {
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
             }
 
-
-
-         
-
             # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
             # Gather version info
             $versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
@@ -264,10 +260,10 @@ function Invoke-FSCCompile {
             if($settings.useLocalNuGetStorage)
             {
                 $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
-                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath @CMDOUT
-                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath @CMDOUT
-                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath @CMDOUT
-                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath @CMDOUT
+                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
+                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force @CMDOUT
             }
             Write-PSFMessage -Level Important -Message "NuGet`s downloading complete"
             $responseObject.nugetPackagesPath = $NuGetPackagesPath
