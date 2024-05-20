@@ -23,12 +23,12 @@
         
         Example output:
         
-        msMetadataDirectory  : D:\a\8\s\Metadata
-        msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
-        msOutputDirectory    : C:\temp\buildbuild\bin
-        solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
-        nugetPackagesPath    : C:\temp\buildbuild\packages
-        buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
+        METADATA_DIRECTORY  : D:\a\8\s\Metadata
+        FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
+        BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
+        SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
+        NUGETS_FOLDER    : C:\temp\buildbuild\packages
+        BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
         PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
         PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
         ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
@@ -41,12 +41,12 @@
         
         Example output:
         
-        msMetadataDirectory  : D:\a\8\s\Metadata
-        msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
-        msOutputDirectory    : C:\temp\buildbuild\bin
-        solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
-        nugetPackagesPath    : C:\temp\buildbuild\packages
-        buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
+        METADATA_DIRECTORY  : D:\a\8\s\Metadata
+        FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
+        BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
+        SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
+        NUGETS_FOLDER    : C:\temp\buildbuild\packages
+        BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
         PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
         PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
         ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
@@ -84,6 +84,16 @@ function Invoke-FSCCompile {
             $responseObject = [Ordered]@{}
             Write-PSFMessage -Level Important -Message "//=============================== Reading current FSC-PS settings ================================//"
             Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
+            if($Script:IsOnebox)
+            {
+                Write-PSFMessage -Level Important -Message "EnvironmentType: $($Script:EnvironmentType)"
+                Write-PSFMessage -Level Important -Message "HostName: $($environment.Infrastructure.HostName)"
+                Write-PSFMessage -Level Important -Message "AOSPath: $($Script:AOSPath)"
+                Write-PSFMessage -Level Important -Message "DatabaseServer: $($Script:DatabaseServer)"
+                Write-PSFMessage -Level Important -Message "PackageDirectory: $($Script:PackageDirectory)"
+                Write-PSFMessage -Level Important -Message "BinDirTools: $($Script:BinDirTools)"
+                Write-PSFMessage -Level Important -Message "MetaDataDir: $($Script:MetaDataDir)"
+            }
             $settings = Get-FSCPSSettings @CMDOUT
 
             if([string]::IsNullOrEmpty($Version))
@@ -120,7 +130,6 @@ function Invoke-FSCCompile {
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
             }
 
-            # $settings | Select-PSFObject -TypeName "FSCPS.TOOLS.settings" "*"
             # Gather version info
             $versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
             $PlatformVersion = $versionData.data.PlatformVersion
@@ -157,9 +166,9 @@ function Invoke-FSCCompile {
             $msReferencePath = "$($NuGetPackagesPath)\$($tools_package_name)".Trim()
             $msOutputDirectory = "$($BuildFolderPath)\bin".Trim()     
 
-            $responseObject.msMetadataDirectory = $msMetadataDirectory
-            $responseObject.msFrameworkDirectory = $msFrameworkDirectory
-            $responseObject.msOutputDirectory = $msOutputDirectory
+            $responseObject.METADATA_DIRECTORY = $msMetadataDirectory
+            $responseObject.FRAMEWORK_DIRECTORY = $msFrameworkDirectory
+            $responseObject.BUILD_OUTPUT_DIRECTORY = $msOutputDirectory
             $responseObject.BUILD_FOLDER_PATH = $BuildFolderPath
 
             Write-PSFMessage -Level Important -Message "//=============================== Getting the list of models to build ============================//"
@@ -239,34 +248,28 @@ function Invoke-FSCCompile {
                 Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
             }
 
-           # if($modelsToBuild)
-           # {
-                Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
-                $null = Invoke-GenerateSolution -ModelsList $modelsToBuild -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
-                $responseObject.solutionFolderPath = Join-Path $BuildFolderPath "$($Version)_build"
-                Write-PSFMessage -Level Important -Message "Generating complete"
-         #   }
-    
+            Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
+            $null = Invoke-GenerateSolution -ModelsList $modelsToBuild -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
+            $responseObject.SOLUTION_FOLDER = Join-Path $BuildFolderPath "$($Version)_build"
+            Write-PSFMessage -Level Important -Message "Complete"
+
             Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
             Write-PSFMessage -Level Important -Message "Source folder: $SourcesPath"
             Write-PSFMessage -Level Important -Message "Destination folder: $BuildFolderPath"
             Copy-Item $SourcesPath\* -Destination $BuildFolderPath -Recurse -Force @CMDOUT
-            #Copy-Item $SolutionBuildFolderPath -Destination $BuildFolderPath -Recurse -Force
-            Write-PSFMessage -Level Important -Message "Copying complete"
+            Write-PSFMessage -Level Important -Message "Complete"
     
             Write-PSFMessage -Level Important -Message "//=============================== Download NuGet packages ========================================//"
-            if($settings.useLocalNuGetStorage)
-            {
-                $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
-                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
-                $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-                $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-            }
-            Write-PSFMessage -Level Important -Message "NuGet`s downloading complete"
-            $responseObject.nugetPackagesPath = $NuGetPackagesPath
+            $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
+            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
+            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+
+            Write-PSFMessage -Level Important -Message "Complete"
+            $responseObject.NUGETS_FOLDER = $NuGetPackagesPath
             
             Write-PSFMessage -Level Important -Message "//=============================== Install NuGet packages =========================================//"
             #validata NuGet installation
@@ -280,11 +283,11 @@ function Invoke-FSCCompile {
             Set-Content $NuGetConfigFilePath $nugetNewContent
                 
             $null = (& $nugetPath restore $NuGetPackagesConfigFilePath -PackagesDirectory $NuGetPackagesPath -ConfigFile $NuGetConfigFilePath)
-            Write-PSFMessage -Level Important -Message "NuGet`s installation complete"
+            Write-PSFMessage -Level Important -Message "Complete"
 
             Write-PSFMessage -Level Important -Message "//=============================== Copy binaries to the build folder ==============================//"
             Copy-Filtered -Source $SourceMetadataPath -Target (Join-Path $BuildFolderPath bin) -Filter *.*
-            Write-PSFMessage -Level Important -Message "Copying binaries complete"
+            Write-PSFMessage -Level Important -Message "Complete"
 
             if($modelsToBuild)
             {
@@ -293,8 +296,7 @@ function Invoke-FSCCompile {
 
                 $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
 
-                $responseObject.buildLogFilePath = $msbuildresult.BuildLogFilePath
-
+                $responseObject.BUILD_LOG_FILE_PATH = $msbuildresult.BuildLogFilePath
                 if ($msbuildresult.BuildSucceeded -eq $true)
                 {
                     Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)
@@ -371,8 +373,7 @@ function Invoke-FSCCompile {
                             $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $packageName)
                         }
                         $packageNamePattern = $packageNamePattern.Replace("FNSCMVERSION", $Version)
-                        $packageNamePattern = $packageNamePattern.Replace("DATE", (Get-Date -Format "yyyyMMdd").ToString())
-                        
+                        $packageNamePattern = $packageNamePattern.Replace("DATE", (Get-Date -Format "yyyyMMdd").ToString())                        
                         $packageNamePattern = $packageNamePattern.Replace("RUNNUMBER", $settings.runId)
 
                         $packageName = $packageNamePattern + ".zip"
@@ -491,7 +492,6 @@ function Invoke-FSCCompile {
                         $responseObject.PACKAGE_PATH = $deployablePackagePath
                         $responseObject.ARTIFACTS_PATH = $artifactDirectory
 
-
                         $artifacts = Get-ChildItem $artifactDirectory -Recurse
                         $artifactsList = $artifacts.FullName -join ","
 
@@ -502,16 +502,12 @@ function Invoke-FSCCompile {
                         else
                         {
                             $artifacts = '["'+$($artifactsList).ToString()+'"]'
-
                         }
-
-                        $responseObject.ARTIFACTS_LIST = $artifacts
-                        
+                        $responseObject.ARTIFACTS_LIST = $artifacts                        
                     }
                     catch {
                         throw $_.Exception.Message
                     }
-
                 }
                 else
                 {
@@ -558,8 +554,7 @@ function Invoke-FSCCompile {
             }
             catch {
                 Write-PSFMessage -Level Verbose -Message "Cleanup warning: $($PSItem.Exception)" 
-            }
-            
+            }            
             $responseObject
         }
     }

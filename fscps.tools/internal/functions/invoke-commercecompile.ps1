@@ -138,7 +138,7 @@ function Invoke-CommerceCompile {
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
             Copy-Item $SourcesPath\* -Destination $SolutionBuildFolderPath -Recurse -Force @CMDOUT
-            Write-PSFMessage -Level Important -Message "Copying complete"
+            Write-PSFMessage -Level Important -Message "Complete"
 
             Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
 

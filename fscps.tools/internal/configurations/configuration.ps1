@@ -22,17 +22,17 @@ Set-PSFConfig -FullName 'fscps.tools.settings.templateBranch' -Value 'main' -Ini
 Set-PSFConfig -FullName "fscps.tools.path.sqlpackage" -Value "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\SqlPackage.exe" -Initialize -Description "Path to the default location where SqlPackage.exe is located."
 Set-PSFConfig -FullName "fscps.tools.azure.common.oauth.token" -Value "https://login.microsoftonline.com/common/oauth2/token" -Initialize -Description "URI / URL for the Azure Active Directory OAuth 2.0 endpoint for tokens"
 
-Set-PSFConfig -FullName 'fscps.tools.settings.fscpsSettingsFile' -Value 'settings.json' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.fscpsRepoSettingsFile' -Value 'FSC-PS-Settings.json' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.fscpsSettingsFile' -Value 'settings.json' -Initialize -Description 'The name of the file has custom fscps settings. JSON'
+Set-PSFConfig -FullName 'fscps.tools.settings.fscpsRepoSettingsFile' -Value 'FSC-PS-Settings.json' -Initialize -Description 'The name of the file has custom fscps repo settings. JSON'
 
 Set-PSFConfig -FullName 'fscps.tools.settings.companyName' -Value '' -Initialize -Description 'Company name used for generate the package name.'
-Set-PSFConfig -FullName 'fscps.tools.settings.fscpsFolder' -Value '.FSC-PS' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.fscpsFolder' -Value '.FSC-PS' -Initialize -Description 'The name of the folder comtains the settings json scripts.'
 
-Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value '' -Initialize -Description 'Specifies the type of project. Allowed values are **FSCM** or **Commerce** or **ECommerce**.'
+Set-PSFConfig -FullName 'fscps.tools.settings.type' -Value '' -Initialize -Description 'Specifies the type of project. Allowed values are **FSCM**/**Commerce**/**ECommerce**.'
 Set-PSFConfig -FullName 'fscps.tools.settings.runs-on' -Value '' -Initialize -Description 'Specifies which github runner will be used for all jobs in all workflows (except the Update FSC-PS System Files workflow). The default is to use the GitHub hosted runner Windows-latest. You can specify a special GitHub Runner for the build job using the GitHubRunner setting.'
 Set-PSFConfig -FullName 'fscps.tools.settings.fscPsVer' -Value $script:ModuleVersion -Initialize -Description 'Version of the fscps.tools module'
 Set-PSFConfig -FullName 'fscps.tools.settings.currentBranch' -Value '' -Initialize -Description 'The current execution branch name'
-Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.sourceBranch' -Value '' -Initialize -Description 'The branch used to build and generate the package.'
 
 Set-PSFConfig -FullName 'fscps.tools.settings.repoOwner' -Value '' -Initialize -Description 'The name of the repo owner. GitHub - repo owner. Azure - name of the organization'
 Set-PSFConfig -FullName 'fscps.tools.settings.repoName' -Value '' -Initialize -Description 'The name of the repo. GitHub - name of the repo. Azure - name of the collection'
@@ -65,13 +65,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.codeSignKeyVaultCertificateName' -
 Set-PSFConfig -FullName 'fscps.tools.settings.codeSignKeyVaultTimestampServer' -Value 'http://timestamp.digicert.com' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.codeSignKeyVaultClientSecretName' -Value 'SIGN_KV_CLIENTSECRET' -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.nugetFeedName' -Value '' -Initialize -Description 'The name of the Nuget feed.'
-Set-PSFConfig -FullName 'fscps.tools.settings.nugetFeedUserName' -Value '' -Initialize -Description 'The username credential of the NuGet feed.'
-Set-PSFConfig -FullName 'fscps.tools.settings.nugetFeedUserSecretName' -Value '' -Initialize -Description 'The GitHub secret name contains the username credential of the NuGet feed. If specified will be used instead of nugetFeedUserName parameter'
-Set-PSFConfig -FullName 'fscps.tools.settings.nugetFeedPasswordSecretName' -Value '' -Initialize -Description 'The GitHub secret name contains the password credential of the NuGet feed.'
-Set-PSFConfig -FullName 'fscps.tools.settings.nugetSourcePath' -Value '' -Initialize -Description 'The URL of the Nuget feed.'
 Set-PSFConfig -FullName 'fscps.tools.settings.nugetPackagesPath' -Value 'NuGets' -Initialize -Description 'The name of the directory where Nuget packages will be stored'
-Set-PSFConfig -FullName 'fscps.tools.settings.useLocalNuGetStorage' -Value $true -Initialize -Description ''
 
 Set-PSFConfig -FullName 'fscps.tools.settings.githubSecrets' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.githubAgentName' -Value '' -Initialize -Description 'Specifies which github runner will be used for the build/ci/deploy/release job in workflows. This is the most time consuming task. By default this job uses the Windows-latest github runner '
@@ -113,7 +107,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.deployOnlyNew' -Value $true -Initi
 Set-PSFConfig -FullName 'fscps.tools.settings.deploymentScheduler' -Value $true -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.signArtifacts' -Value $false -Initialize -Description ''
 
-Set-PSFConfig -FullName 'fscps.tools.settings.cleanupNugets' -Value $false -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.cleanupNugets' -Value $false -Initialize -Description 'Cleanup Commerce compiled NuGet packages with microsoft artifacts'
 Set-PSFConfig -FullName 'fscps.tools.settings.cleanupCSUPackage' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.secretsList' -Value @('nugetFeedPasswordSecretName','nugetFeedUserSecretName','lcsUsernameSecretname','lcsPasswordSecretname','azClientsecretSecretname','repoTokenSecretName','codeSignDigiCertUrlSecretName','codeSignDigiCertPasswordSecretName','codeSignDigiCertAPISecretName','codeSignDigiCertHashSecretName','codeSignKeyVaultClientSecretName') -Initialize -Description ''
 
