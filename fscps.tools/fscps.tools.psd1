@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.191'
+ModuleVersion = '1.0.192'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -53,7 +53,7 @@ PowerShellVersion = '5.0'
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.0.12'; }, 
                @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; }, 
-               @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.9'; }, 
+               @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.11'; }, 
                @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; })
 
 # Assemblies that must be loaded prior to importing this module
@@ -72,17 +72,30 @@ FormatsToProcess = 'xml\fscps.tools.Format.ps1xml'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Invoke-FSCPSChoco', 
-               'Get-FSCPSNuget', 'Get-FSCPSVersionInfo', 'Invoke-FSCPSCompile', 
-               'Install-FSCPSNugetCLI', 'Find-FSCPSCommand', 
-               'Disable-FSCPSException', 'Enable-FSCPSException', 
-               'Get-FSCPSAzureStorageFile', 'Update-FSCPSModelVersion', 
-               'Invoke-FSCPSSignBinaryFile', 'Add-FSCPSAzureStorageConfig', 
-               'Get-FSCPSAzureStorageConfig', 'Get-FSCPSActiveAzureStorageConfig', 
-               'Register-FSCPSAzureStorageConfig', 
-               'Set-FSCPSActiveAzureStorageConfig', 
-               'Invoke-FSCPSAzureStorageDownload', 
-               'Invoke-FSCPSAzureStorageUpload', 'Invoke-FSCPSAzureStorageDelete'
+FunctionsToExport = @(
+    'Get-FSCPSSettings', 
+    'Set-FSCPSSettings', 
+    'Invoke-FSCPSChoco', 
+    'Get-FSCPSNuget', 
+    'Get-FSCPSVersionInfo', 
+    'Invoke-FSCPSCompile', 
+    'Install-FSCPSNugetCLI', 
+    'Find-FSCPSCommand', 
+    'Disable-FSCPSException', 
+    'Enable-FSCPSException', 
+    'Get-FSCPSAzureStorageFile', 
+    'Update-FSCPSModelVersion', 
+    'Invoke-FSCPSSignBinaryFile', 
+    'Add-FSCPSAzureStorageConfig', 
+    'Get-FSCPSAzureStorageConfig', 
+    'Get-FSCPSActiveAzureStorageConfig', 
+    'Register-FSCPSAzureStorageConfig', 
+    'Set-FSCPSActiveAzureStorageConfig', 
+    'Invoke-FSCPSAzureStorageDownload', 
+    'Invoke-FSCPSAzureStorageUpload', 
+    'Invoke-FSCPSAzureStorageDelete',
+    'Update-FSCPSISVSource'
+)
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
