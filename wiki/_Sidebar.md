@@ -16,7 +16,7 @@
 * [[Work with Azure Storage Account]]
 
 # **Documentation**
-* [[settings]]
+* [[Settings]]
 
 ## **Concepts**
 

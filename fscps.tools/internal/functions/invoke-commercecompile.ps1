@@ -11,7 +11,7 @@
         
     .PARAMETER SourcesPath
         The folder contains a metadata files with binaries
-
+        
     .PARAMETER BuildFolderPath
         The destination build folder
         
