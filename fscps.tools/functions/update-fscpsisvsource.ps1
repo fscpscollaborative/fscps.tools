@@ -57,8 +57,17 @@ function Update-FSCPSISVSource {
                 throw "Only a zip or axmodel file can be processed."
             }
 
+            if(Test-Path "$($MetadataPath)/PackagesLocalDirectory")
+            {
+                $MetadataPath = (Join-Path $($MetadataPath) "/PackagesLocalDirectory")
+            }
+            elseif(Test-Path "$($MetadataPath)/Metadata")
+            {
+                $MetadataPath = (Join-Path $($MetadataPath) "/Metadata")
+            }
+
             #$script:DefaultTempPath 
-            $tempPath = Join-Path -Path "c:\temp" -ChildPath "updateSource"
+            $tempPath = Join-Path -Path $script:DefaultTempPath -ChildPath "updateSource"
 
             #Cleanup existing temp folder
             Remove-Item -Path $tempPath -Recurse -Force -ErrorAction SilentlyContinue -Confirm:$false        
