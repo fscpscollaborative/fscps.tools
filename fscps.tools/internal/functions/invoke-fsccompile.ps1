@@ -465,12 +465,9 @@ function Invoke-FSCCompile {
                             Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
 
                             $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
-                        
-                        
-
                             $responseObject.PACKAGE_NAME = $pname
                             $responseObject.PACKAGE_PATH = $deployablePackagePath
-                            $responseObject.ARTIFACTS_PATH = $artifactDirectory          
+                            $responseObject.ARTIFACTS_PATH = $artifactDirectory
                         }
                         catch {
                             throw $_.Exception.Message
@@ -491,7 +488,7 @@ function Invoke-FSCCompile {
                     $null = Test-PathExists -Path $axModelFolder -Type Container -Create
                     Write-PSFMessage -Level Verbose -Message "$axModelFolder created"
 
-                    if($modelsToPackage.Split(","))
+                    if($modelsToPackage.Count -gt 1)
                     {                                
                         $modelsToPackage.Split(",") | ForEach-Object{
                             Write-PSFMessage -Level Verbose -Message "Exporting $_ model..."
@@ -535,7 +532,7 @@ function Invoke-FSCCompile {
             {
                 $artifacts = '["'+$($artifactsList).ToString()+'"]'
             }
-            $responseObject.ARTIFACTS_LIST = $artifacts           
+            $responseObject.ARTIFACTS_LIST = $artifacts
         }
         catch {
             Write-PSFMessage -Level Host -Message "Error: " -Exception $PSItem.Exception
