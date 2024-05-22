@@ -348,172 +348,194 @@ function Invoke-FSCCompile {
             {
                 if($PSVersionTable.PSVersion.Major -gt 5) {
                     Write-PSFMessage -Level Warning -Message "Current PS version is $($PSVersionTable.PSVersion). The latest PS version acceptable to generate the D365FSC deployable package is 5."
-                    continue;
                 }
-                Write-PSFMessage -Level Important -Message "//=============================== Generate package ==============================================//"
+                else {                
+                    Write-PSFMessage -Level Important -Message "//=============================== Generate package ==============================================//"
 
-                switch ($settings.namingStrategy) {
-                    { $settings.namingStrategy -eq "Default" }
-                    {
-                        $packageNamePattern = $settings.packageNamePattern;
-                        if($settings.packageName.Contains('.zip'))
+                    switch ($settings.namingStrategy) {
+                        { $settings.namingStrategy -eq "Default" }
                         {
-                            $packageName = $settings.packageName
-                        }
-                        else {
-                            $packageName = $settings.packageName# + ".zip"
-                        }
-                        $packageNamePattern = $packageNamePattern.Replace("BRANCHNAME", $($settings.sourceBranch))
-                        if($settings.deploy)
-                        {
-                            $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $settings.azVMName)
-                        }
-                        else
-                        {
-                            $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $packageName)
-                        }
-                        $packageNamePattern = $packageNamePattern.Replace("FNSCMVERSION", $Version)
-                        $packageNamePattern = $packageNamePattern.Replace("DATE", (Get-Date -Format "yyyyMMdd").ToString())                        
-                        $packageNamePattern = $packageNamePattern.Replace("RUNNUMBER", $settings.runId)
-
-                        $packageName = $packageNamePattern + ".zip"
-                        break;
-                    }
-                    { $settings.namingStrategy -eq "Custom" }
-                    {
-                        if($settings.packageName.Contains('.zip'))
-                        {
-                            $packageName = $settings.packageName
-                        }
-                        else {
-                            $packageName = $settings.packageName + ".zip"
-                        }
-                        
-                        break;
-                    }
-                    Default {
-                        $packageName = $settings.packageName
-                        break;
-                    }
-                }                
-
-                $xppToolsPath = $msFrameworkDirectory
-                $xppBinariesPath = (Join-Path $($BuildFolderPath) bin)
-                $xppBinariesSearch = $modelsToPackage
-                $deployablePackagePath = Join-Path $artifactDirectory ($packageName)
-
-                if ($xppBinariesSearch.Contains(","))
-                {
-                    [string[]]$xppBinariesSearch = $xppBinariesSearch -split ","
-                }
-
-                $potentialPackages = Find-FSCPSMatch -DefaultRoot $xppBinariesPath -Pattern $xppBinariesSearch | Where-Object { (Test-Path -LiteralPath $_ -PathType Container) }
-                $packages = @()
-                if ($potentialPackages.Length -gt 0)
-                {
-                    Write-PSFMessage -Level Verbose -Message "Found $($potentialPackages.Length) potential folders to include:"
-                    foreach($package in $potentialPackages)
-                    {
-                        $packageBinPath = Join-Path -Path $package -ChildPath "bin"
-                        
-                        # If there is a bin folder and it contains *.MD files, assume it's a valid X++ binary
-                        try {
-                            if ((Test-Path -Path $packageBinPath) -and ((Get-ChildItem -Path $packageBinPath -Filter *.md).Count -gt 0))
+                            $packageNamePattern = $settings.packageNamePattern;
+                            if($settings.packageName.Contains('.zip'))
                             {
-                                Write-PSFMessage -Level Verbose -Message $packageBinPath
-                                Write-PSFMessage -Level Verbose -Message "  - $package"
-                                $packages += $package
-                            }
-                        }
-                        catch
-                        {
-                            Write-PSFMessage -Level Verbose -Message "  - $package (not an X++ binary folder, skip)"
-                        }
-                    }
-
-                    Import-Module (Join-Path -Path $xppToolsPath -ChildPath "CreatePackage.psm1")
-                    $outputDir = Join-Path -Path $BuildFolderPath -ChildPath ((New-Guid).ToString())
-                    $tempCombinedPackage = Join-Path -Path $BuildFolderPath -ChildPath "$((New-Guid).ToString()).zip"
-                    try
-                    {
-                        New-Item -Path $outputDir -ItemType Directory > $null
-                        Write-PSFMessage -Level Verbose -Message "Creating binary packages"
-                        Invoke-FSCAssembliesImport $xppToolsPath -Verbose
-                        foreach($packagePath in $packages)
-                        {
-                            $packageName = (Get-Item $packagePath).Name
-                            Write-PSFMessage -Level Verbose -Message "  - '$packageName'"
-                            $version = ""
-                            $packageDll = Join-Path -Path $packagePath -ChildPath "bin\Dynamics.AX.$packageName.dll"
-                            if (Test-Path $packageDll)
-                            {
-                                $version = (Get-Item $packageDll).VersionInfo.FileVersion
-                            }
-                            if (!$version)
-                            {
-                                $version = "1.0.0.0"
-                            }
-                            $null = New-XppRuntimePackage -packageName $packageName -packageDrop $packagePath -outputDir $outputDir -metadataDir $xppBinariesPath -packageVersion $version -binDir $xppToolsPath -enforceVersionCheck $True
-                        }
-
-                        Write-PSFMessage -Level Important "Creating deployable package"
-                        Add-Type -Path "$xppToolsPath\Microsoft.Dynamics.AXCreateDeployablePackageBase.dll"
-                        Write-PSFMessage -Level Important "  - Creating combined metadata package"
-                        $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::CreateMetadataPackage($outputDir, $tempCombinedPackage)
-                        Write-PSFMessage -Level Important "  - Creating merged deployable package"
-                        $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::MergePackage("$xppToolsPath\BaseMetadataDeployablePackage.zip", $tempCombinedPackage, $deployablePackagePath, $true, [String]::Empty)
-                        Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
-
-                        $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
-                    
-                        if($settings.exportModel)
-                        {
-                            Write-PSFMessage -Level Important -Message "//=============================== Export models ===============================================//"
-
-                            $null = Test-PathExists -Path $artifactDirectory\AxModels -Type Container -Create
-                            if($models.Split(","))
-                            {                                
-                                $models.Split(",") | ForEach-Object{
-                                    Write-PSFMessage -Level Verbose -Message "Exporting $_ model..."
-                                    $modelFilePath = Export-D365Model -Path $artifactDirectory\AxModels -Model (Get-AXModelName -ModelName $_ -ModelPath $msMetadataDirectory)  -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
-                                    $modelFile = Get-Item $modelFilePath.File
-                                    Rename-Item $modelFile.FullName (($_)+($modelFile.Extension)) -Force
-                                }
+                                $packageName = $settings.packageName
                             }
                             else {
-                                Write-PSFMessage -Level Verbose -Message "Exporting $models model..."
-                                $modelFilePath = Export-D365Model -Path $artifactDirectory\AxModels -Model (Get-AXModelName -ModelName $models -ModelPath $msMetadataDirectory) -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
-                                $modelFile = Get-Item $modelFilePath.File
-                                Rename-Item $modelFile.FullName (($models)+($modelFile.Extension)) -Force
+                                $packageName = $settings.packageName# + ".zip"
+                            }
+                            $packageNamePattern = $packageNamePattern.Replace("BRANCHNAME", $($settings.sourceBranch))
+                            if($settings.deploy)
+                            {
+                                $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $settings.azVMName)
+                            }
+                            else
+                            {
+                                $packageNamePattern = $packageNamePattern.Replace("PACKAGENAME", $packageName)
+                            }
+                            $packageNamePattern = $packageNamePattern.Replace("FNSCMVERSION", $Version)
+                            $packageNamePattern = $packageNamePattern.Replace("DATE", (Get-Date -Format "yyyyMMdd").ToString())                        
+                            $packageNamePattern = $packageNamePattern.Replace("RUNNUMBER", $settings.runId)
+
+                            $packageName = $packageNamePattern + ".zip"
+                            break;
+                        }
+                        { $settings.namingStrategy -eq "Custom" }
+                        {
+                            if($settings.packageName.Contains('.zip'))
+                            {
+                                $packageName = $settings.packageName
+                            }
+                            else {
+                                $packageName = $settings.packageName + ".zip"
+                            }
+                            
+                            break;
+                        }
+                        Default {
+                            $packageName = $settings.packageName
+                            break;
+                        }
+                    }                
+
+                    $xppToolsPath = $msFrameworkDirectory
+                    $xppBinariesPath = (Join-Path $($BuildFolderPath) bin)
+                    $xppBinariesSearch = $modelsToPackage
+                    $deployablePackagePath = Join-Path $artifactDirectory ($packageName)
+
+                    if ($xppBinariesSearch.Contains(","))
+                    {
+                        [string[]]$xppBinariesSearch = $xppBinariesSearch -split ","
+                    }
+
+                    $potentialPackages = Find-FSCPSMatch -DefaultRoot $xppBinariesPath -Pattern $xppBinariesSearch | Where-Object { (Test-Path -LiteralPath $_ -PathType Container) }
+                    $packages = @()
+                    if ($potentialPackages.Length -gt 0)
+                    {
+                        Write-PSFMessage -Level Verbose -Message "Found $($potentialPackages.Length) potential folders to include:"
+                        foreach($package in $potentialPackages)
+                        {
+                            $packageBinPath = Join-Path -Path $package -ChildPath "bin"
+                            
+                            # If there is a bin folder and it contains *.MD files, assume it's a valid X++ binary
+                            try {
+                                if ((Test-Path -Path $packageBinPath) -and ((Get-ChildItem -Path $packageBinPath -Filter *.md).Count -gt 0))
+                                {
+                                    Write-PSFMessage -Level Verbose -Message $packageBinPath
+                                    Write-PSFMessage -Level Verbose -Message "  - $package"
+                                    $packages += $package
+                                }
+                            }
+                            catch
+                            {
+                                Write-PSFMessage -Level Verbose -Message "  - $package (not an X++ binary folder, skip)"
                             }
                         }
 
-                        $responseObject.PACKAGE_NAME = $pname
-                        $responseObject.PACKAGE_PATH = $deployablePackagePath
-                        $responseObject.ARTIFACTS_PATH = $artifactDirectory
-
-                        $artifacts = Get-ChildItem $artifactDirectory -Recurse
-                        $artifactsList = $artifacts.FullName -join ","
-
-                        if($artifactsList.Contains(','))
+                        Import-Module (Join-Path -Path $xppToolsPath -ChildPath "CreatePackage.psm1")
+                        $outputDir = Join-Path -Path $BuildFolderPath -ChildPath ((New-Guid).ToString())
+                        $tempCombinedPackage = Join-Path -Path $BuildFolderPath -ChildPath "$((New-Guid).ToString()).zip"
+                        try
                         {
-                            $artifacts = $artifactsList.Split(',') | ConvertTo-Json -compress
+                            New-Item -Path $outputDir -ItemType Directory > $null
+                            Write-PSFMessage -Level Verbose -Message "Creating binary packages"
+                            Invoke-FSCAssembliesImport $xppToolsPath -Verbose
+                            foreach($packagePath in $packages)
+                            {
+                                $packageName = (Get-Item $packagePath).Name
+                                Write-PSFMessage -Level Verbose -Message "  - '$packageName'"
+                                $version = ""
+                                $packageDll = Join-Path -Path $packagePath -ChildPath "bin\Dynamics.AX.$packageName.dll"
+                                if (Test-Path $packageDll)
+                                {
+                                    $version = (Get-Item $packageDll).VersionInfo.FileVersion
+                                }
+                                if (!$version)
+                                {
+                                    $version = "1.0.0.0"
+                                }
+                                $null = New-XppRuntimePackage -packageName $packageName -packageDrop $packagePath -outputDir $outputDir -metadataDir $xppBinariesPath -packageVersion $version -binDir $xppToolsPath -enforceVersionCheck $True
+                            }
+
+                            Write-PSFMessage -Level Important "Creating deployable package"
+                            Add-Type -Path "$xppToolsPath\Microsoft.Dynamics.AXCreateDeployablePackageBase.dll"
+                            Write-PSFMessage -Level Important "  - Creating combined metadata package"
+                            $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::CreateMetadataPackage($outputDir, $tempCombinedPackage)
+                            Write-PSFMessage -Level Important "  - Creating merged deployable package"
+                            $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::MergePackage("$xppToolsPath\BaseMetadataDeployablePackage.zip", $tempCombinedPackage, $deployablePackagePath, $true, [String]::Empty)
+                            Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
+
+                            $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
+                        
+                        
+
+                            $responseObject.PACKAGE_NAME = $pname
+                            $responseObject.PACKAGE_PATH = $deployablePackagePath
+                            $responseObject.ARTIFACTS_PATH = $artifactDirectory          
+                        }
+                        catch {
+                            throw $_.Exception.Message
+                        }
+                    }
+                    else
+                    {
+                        throw "No X++ binary package(s) found"
+                    }
+                }
+            }
+            if($settings.exportModel)
+            {
+                Write-PSFMessage -Level Important -Message "//=============================== Export models ===============================================//"
+
+                try {
+                    $axModelFolder = Join-Path $artifactDirectory AxModels
+                    $null = Test-PathExists -Path $axModelFolder -Type Container -Create
+                    Write-PSFMessage -Level Verbose -Message "$axModelFolder created"
+
+                    if($modelsToPackage.Split(","))
+                    {                                
+                        $modelsToPackage.Split(",") | ForEach-Object{
+                            Write-PSFMessage -Level Verbose -Message "Exporting $_ model..."
+                            $modelName = (Get-AXModelName -ModelName $_ -ModelPath $msMetadataDirectory)
+                            if($modelName)
+                            {
+                                $modelFilePath = Export-D365Model -Path $axModelFolder -Model $modelName  -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
+                                $modelFile = Get-Item $modelFilePath.File
+                                Rename-Item $modelFile.FullName (($_)+($modelFile.Extension)) -Force
+                            }
+                        }
+                    }
+                    else {
+                        Write-PSFMessage -Level Verbose -Message "Exporting $modelsToPackage model..."
+                        $modelName = (Get-AXModelName -ModelName $modelsToPackage -ModelPath $msMetadataDirectory)
+                        if($modelName)
+                        {
+                            $modelFilePath = Export-D365Model -Path $axModelFolder -Model $modelName -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
+                            $modelFile = Get-Item $modelFilePath.File
+                            Rename-Item $modelFile.FullName (($modelsToPackage)+($modelFile.Extension)) -Force
                         }
                         else
                         {
-                            $artifacts = '["'+$($artifactsList).ToString()+'"]'
+                            Write-PSFMessage -Level Verbose -Message "The model $modelsToPackage doesn`t have the source code. Skipped."
                         }
-                        $responseObject.ARTIFACTS_LIST = $artifacts                        
-                    }
-                    catch {
-                        throw $_.Exception.Message
                     }
                 }
-                else
-                {
-                    throw "No X++ binary package(s) found"
+                catch {
+                    Write-PSFMessage -Level Important -Message $_.Exception.Message
                 }
+                
             }
+            $artifacts = Get-ChildItem $artifactDirectory -Recurse
+            $artifactsList = $artifacts.FullName -join ","
+
+            if($artifactsList.Contains(','))
+            {
+                $artifacts = $artifactsList.Split(',') | ConvertTo-Json -compress
+            }
+            else
+            {
+                $artifacts = '["'+$($artifactsList).ToString()+'"]'
+            }
+            $responseObject.ARTIFACTS_LIST = $artifacts           
         }
         catch {
             Write-PSFMessage -Level Host -Message "Error: " -Exception $PSItem.Exception

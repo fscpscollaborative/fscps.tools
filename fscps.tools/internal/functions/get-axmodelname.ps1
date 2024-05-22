@@ -29,10 +29,16 @@ function Get-AXModelName {
     )
     process{
         $descriptorSearchPath = (Join-Path $_modelPath (Join-Path $_modelName "Descriptor"))
-        $descriptor = (Get-ChildItem -Path $descriptorSearchPath -Filter '*.xml')
-        Write-PSFMessage -Level Verbose -Message "Descriptor found at $descriptor"
-        [xml]$xmlData = Get-Content $descriptor.FullName
-        $modelDisplayName = $xmlData.SelectNodes("//AxModelInfo/Name")
-        return $modelDisplayName.InnerText
+        if(Test-Path $descriptorSearchPath)
+        {
+            $descriptor = (Get-ChildItem -Path $descriptorSearchPath -Filter '*.xml')
+            Write-PSFMessage -Level Verbose -Message "Descriptor found at $descriptor"
+            [xml]$xmlData = Get-Content $descriptor.FullName
+            $modelDisplayName = $xmlData.SelectNodes("//AxModelInfo/Name")
+            return $modelDisplayName.InnerText
+        }
+        else {
+            return $null;
+        }
     }
 }
