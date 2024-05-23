@@ -488,31 +488,32 @@ function Invoke-FSCCompile {
                     $null = Test-PathExists -Path $axModelFolder -Type Container -Create
                     Write-PSFMessage -Level Verbose -Message "$axModelFolder created"
 
-                    if($modelsToPackage.Count -gt 1)
+                    if($models.Split(","))
                     {                                
-                        $modelsToPackage.Split(",") | ForEach-Object{
-                            Write-PSFMessage -Level Verbose -Message "Exporting $_ model..."
-                            $modelName = (Get-AXModelName -ModelName $_ -ModelPath $msMetadataDirectory)
+                        $modelsList = $models.Split(",")
+                        foreach ($currentModel in $modelsList) {
+                            Write-PSFMessage -Level Verbose -Message "Exporting $currentModel model..."
+                            $modelName = (Get-AXModelName -ModelName $currentModel -ModelPath $msMetadataDirectory)
                             if($modelName)
                             {
-                                $modelFilePath = Export-D365Model -Path $axModelFolder -Model $modelName  -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
+                                $modelFilePath = Export-D365Model -Path $axModelFolder -Model $modelName -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory -ShowOriginalProgress 
                                 $modelFile = Get-Item $modelFilePath.File
-                                Rename-Item $modelFile.FullName (($_)+($modelFile.Extension)) -Force
+                                Rename-Item $modelFile.FullName (($currentModel)+($modelFile.Extension)) -Force
                             }
                         }
                     }
                     else {
-                        Write-PSFMessage -Level Verbose -Message "Exporting $modelsToPackage model..."
-                        $modelName = (Get-AXModelName -ModelName $modelsToPackage -ModelPath $msMetadataDirectory)
+                        Write-PSFMessage -Level Verbose -Message "Exporting $models model..."
+                        $modelName = (Get-AXModelName -ModelName $models -ModelPath $msMetadataDirectory)
                         if($modelName)
                         {
                             $modelFilePath = Export-D365Model -Path $axModelFolder -Model $modelName -BinDir $msFrameworkDirectory -MetaDataDir $msMetadataDirectory
                             $modelFile = Get-Item $modelFilePath.File
-                            Rename-Item $modelFile.FullName (($modelsToPackage)+($modelFile.Extension)) -Force
+                            Rename-Item $modelFile.FullName (($models)+($modelFile.Extension)) -Force
                         }
                         else
                         {
-                            Write-PSFMessage -Level Verbose -Message "The model $modelsToPackage doesn`t have the source code. Skipped."
+                            Write-PSFMessage -Level Verbose -Message "The model $models doesn`t have the source code. Skipped."
                         }
                     }
                 }
@@ -521,7 +522,7 @@ function Invoke-FSCCompile {
                 }
                 
             }
-            $artifacts = Get-ChildItem $artifactDirectory -Recurse
+            $artifacts = Get-ChildItem $artifactDirectory -File -Recurse
             $artifactsList = $artifacts.FullName -join ","
 
             if($artifactsList.Contains(','))
