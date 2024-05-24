@@ -33,6 +33,12 @@ $Script:IISHostFile = 'C:\Windows\System32\inetsrv\Config\applicationHost.config
 
 $Script:MRConfigFile = 'C:\FinancialReporting\Server\ApplicationService\bin\MRServiceHost.settings.config'
 
+$Script:IsOnGitHub = $null -ne $env:GITHUB_REPOSITORY
+
+$Script:IsOnAzureDevOps = $null -ne $env:AGENT_ID
+
+$Script:IsOnLocalhost = -not $Script:IsOnGitHub -and -not $Script:IsOnAzureDevOps
+
 #Update all module variables
 Update-ModuleVariables
 
