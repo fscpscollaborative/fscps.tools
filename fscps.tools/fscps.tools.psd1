@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.192'
+ModuleVersion = '1.0.193'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -94,7 +94,8 @@ FunctionsToExport = @(
     'Invoke-FSCPSAzureStorageDownload', 
     'Invoke-FSCPSAzureStorageUpload', 
     'Invoke-FSCPSAzureStorageDelete',
-    'Update-FSCPSISVSource'
+    'Update-FSCPSISVSource',
+    'Invoke-FSCPSAzureSignToolSignFile'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
