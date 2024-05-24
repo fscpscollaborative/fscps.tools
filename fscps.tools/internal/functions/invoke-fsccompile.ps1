@@ -292,6 +292,7 @@ function Invoke-FSCCompile {
             if($modelsToBuild)
             {
                 Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
+                
                 Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
                 $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
@@ -302,6 +303,7 @@ function Invoke-FSCCompile {
                     Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)
                     if($settings.enableBuildCaching)
                     {
+                        Write-PSFMessage -Level Important -Message "//=============================== Upload cached models to the storageaccount =====================//"
                         foreach ($model in $modelsToBuild.Split(","))
                         {
                             $modelName = $model
@@ -331,7 +333,9 @@ function Invoke-FSCCompile {
                             Set-FSCPSActiveAzureStorageConfig ModelStorage
                             $null = Invoke-FSCPSAzureStorageUpload -FilePath $modelArchivePath
                             Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+
                         }
+                        Write-PSFMessage -Level Important -Message "Complete"
                     }
                 }
                 elseif ($msbuildresult.BuildSucceeded -eq $false)
@@ -477,6 +481,7 @@ function Invoke-FSCCompile {
                     {
                         throw "No X++ binary package(s) found"
                     }
+                    Write-PSFMessage -Level Important -Message "Complete"
                 }
             }
             if($settings.exportModel)
@@ -524,6 +529,7 @@ function Invoke-FSCCompile {
                 catch {
                     Write-PSFMessage -Level Important -Message $_.Exception.Message
                 }
+                Write-PSFMessage -Level Important -Message "Complete"
                 
             }
             $artifacts = Get-ChildItem $artifactDirectory -File -Recurse
