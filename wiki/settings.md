@@ -29,8 +29,8 @@ The behavior of FSCPS is very much controlled by the settings in settings files.
 | azClientId | The Guid of the AAD registered application  | All | GitHub |  |
 | azClientsecretSecretname | The github secret name that contains ClientSecret of the registered application  | All | GitHub | AZ_CLIENTSECRET | 
 | lcsEnvironmentId | The Guid of the LCS environment | All | GitHub | |
-| lcsProjectId | The ID of the LCS project | All | GitHub ||
-| lcsClientId | The ClientId of the azure application what has access to the LCS | All | GitHub ||
+| lcsProjectId | The ID of the LCS project | All | GitHub | |
+| lcsClientId | The ClientId of the azure application what has access to the LCS | All | GitHub | |
 | lcsUsernameSecretname | The github secret name that contains the username what has at least Owner access to the LCS project. It is a highly recommend to create a separate AAD user for this purposes. E.g. lcsadmin@contoso.com | All | GitHub | AZ_TENANT_USERNAME |
 | lcsPasswordSecretname | The github secret name that contains the password of the LCS user. | All | GitHub | AZ_TENANT_PASSWORD |
 | FSCPreviewVersionPackageId | The AssetId of the Preview package of the FSC. Depends on the FSC Version(version.default.json). | All | GitHub | "" |

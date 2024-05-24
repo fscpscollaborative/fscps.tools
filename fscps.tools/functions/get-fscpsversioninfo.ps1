@@ -31,7 +31,7 @@ Function Get-FSCPSVersionInfo {
     BEGIN {
         Invoke-TimeSignal -Start
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        $VersionStrategy = Get-PSFConfigValue -FullName "fscps.tools.settings.versionStrategy"
+        $VersionStrategy = Get-PSFConfigValue -FullName "fscps.tools.settings.all.versionStrategy"
         $versionsDefaultFile = Join-Path "$Script:DefaultTempPath" "versions.default.json"
 
         Invoke-FSCPSWebRequest -method GET -Uri "https://raw.githubusercontent.com/fscpscollaborative/fscps/main/Actions/Helpers/versions.default.json" -outFile $versionsDefaultFile

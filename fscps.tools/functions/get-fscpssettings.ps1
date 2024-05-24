@@ -75,11 +75,31 @@ function Get-FSCPSSettings {
     }
     process{         
 
-        foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.*") {
-            $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.", "")
+        foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.all.*") {
+            $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.all.", "")
             $res.$propertyName = $config.Value
         }
-
+        if($Script:IsOnGitHub)# If GitHub context
+        {
+            foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.github.*") {
+                $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.github.", "")
+                $res.$propertyName = $config.Value
+            }
+        }
+        if($Script:IsOnAzureDevOps)# If ADO context
+        {
+            foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.ado.*") {
+                $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.ado.", "")
+                $res.$propertyName = $config.Value
+            }
+        }
+        if($Script:IsOnLocalhost)# If localhost context
+        {
+            foreach ($config in Get-PSFConfig -FullName "fscps.tools.settings.localhost.*") {
+                $propertyName = $config.FullName.ToString().Replace("fscps.tools.settings.localhost.", "")
+                $res.$propertyName = $config.Value
+            }
+        }
         if($OutputAsHashtable) {
             $res
         } else {
