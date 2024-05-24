@@ -1,6 +1,25 @@
 # Settings
 The behavior of FSCPS is very much controlled by the settings in settings files.
 
+## How to configure if running on the GitHub
+When running a workflow or a local script, the settings are applied by reading one or more settings files. Last applied settings file wins. The following lists the settings files and their location:
+
+**.FSC-PS\\settings.json** is the root repository settings file. The .FSC-PS folder should be in the root folder of the repository.
+
+**.github\\FSC-PS-settings.json** is the repository settings file. This settings file contains settings for the repository. If a settings in the repository settings file is found in a subsequent settings file, it will be overridden by the new value.
+
+**.FSC-PS\\\<workflow\>.settings.json** is the workflow-specific settings file. This option is used for the build, ci and deploy workflows to determine artifacts and build numbers when running these workflows.
+
+**.FSC-PS\\\<username\>.settings.json** is the user-specific settings file. This option is rarely used, but if you have special settings, which should only be used for one specific user (potentially in the local scripts), these settings can be added to a settings file with the name of the user followed by `.settings.json`.
+
+**.FSC-PS\\environments.json** is the environment settings file. This settings file contains the list on the environments with the environment specific settings(branch, FSC version, etc.).
+
+## How to configure if running on the Azure DevOps
+All the important settings is added to the Azure DevOps action [FSCPS for Azure DevOps](https://marketplace.visualstudio.com/items?itemName=fscps.ado)
+
+## How to configure if on localhost
+The settings file can be everywhere and provided to the fscps.tools through the Set-FSCPSSettings applet. Find more details [here](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Compile-ISV-model).
+
 ## Basic settings
 | Name | Description | Project | System | Default value |
 | :-- | :-- | :-- | :-- | :-- |
