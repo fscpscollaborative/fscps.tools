@@ -5,41 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-FSCPSSignBinaryFile
+# Invoke-FSCPSAzureSignToolSignFile
 
 ## SYNOPSIS
-Function to sign the files with digicert
+Function to sign the files with KeyVault
 
 ## SYNTAX
 
 ```
-Invoke-FSCPSSignBinaryFile [[-SM_HOST] <String>] [-SM_API_KEY] <String> [[-SM_CLIENT_CERT_FILE] <String>]
- [[-SM_CLIENT_CERT_FILE_URL] <String>] [-SM_CLIENT_CERT_PASSWORD] <SecureString>
- [-SM_CODE_SIGNING_CERT_SHA1_HASH] <String> [-FILE] <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Invoke-FSCPSAzureSignToolSignFile [[-Uri] <String>] [-TenantId] <String> [[-CertificateName] <String>]
+ [[-ClientId] <String>] [-ClientSecret] <SecureString> [-TimestampServer] <String> [-FILE] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Function to sign the files with digicert
+Function to sign the files with KeyVault
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-FSCPSSignBinaryFile -SM_API_KEY "$codeSignDigiCertAPISecretName" `
--SM_CLIENT_CERT_FILE_URL "$codeSignDigiCertUrlSecretName" `
--SM_CLIENT_CERT_PASSWORD $(ConvertTo-SecureString $codeSignDigiCertPasswordSecretName -AsPlainText -Force) `
--SM_CODE_SIGNING_CERT_SHA1_HASH "$codeSignDigiCertHashSecretName" `
+Invoke-FSCPSAzureSignToolSignFile -Uri "https://my-vault.vault.azure.net" `
+-TenantId "01234567-abcd-ef012-0000-0123456789ab" `
+-CertificateName "my-key-name" `
+-ClientId "01234567-abcd-ef012-0000-0123456789ab" `
+-ClientSecret "secret" `
 -FILE "$filePath"
 ```
 
-This will sign the target file with the DigiCert certificate
+This will sign the target file with the KeyVault certificate
 
 ## PARAMETERS
 
-### -SM_HOST
-Digicert host URL.
-Default value "https://clientauth.one.digicert.com"
+### -Uri
+A fully qualified URL of the key vault with the certificate that will be used for signing.
+An example value might be https://my-vault.vault.azure.net.
 
 ```yaml
 Type: String
@@ -48,13 +48,13 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: Https://clientauth.one.digicert.com
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SM_API_KEY
-The DigiCert API Key
+### -TenantId
+This is the tenant id used to authenticate to Azure, which will be used to generate an access token.
 
 ```yaml
 Type: String
@@ -68,8 +68,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SM_CLIENT_CERT_FILE
-The DigiCert certificate local path (p12)
+### -CertificateName
+The name of the certificate used to perform the signing operation.
 
 ```yaml
 Type: String
@@ -78,13 +78,13 @@ Aliases:
 
 Required: False
 Position: 3
-Default value: C:\temp\digicert.p12
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SM_CLIENT_CERT_FILE_URL
-The DigiCert certificate URL (p12)
+### -ClientId
+This is the client ID used to authenticate to Azure, which will be used to generate an access token.
 
 ```yaml
 Type: String
@@ -98,8 +98,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SM_CLIENT_CERT_PASSWORD
-The DigiCert certificate password
+### -ClientSecret
+This is the client secret used to authenticate to Azure, which will be used to generate an access token.
 
 ```yaml
 Type: SecureString
@@ -113,8 +113,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SM_CODE_SIGNING_CERT_SHA1_HASH
-The DigiCert certificate thumbprint(fingerprint)
+### -TimestampServer
+A URL to an RFC3161 compliant timestamping service.
 
 ```yaml
 Type: String
@@ -123,7 +123,7 @@ Aliases:
 
 Required: True
 Position: 6
-Default value: None
+Default value: Http://timestamp.digicert.com
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -92,6 +92,7 @@ function Validate-FSCModelCache {
         $hash = Get-FolderHash $modelRootPath
         $modelFileNameWithHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_$($hash).7z".Replace(" ", "-")
         $modelFileNameWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_*.7z".Replace(" ", "-")
+        $modelFileNameGatedWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_*gated*_$($Version)_*.7z".Replace(" ", "-")
     
         Write-PSFMessage -Level Verbose -Message "Looking for $modelFileNameWithHash blob."
         $modelFile = Get-FSCPSAzureStorageFile -Name $modelFileNameWithHash
@@ -112,6 +113,7 @@ function Validate-FSCModelCache {
                 Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash not found.The model $ModelName will be compiled."
 
                 Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameWithoutHash
+                Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash
 
                 return $false;
             }

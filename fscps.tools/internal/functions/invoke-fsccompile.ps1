@@ -500,6 +500,10 @@ function Invoke-FSCCompile {
                                 $modelFile = Get-Item $modelFilePath.File
                                 Rename-Item $modelFile.FullName (($currentModel)+($modelFile.Extension)) -Force
                             }
+                            else
+                            {
+                                Write-PSFMessage -Level Verbose -Message "The model $modelName doesn`t have the source code. Skipped."
+                            }
                         }
                     }
                     else {
@@ -533,6 +537,7 @@ function Invoke-FSCCompile {
             {
                 $artifacts = '["'+$($artifactsList).ToString()+'"]'
             }
+            
             $responseObject.ARTIFACTS_LIST = $artifacts
         }
         catch {
