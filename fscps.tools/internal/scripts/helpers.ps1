@@ -98,7 +98,9 @@ function Validate-FSCModelCache {
         $modelFile = Get-FSCPSAzureStorageFile -Name $modelFileNameWithHash
     
         try
-        {        
+        {       
+            #Delete gated builds
+            Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash 
             if($modelFile)
             {
                 Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash found.The model $ModelName will be skipped for building."
@@ -113,10 +115,11 @@ function Validate-FSCModelCache {
                 Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash not found.The model $ModelName will be compiled."
 
                 Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameWithoutHash
-                Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash
+
 
                 return $false;
             }
+            
         }
         catch{
             return $false;
@@ -168,7 +171,7 @@ function Compress-7zipArchive {
         Update-7ZipInstallation
     }
 
-    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.repoToken"
+    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.all.repoToken"
     if(-not $passwd)
     {
         $passwd = "6E489467A6065A93CE1989C997810"
@@ -207,7 +210,7 @@ function Expand-7zipArchive {
         Update-7ZipInstallation
     }
 
-    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.repoToken"
+    $passwd = Get-PSFConfigValue -FullName "fscps.tools.settings.all.repoToken"
     if(-not $passwd)
     {
         $passwd = "6E489467A6065A93CE1989C997810"
