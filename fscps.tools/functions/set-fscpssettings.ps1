@@ -52,10 +52,12 @@ function Set-FSCPSSettings {
             $null = Set-Content $SettingsFilePath $SettingsJsonString -Force -PassThru
         }
 
-        $fscpsFolderName = Get-PSFConfigValue -FullName "fscps.tools.settings.*.fscpsFolder"
-        $fscmSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.*.fscpsSettingsFile"
-        $fscmRepoSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.*.fscpsRepoSettingsFile"
-
+        $fscpsFolderName = Get-PSFConfigValue -FullName "fscps.tools.settings.all.fscpsFolder"
+        $fscmSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.all.fscpsSettingsFile"
+        $fscmRepoSettingsFile = Get-PSFConfigValue -FullName "fscps.tools.settings.all.fscpsRepoSettingsFile"
+        Write-PSFMessage -Level Verbose -Message "fscpsFolderName is: $fscpsFolderName"
+        Write-PSFMessage -Level Verbose -Message "fscmSettingsFile is: $fscmSettingsFile"
+        Write-PSFMessage -Level Verbose -Message "fscmRepoSettingsFile is: $fscmRepoSettingsFile"
         $settingsFiles = @()
         $res = [Ordered]@{}
 
@@ -67,11 +69,11 @@ function Set-FSCPSSettings {
         if($Script:IsOnGitHub)# If GitHub context
         {
             Write-PSFMessage -Level Important -Message "Running on GitHub"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.repoProvider' -Value 'GitHub'
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"            
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.repoProvider' -Value 'GitHub'
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.repositoryRootPath' -Value "$env:GITHUB_WORKSPACE"            
 
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.runId' -Value "$ENV:GITHUB_RUN_NUMBER"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.workflowName' -Value "$ENV:GITHUB_WORKFLOW"
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.runId' -Value "$ENV:GITHUB_RUN_NUMBER"
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.workflowName' -Value "$ENV:GITHUB_WORKFLOW"
 
             if($SettingsFilePath -eq "")
             {
@@ -103,10 +105,10 @@ function Set-FSCPSSettings {
         elseif($Script:IsOnAzureDevOps)# If Azure DevOps context
         {
             Write-PSFMessage -Level Verbose -Message "Running on Azure"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.repoProvider' -Value 'AzureDevOps'
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.runId' -Value "$ENV:Build_BuildNumber"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.workflowName' -Value "$ENV:Build_DefinitionName" 
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.repoProvider' -Value 'AzureDevOps'
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.repositoryRootPath' -Value "$env:PIPELINE_WORKSPACE"
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.runId' -Value "$ENV:Build_BuildNumber"
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.workflowName' -Value "$ENV:Build_DefinitionName" 
             if($SettingsFilePath -eq "")
             {
                 $RepositoryRootPath = "$env:PIPELINE_WORKSPACE"
@@ -126,19 +128,20 @@ function Set-FSCPSSettings {
         }
         else { # If Desktop or other
             Write-PSFMessage -Level Verbose -Message "Running on desktop"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.repoProvider' -Value 'Other'
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.repoProvider' -Value 'Other'
             if($SettingsFilePath -eq "")
             {
                 throw "SettingsFilePath variable should be passed if running on the cloud/personal computer"
             }
             $reposytoryName = "windows host"
-            Set-PSFConfig -FullName 'fscps.tools.settings.*.runId' -Value 1
+            Set-PSFConfig -FullName 'fscps.tools.settings.all.runId' -Value 1
             $currentBranchName = 'DEV'
             $settingsFiles += $SettingsFilePath
         }
-        Set-PSFConfig -FullName 'fscps.tools.settings.*.currentBranch' -Value $currentBranchName
-        Set-PSFConfig -FullName 'fscps.tools.settings.*.repoOwner' -Value $reposytoryOwner
-        Set-PSFConfig -FullName 'fscps.tools.settings.*.repoName' -Value $reposytoryName
+
+        Set-PSFConfig -FullName 'fscps.tools.settings.all.currentBranch' -Value $currentBranchName
+        Set-PSFConfig -FullName 'fscps.tools.settings.all.repoOwner' -Value $reposytoryOwner
+        Set-PSFConfig -FullName 'fscps.tools.settings.all.repoName' -Value $reposytoryName
 
         
         function MergeCustomObjectIntoOrderedDictionary {
