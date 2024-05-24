@@ -85,7 +85,8 @@ FunctionsToExport = @(
     'Enable-FSCPSException', 
     'Get-FSCPSAzureStorageFile', 
     'Update-FSCPSModelVersion', 
-    'Invoke-FSCPSSignBinaryFile', 
+    'Invoke-FSCPSDigiCertSignFile',
+    'Invoke-FSCPSAzureSignToolSignFile', 
     'Add-FSCPSAzureStorageConfig', 
     'Get-FSCPSAzureStorageConfig', 
     'Get-FSCPSActiveAzureStorageConfig', 
@@ -94,8 +95,7 @@ FunctionsToExport = @(
     'Invoke-FSCPSAzureStorageDownload', 
     'Invoke-FSCPSAzureStorageUpload', 
     'Invoke-FSCPSAzureStorageDelete',
-    'Update-FSCPSISVSource',
-    'Invoke-FSCPSAzureSignToolSignFile'
+    'Update-FSCPSISVSource'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
