@@ -49,7 +49,7 @@ function Update-FSCPSModelVersion {
             [string[]]$xppDescriptorSearch = $xppDescriptorSearch -split "`n"
         }
         
-        Test-Path -LiteralPath $xppSourcePath -PathType Container
+        $null = Test-Path -LiteralPath $xppSourcePath -PathType Container
             
         if ($versionNumber -match "^\d+\.\d+\.\d+\.\d+$")
         {

@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.192'
+ModuleVersion = '1.0.193'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -85,7 +85,8 @@ FunctionsToExport = @(
     'Enable-FSCPSException', 
     'Get-FSCPSAzureStorageFile', 
     'Update-FSCPSModelVersion', 
-    'Invoke-FSCPSSignBinaryFile', 
+    'Invoke-FSCPSDigiCertSignFile',
+    'Invoke-FSCPSAzureSignToolSignFile', 
     'Add-FSCPSAzureStorageConfig', 
     'Get-FSCPSAzureStorageConfig', 
     'Get-FSCPSActiveAzureStorageConfig', 

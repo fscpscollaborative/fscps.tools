@@ -1,4 +1,4 @@
-﻿Describe "Invoke-FSCPSSignBinaryFile Unit Tests" -Tag "Unit" {
+﻿Describe "Invoke-FSCPSAzureSignToolSignFile Unit Tests" -Tag "Unit" {
 	BeforeAll {
 		# Place here all things needed to prepare for the tests
 	}
@@ -8,12 +8,12 @@
 	
 	Describe "Ensuring unchanged command signature" {
 		It "should have the expected parameter sets" {
-			(Get-Command Invoke-FSCPSSignBinaryFile).ParameterSets.Name | Should -Be '__AllParameterSets'
+			(Get-Command Invoke-FSCPSAzureSignToolSignFile).ParameterSets.Name | Should -Be '__AllParameterSets'
 		}
 		
-		It 'Should have the expected parameter SM_HOST' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_HOST']
-			$parameter.Name | Should -Be 'SM_HOST'
+		It 'Should have the expected parameter Uri' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['Uri']
+			$parameter.Name | Should -Be 'Uri'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -24,9 +24,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SM_API_KEY' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_API_KEY']
-			$parameter.Name | Should -Be 'SM_API_KEY'
+		It 'Should have the expected parameter TenantId' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['TenantId']
+			$parameter.Name | Should -Be 'TenantId'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -37,9 +37,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SM_CLIENT_CERT_FILE' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_CLIENT_CERT_FILE']
-			$parameter.Name | Should -Be 'SM_CLIENT_CERT_FILE'
+		It 'Should have the expected parameter CertificateName' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['CertificateName']
+			$parameter.Name | Should -Be 'CertificateName'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -50,9 +50,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SM_CLIENT_CERT_FILE_URL' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_CLIENT_CERT_FILE_URL']
-			$parameter.Name | Should -Be 'SM_CLIENT_CERT_FILE_URL'
+		It 'Should have the expected parameter ClientId' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['ClientId']
+			$parameter.Name | Should -Be 'ClientId'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -63,9 +63,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SM_CLIENT_CERT_PASSWORD' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_CLIENT_CERT_PASSWORD']
-			$parameter.Name | Should -Be 'SM_CLIENT_CERT_PASSWORD'
+		It 'Should have the expected parameter ClientSecret' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['ClientSecret']
+			$parameter.Name | Should -Be 'ClientSecret'
 			$parameter.ParameterType.ToString() | Should -Be System.Security.SecureString
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -76,9 +76,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter SM_CODE_SIGNING_CERT_SHA1_HASH' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['SM_CODE_SIGNING_CERT_SHA1_HASH']
-			$parameter.Name | Should -Be 'SM_CODE_SIGNING_CERT_SHA1_HASH'
+		It 'Should have the expected parameter TimestampServer' {
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['TimestampServer']
+			$parameter.Name | Should -Be 'TimestampServer'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -90,7 +90,7 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
 		It 'Should have the expected parameter FILE' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['FILE']
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['FILE']
 			$parameter.Name | Should -Be 'FILE'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
@@ -103,7 +103,7 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
 		It 'Should have the expected parameter ProgressAction' {
-			$parameter = (Get-Command Invoke-FSCPSSignBinaryFile).Parameters['ProgressAction']
+			$parameter = (Get-Command Invoke-FSCPSAzureSignToolSignFile).Parameters['ProgressAction']
 			$parameter.Name | Should -Be 'ProgressAction'
 			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.ActionPreference
 			$parameter.IsDynamic | Should -Be $False
@@ -119,8 +119,8 @@
 	
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
-		__AllParameterSets -SM_API_KEY -SM_CLIENT_CERT_PASSWORD -SM_CODE_SIGNING_CERT_SHA1_HASH -FILE
-		__AllParameterSets -SM_HOST -SM_API_KEY -SM_CLIENT_CERT_FILE -SM_CLIENT_CERT_FILE_URL -SM_CLIENT_CERT_PASSWORD -SM_CODE_SIGNING_CERT_SHA1_HASH -FILE -ProgressAction
+		__AllParameterSets -TenantId -ClientSecret -TimestampServer -FILE
+		__AllParameterSets -Uri -TenantId -CertificateName -ClientId -ClientSecret -TimestampServer -FILE -ProgressAction
 		#>
 	}
 

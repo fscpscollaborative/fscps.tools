@@ -28,7 +28,7 @@
         A file to sign
         
     .EXAMPLE
-        PS C:\> Invoke-FSCPSSignBinaryFile -SM_API_KEY "$codeSignDigiCertAPISecretName" `
+        PS C:\> Invoke-FSCPSDigiCertSignFile -SM_API_KEY "$codeSignDigiCertAPISecretName" `
         -SM_CLIENT_CERT_FILE_URL "$codeSignDigiCertUrlSecretName" `
         -SM_CLIENT_CERT_PASSWORD $(ConvertTo-SecureString $codeSignDigiCertPasswordSecretName -AsPlainText -Force) `
         -SM_CODE_SIGNING_CERT_SHA1_HASH "$codeSignDigiCertHashSecretName" `
@@ -38,7 +38,7 @@
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
-function Invoke-FSCPSSignBinaryFile {
+function Invoke-FSCPSDigiCertSignFile {
     param (
         [Parameter(HelpMessage = "The DigiCert host", Mandatory = $false)]
         [string] $SM_HOST = "https://clientauth.one.digicert.com",
