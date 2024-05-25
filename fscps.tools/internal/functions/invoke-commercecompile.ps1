@@ -93,6 +93,11 @@ function Invoke-CommerceCompile {
                 $artifactDirectory = $settings.artifactsPath
             }
 
+            if (Test-Path -Path $artifactDirectory -ErrorAction SilentlyContinue)
+            {
+                Remove-Item -Path $artifactDirectory -Recurse -Force -ErrorAction SilentlyContinue
+            }
+
             if (!(Test-Path -Path $artifactDirectory))
             {
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
