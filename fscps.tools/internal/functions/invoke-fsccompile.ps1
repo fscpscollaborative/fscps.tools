@@ -26,7 +26,6 @@
         METADATA_DIRECTORY  : D:\a\8\s\Metadata
         FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
         BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
-        SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
         NUGETS_FOLDER    : C:\temp\buildbuild\packages
         BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
         PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
@@ -44,7 +43,6 @@
         METADATA_DIRECTORY  : D:\a\8\s\Metadata
         FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
         BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
-        SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
         NUGETS_FOLDER    : C:\temp\buildbuild\packages
         BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
         PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
@@ -128,6 +126,13 @@ function Invoke-FSCCompile {
             {
                 Remove-Item -Path $artifactDirectory -Recurse -Force
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
+            }
+
+            $buildLogsDirectory = (Join-Path $artifactDirectory "Logs")
+            if (Test-Path -Path $buildLogsDirectory)
+            {
+                Remove-Item -Path $buildLogsDirectory -Recurse -Force
+                $null = [System.IO.Directory]::CreateDirectory($buildLogsDirectory)
             }
 
             # Gather version info
@@ -250,7 +255,6 @@ function Invoke-FSCCompile {
 
             Write-PSFMessage -Level Important -Message "//=============================== Generate solution folder =======================================//"
             $null = Invoke-GenerateSolution -ModelsList $modelsToBuild -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
-            $responseObject.SOLUTION_FOLDER = Join-Path $BuildFolderPath "$($Version)_build"
             Write-PSFMessage -Level Important -Message "Complete"
 
             Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
@@ -298,6 +302,11 @@ function Invoke-FSCCompile {
                 $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -ShowBuildOutputInCurrentWindow @CMDOUT
 
                 $responseObject.BUILD_LOG_FILE_PATH = $msbuildresult.BuildLogFilePath
+
+                Copy-Filtered -Source (Join-Path $SolutionBuildFolderPath "Build") -Target $buildLogsDirectory -Filter *Dynamics.AX.*.xppc.*
+                Copy-Filtered -Source (Join-Path $SolutionBuildFolderPath "Build") -Target $buildLogsDirectory -Filter *Dynamics.AX.*.labelc.*
+                Copy-Filtered -Source (Join-Path $SolutionBuildFolderPath "Build") -Target $buildLogsDirectory -Filter *Dynamics.AX.*.reportsc.*
+                
                 if ($msbuildresult.BuildSucceeded -eq $true)
                 {
                     Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)

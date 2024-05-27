@@ -1,6 +1,4 @@
-﻿# **D365FSC. Download FSC NuGets**
-
-This tutorial will show you how to download D365FSC nuget packages.
+﻿This tutorial will show you how to download D365FSC nuget packages.
 
 ## **Prerequisites**
 * PowerShell 5.1
