@@ -14,7 +14,8 @@ Invoke the D365FSC models compilation
 
 ```
 Invoke-FSCPSCompile [[-Version] <String>] [-SourcesPath] <String> [[-Type] <FSCPSType>]
- [[-BuildFolderPath] <String>] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-BuildFolderPath] <String>] [-OutputAsHashtable] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +122,21 @@ Aliases:
 Required: False
 Position: 4
 Default value: (Join-Path $script:DefaultTempPath _bld)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsHashtable
+Instruct the cmdlet to return a hashtable object
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -110,7 +110,7 @@ function Invoke-FSCPSAzureStorageDelete {
             }
             if(-not $files)
             {
-                Write-PSFMessage -Level Warning -Message "Files with filter '$($FileName)' were not found in the Storage Account."
+                Write-PSFMessage -Level Verbose -Message "Files with filter '$($FileName)' were not found in the Storage Account."
             }
         }
         catch {

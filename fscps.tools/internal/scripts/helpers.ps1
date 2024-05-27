@@ -100,7 +100,7 @@ function Validate-FSCModelCache {
         try
         {       
             #Delete gated builds
-            Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash 
+            Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash
             if($modelFile)
             {
                 Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash found.The model $ModelName will be skipped for building."
