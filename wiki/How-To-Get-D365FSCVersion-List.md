@@ -1,6 +1,4 @@
-﻿# **List available data of D365FSC versions from fscps.tools module**
-
-This tutorial will show you how to list and search data of D365FSC versions that are available from the fscps.tools module.
+﻿This tutorial will show you how to list and search data of D365FSC versions that are available from the fscps.tools module.
 
 ## **Prerequisites**
 * PowerShell 5.1

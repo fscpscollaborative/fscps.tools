@@ -1,6 +1,4 @@
-﻿# **D365FSC. Compile ISV model**
-
-This tutorial will show you how to compile a D365FSC module and generate the package.
+﻿This tutorial will show you how to compile a D365FSC module and generate the package.
 
 ## **Prerequisites**
 * PowerShell 5.1

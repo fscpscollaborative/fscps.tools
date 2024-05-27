@@ -1,6 +1,4 @@
-﻿# **Use Choco**
-
-This tutorial will show you how to install/upgrade choco packages.
+﻿This tutorial will show you how to install/upgrade choco packages.
 
 ## **Prerequisites**
 * PowerShell 5.1
