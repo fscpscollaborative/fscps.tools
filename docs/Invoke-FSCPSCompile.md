@@ -33,7 +33,6 @@ Example output:
 METADATA_DIRECTORY  : D:\a\8\s\Metadata
 FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
 BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
-SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
 NUGETS_FOLDER    : C:\temp\buildbuild\packages
 BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
 PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
@@ -53,7 +52,6 @@ Example output:
 METADATA_DIRECTORY  : D:\a\8\s\Metadata
 FRAMEWORK_DIRECTORY : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
 BUILD_OUTPUT_DIRECTORY    : C:\temp\buildbuild\bin
-SOLUTION_FOLDER   : C:\temp\buildbuild\10.0.39_build
 NUGETS_FOLDER    : C:\temp\buildbuild\packages
 BUILD_LOG_FILE_PATH     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
 PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78

@@ -126,7 +126,9 @@ function Validate-FSCModelCache {
         }        
     }
     end{
-        Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+        if(-not [string]::IsNullOrEmpty($activeStorageConfigName)){
+            Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+        }
     }    
 }
 

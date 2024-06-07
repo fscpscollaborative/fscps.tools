@@ -77,7 +77,7 @@ function Set-FSCPSActiveAzureStorageConfig {
     }
 
     if (-not ($azureStorageConfigs.ContainsKey($Name))) {
-        Write-PSFMessage -Level Host -Message "An Azure Storage Account with that name <c='em'>doesn't exists</c>."
+        Write-PSFMessage -Level Host -Message "An Azure Storage Account with that name <c='$Name'> doesn't exists</c>."
         Stop-PSFFunction -Message "Stopping because an Azure Storage Account with that name doesn't exists."
         return
     }
