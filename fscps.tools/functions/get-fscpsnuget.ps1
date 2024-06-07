@@ -44,6 +44,7 @@ function Get-FSCPSNuget {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignment", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -83,17 +84,16 @@ function Get-FSCPSNuget {
 
         $storageConfigs = Get-FSCPSAzureStorageConfig
         $activeStorageConfigName = "NugetStorage"
-        if($storageConfigs)
+        if($storageConfigs.Length -gt 0)
         {
             $activeStorageConfig = Get-FSCPSActiveAzureStorageConfig
             $storageConfigs | ForEach-Object {
                 if($_.AccountId -eq $activeStorageConfig.AccountId -and $_.Container -eq $activeStorageConfig.Container -and $_.SAS -eq $activeStorageConfig.SAS)
                 {
                     $activeStorageConfigName = $_.Name
-                    $activeStorageConfigName
                 }
             }
-        }        
+        }
         Write-PSFMessage -Level Verbose -Message "ActiveStorageConfigName: $activeStorageConfigName"
         if($Force)
         {
@@ -108,8 +108,7 @@ function Get-FSCPSNuget {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         try {
-            Set-FSCPSActiveAzureStorageConfig "NuGetStorage"
-
+            Set-FSCPSActiveAzureStorageConfig "NuGetStorage" -ErrorAction SilentlyContinue
             $destinationNugetFilePath = Join-Path $Path $packageName 
             
             $download = (-not(Test-Path $destinationNugetFilePath))
@@ -141,13 +140,13 @@ function Get-FSCPSNuget {
             return
         }
         finally{
-            if($activeStorageConfigName){
-                Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+            if((Get-FSCPSAzureStorageConfig $activeStorageConfigName -ErrorAction SilentlyContinue).Length -gt 0){
+                Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName -ErrorAction SilentlyContinue
             }
             else
             {
-                Set-FSCPSActiveAzureStorageConfig "NuGetStorage"
-            }            
+                Set-FSCPSActiveAzureStorageConfig "NuGetStorage" -ErrorAction SilentlyContinue
+            }       
         }
     }
     END {

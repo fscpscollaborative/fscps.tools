@@ -18,41 +18,55 @@
     .PARAMETER Force
         Cleanup destination build folder befor build
         
-    .EXAMPLE
-        PS C:\> Invoke-CommerceCompile -Version "10.0.39"
+        .EXAMPLE
+        PS C:\> Invoke-FSCPSCompile -Version 10.0.39
         
         Example output:
         
-        msMetadataDirectory  : D:\a\8\s\Metadata
-        msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
-        msOutputDirectory    : C:\temp\buildbuild\bin
-        solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
-        nugetPackagesPath    : C:\temp\buildbuild\packages
-        buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
-        PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
-        PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
-        ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
-        ARTIFACTS_LIST       : ["C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip"]
+        BUILD_FOLDER_PATH : c:\temp\fscps.tools\_bld\10.0.39_build
+        BUILD_LOG_FILE_PATH  : C:\Users\Administrator\AppData\Local\Temp\ScaleUnit.sln.msbuild.log
+        CSU_ZIP_PATH      : c:\temp\fscps.tools\_bld\artifacts\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip
+        HW_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        SC_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        SU_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        PACKAGE_NAME      : Master-ContosoForD365Commerce-10.0.39_20240530.48
+        ARTIFACTS_PATH    : c:\temp\fscps.tools\_bld\artifacts
+        ARTIFACTS_LIST    : ["C:\\temp\\fscps.tools\\_bld\\artifacts\\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
         
-        This will build D365Commerce package with version "10.0.39" to the Temp folder
+        This will build D365FSC package with version "10.0.39" to the Temp folder
         
     .EXAMPLE
-        PS C:\> Invoke-CommerceCompile -Version "10.0.39" -Path "c:\Temp"
+        PS C:\> Invoke-FSCPSCompile -SourcesPath "D:\Sources\connector-d365-commerce\"
         
         Example output:
         
-        msMetadataDirectory  : D:\a\8\s\Metadata
-        msFrameworkDirectory : C:\temp\buildbuild\packages\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99
-        msOutputDirectory    : C:\temp\buildbuild\bin
-        solutionFolderPath   : C:\temp\buildbuild\10.0.39_build
-        nugetPackagesPath    : C:\temp\buildbuild\packages
-        buildLogFilePath     : C:\Users\VssAdministrator\AppData\Local\Temp\Build.sln.msbuild.log
-        PACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78
-        PACKAGE_PATH         : C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip
-        ARTIFACTS_PATH       : C:\temp\buildbuild\artifacts
-        ARTIFACTS_LIST       : ["C:\temp\buildbuild\artifacts\MAIN TEST-DeployablePackage-10.0.39-78.zip"]
+        BUILD_FOLDER_PATH : c:\temp\fscps.tools\_bld\10.0.39_build
+        BUILD_LOG_FILE_PATH  : C:\Users\Administrator\AppData\Local\Temp\ScaleUnit.sln.msbuild.log
+        CSU_ZIP_PATH      : c:\temp\fscps.tools\_bld\artifacts\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip
+        HW_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        SC_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        SU_INSTALLER_PATH : c:\temp\fscps.tools\_bld\artifacts\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe
+        PACKAGE_NAME      : Master-ContosoForD365Commerce-10.0.39_20240530.48
+        ARTIFACTS_PATH    : c:\temp\fscps.tools\_bld\artifacts
+        ARTIFACTS_LIST    : ["C:\\temp\\fscps.tools\\_bld\\artifacts\\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
+                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
         
-        This will build D365Commerce package with version "10.0.39" to the Temp folder
+        This will build D365FSC package with version "10.0.39" to the Temp folder
         
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
@@ -82,8 +96,15 @@ function Invoke-CommerceCompile {
                 Debug = If ($PSBoundParameters.Debug -eq $true) { $true } else { $false }
             }
             $responseObject = [Ordered]@{}
-            Write-PSFMessage -Level Important -Message "//=============================== Reading current FSC-PS settings ================================//"
+            Write-PSFMessage -Level Important -Message "//================= Reading current FSC-PS settings ============================//"
             $settings = Get-FSCPSSettings @CMDOUT
+            Write-PSFMessage -Level Important -Message "Complete"
+            #if($Force)
+            #{
+                Write-PSFMessage -Level Important -Message "//================= Cleanup build folder =======================================//"
+                Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
+                Write-PSFMessage -Level Important -Message "Complete"
+            #}
 
             if($settings.artifactsPath -eq "")
             {
@@ -132,20 +153,14 @@ function Invoke-CommerceCompile {
     PROCESS {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        try {            
-            if($Force)
-            {
-                Write-PSFMessage -Level Important -Message "//=============================== Cleanup build folder ===========================================//"
-                Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
-            }
-    
-            Write-PSFMessage -Level Important -Message "//=============================== Copy source files to the build folder ==========================//"            
+        try {               
+            Write-PSFMessage -Level Important -Message "//================= Copy source files to the build folder ======================//"            
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
             Copy-Item $SourcesPath\* -Destination $SolutionBuildFolderPath -Recurse -Force @CMDOUT
             Write-PSFMessage -Level Important -Message "Complete"
 
-            Write-PSFMessage -Level Important -Message "//=============================== Build solution =================================================//"
+            Write-PSFMessage -Level Important -Message "//================= Build solution =============================================//"
 
             $msbuildpath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -products * -requires Microsoft.Component.MSBuild -property installationPath -latest
 
@@ -162,7 +177,7 @@ function Invoke-CommerceCompile {
                 $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath $settings.solutionName) -MsBuildParameters "/t:restore,rebuild /property:Configuration=Release /property:NuGetInteractive=true /property:BuildingInsideVisualStudio=false" -ShowBuildOutputInCurrentWindow @CMDOUT
             }
 
-            $responseObject.buildLogFilePath = $msbuildresult.BuildLogFilePath
+            $responseObject.BUILD_LOG_FILE_PATH = $msbuildresult.BuildLogFilePath
 
             if ($msbuildresult.BuildSucceeded -eq $true)
             {
@@ -179,7 +194,7 @@ function Invoke-CommerceCompile {
             Set-Location $origLocation
             if($settings.generatePackages)
             {
-                Write-PSFMessage -Level Important -Message "//=============================== Generate package ==============================================//"
+                Write-PSFMessage -Level Important -Message "//================= Generate package ==========================================//"
 
                 switch ($settings.namingStrategy) {
                     { $settings.namingStrategy -eq "Default" }
@@ -190,7 +205,7 @@ function Invoke-CommerceCompile {
                             $packageName = $settings.packageName
                         }
                         else {
-                            $packageName = $settings.packageName# + ".zip"
+                            $packageName = $settings.packageName
                         }
                         $packageNamePattern = $packageNamePattern.Replace("BRANCHNAME", $($settings.sourceBranch))
                         if($settings.deploy)
@@ -206,7 +221,7 @@ function Invoke-CommerceCompile {
                         
                         $packageNamePattern = $packageNamePattern.Replace("RUNNUMBER", $settings.runId)
 
-                        $packageName = $packageNamePattern + ".zip"
+                        $packageName = $packageNamePattern
                         break;
                     }
                     { $settings.namingStrategy -eq "Custom" }
@@ -233,7 +248,7 @@ function Invoke-CommerceCompile {
                 [System.IO.DirectoryInfo]$sCInstallerPath = Get-ChildItem -Path $SolutionBuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*StoreCommerce.*.exe$"} | ForEach-Object {$_.FullName}
                 [System.IO.DirectoryInfo]$sUInstallerPath = Get-ChildItem -Path $SolutionBuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*ScaleUnit.*.exe$"} | ForEach-Object {$_.FullName}
                 
-                Write-PSFMessage -Level Important -Message "//=============================== Copy packages to the artifacts folder ==========================//"
+                Write-PSFMessage -Level Important -Message "//================= Copy packages to the artifacts folder ======================//"
                 if($csuZipPackagePath)
                 {    
                     Write-PSFMessage -Level Important -Message "CSU Package processing..."
@@ -282,7 +297,7 @@ function Invoke-CommerceCompile {
                     $responseObject.SU_INSTALLER_PATH = $destinationFullName
                 }
 
-                Write-PSFMessage -Level Important -Message "//=============================== Export NuGets ===================================================//"
+                Write-PSFMessage -Level Important -Message "//================= Export NuGets ===============================================//"
                 Get-ChildItem -Path $BuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*.nupkg$"} | ForEach-Object {
                     if($settings.cleanupNugets)
                     {                
@@ -359,6 +374,7 @@ function Invoke-CommerceCompile {
                         Remove-Item -Path $tempCombinedPackage -Recurse -Force -ErrorAction SilentlyContinue
                     }
                 }
+                Set-Location $origLocation
             }
             catch {
                 Write-PSFMessage -Level Verbose -Message "Cleanup warning: $($PSItem.Exception)" 
