@@ -34,7 +34,12 @@ Function Get-FSCPSVersionInfo {
         $VersionStrategy = Get-PSFConfigValue -FullName "fscps.tools.settings.all.versionStrategy"
         $versionsDefaultFile = Join-Path "$Script:DefaultTempPath" "versions.default.json"
 
-        Invoke-FSCPSWebRequest -method GET -Uri "https://raw.githubusercontent.com/fscpscollaborative/fscps/main/Actions/Helpers/versions.default.json" -outFile $versionsDefaultFile
+        try {
+            Invoke-FSCPSWebRequest -method GET -Uri "https://raw.githubusercontent.com/fscpscollaborative/fscps/main/Actions/Helpers/versions.default.json" -outFile $versionsDefaultFile
+        }
+        catch {
+            Start-BitsTransfer -Source "https://raw.githubusercontent.com/fscpscollaborative/fscps/main/Actions/Helpers/versions.default.json" -Destination $versionsDefaultFile
+        }       
         
         $versionsData = (Get-Content $versionsDefaultFile) | ConvertFrom-Json 
 

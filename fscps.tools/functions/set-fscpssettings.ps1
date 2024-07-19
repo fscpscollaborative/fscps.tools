@@ -203,8 +203,13 @@ function Set-FSCPSSettings {
                             }
                         }
                         else {
+                            Write-PSFMessage -Level Verbose -Message "Searching fscps.tools.settings.*.$prop"
                             $setting = Get-PSFConfig -FullName "fscps.tools.settings.*.$prop"
-                            Set-PSFConfig -FullName $setting.FullName -Value $srcProp
+                            Write-PSFMessage -Level Verbose -Message "Found  $setting"
+                            if($setting)
+                            {
+                                Set-PSFConfig -FullName $setting.FullName -Value $srcProp
+                            }
                             #$dst."$prop" = $srcProp
                         }
                     }
