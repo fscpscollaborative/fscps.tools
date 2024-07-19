@@ -16,6 +16,9 @@
     .PARAMETER Silent
         Disable output
         
+    .PARAMETER SkipUpdate
+        Skip the chocolatey update
+        
     .PARAMETER Command
         The command of the choco to execute
         
@@ -44,6 +47,7 @@ Function Invoke-FSCPSChoco {
         [string] $Command,
         [Parameter(Mandatory = $false, Position = 1, ValueFromRemainingArguments = $true)] $RemainingArguments,
         [switch] $Silent,
+        [switch] $SkipUpdate,
         [switch] $Force
     )
 
@@ -51,13 +55,16 @@ Function Invoke-FSCPSChoco {
         Invoke-TimeSignal -Start
         try {
             if (Test-Path -Path "$env:ProgramData\Chocolatey") {
-                if (!$Silent) {
-                    choco upgrade chocolatey -y -r 
-                    choco upgrade all --ignore-checksums -y -r
-                }
-                else{
-                    $null = choco upgrade chocolatey -y -r -silent
-                    $null = choco upgrade all --ignore-checksums -y -r
+                if($SkipUpdate)
+                {
+                    if (!$Silent) {
+                        choco upgrade chocolatey -y -r 
+                        choco upgrade all --ignore-checksums -y -r
+                    }
+                    else{
+                        $null = choco upgrade chocolatey -y -r -silent
+                        $null = choco upgrade all --ignore-checksums -y -r
+                    }
                 }
             }
             else {

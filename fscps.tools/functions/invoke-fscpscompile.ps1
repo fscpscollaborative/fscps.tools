@@ -17,7 +17,7 @@
         
     .PARAMETER BuildFolderPath
         The destination build folder
-
+        
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
         

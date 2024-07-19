@@ -83,13 +83,19 @@ function Update-FSCPSISVSource {
     process
     {
         if (Test-PSFFunctionInterrupt) { return }
-
+        $helperPath = Join-Path -Path $($Script:ModuleRoot) -ChildPath "\internal\scripts\helpers.ps1" -Resolve
+        . ($helperPath)    
         try {
             
-            Write-PSFMessage -Level Verbose -Message "Downloading $($FileName)" -Target $downloadPath
+            Write-PSFMessage -Level Important -Message "Downloading $($FileName)" -Target $downloadPath
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-            [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
-            Invoke-WebRequest -Uri $Url -OutFile $downloadPath
+            #[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+
+            Write-PSFMessage -Level Important -Message "Source: $Url"
+            Write-PSFMessage -Level Important -Message "Destination $downloadPath"
+
+            Start-BitsTransfer -Source $Url -Destination $downloadPath
+
 
             #check is archive contains few archives
             $packagesPaths = [System.Collections.ArrayList]@()
@@ -100,29 +106,42 @@ function Update-FSCPSISVSource {
             {            
                 Unblock-File $downloadPath
                 Expand-7zipArchive -Path $downloadPath -DestinationPath "$tempPath/archives"
-                Get-ChildItem "$tempPath/archives" -Filter '*.zip'  -ErrorAction SilentlyContinue -Force | ForEach-Object{
-                    $archive = $_.FullName
-                    $tmpArchivePath = Join-Path "$tempPath/archives" $_.BaseName
-                    
-                    Unblock-File $archive
-                    Expand-7zipArchive -Path $archive -DestinationPath $tmpArchivePath
-                    $ispackage = Get-ChildItem -Path $tmpArchivePath -Filter 'AXUpdateInstaller.exe' -Recurse -ErrorAction SilentlyContinue -Force    
 
-                    if($ispackage)
-                    {
-                        $null = $packagesPaths.Add($_.FullName)
-                    }
-                    else
-                    {   
-                        $null = $sourceCodePaths.Add($_.FullName)
-                    }
+                $ispackage = Get-ChildItem -Path "$tempPath/archives" -Filter 'AXUpdateInstaller.exe' -ErrorAction SilentlyContinue -Force    
+
+                if($ispackage)
+                {
+                    $null = $packagesPaths.Add($downloadPath)
+                }
+                else
+                {   
+                    Get-ChildItem "$tempPath/archives" -Filter '*.zip' -Recurse  -ErrorAction SilentlyContinue -Force | ForEach-Object{
+                        $archive = $_.FullName
                         
-                } 
-                #check axmodel files inside and add to list if found
-                Get-ChildItem "$tempPath/archives" -Filter '*.axmodel' -Recurse -ErrorAction SilentlyContinue -Force | ForEach-Object {
-                    $null = $axmodelsPaths.Add($_.FullName)
-                }                      
+                        $tmpArchivePath = Join-Path "$tempPath/archives" $_.BaseName
+                        
+                        Unblock-File $archive
+                        Expand-7zipArchive -Path $archive -DestinationPath $tmpArchivePath
+                        $ispackage = Get-ChildItem -Path $tmpArchivePath -Filter 'AXUpdateInstaller.exe' -Recurse -ErrorAction SilentlyContinue -Force    
     
+                        if($ispackage)
+                        {
+                            $null = $packagesPaths.Add($_.FullName)
+                        }
+                        else
+                        {   
+                            if($_.FullName -notlike "*dynamicsax-*.zip")
+                            {
+                                $null = $sourceCodePaths.Add($_.FullName)
+                            }
+                        }
+                            
+                    } 
+                    #check axmodel files inside and add to list if found
+                    Get-ChildItem "$tempPath/archives" -Filter '*.axmodel' -Recurse -ErrorAction SilentlyContinue -Force | ForEach-Object {
+                        $null = $axmodelsPaths.Add($_.FullName)
+                    }           
+                } 
             }
             if($downloadPath.EndsWith(".axmodel"))
             {
@@ -132,19 +151,25 @@ function Update-FSCPSISVSource {
             foreach($package in $packagesPaths)
             {
                 try {
-                    Write-PSFMessage -Level Important -Message "The package $($package) importing..."
+                    $package = Get-ChildItem $package
+                    Write-PSFMessage -Level Important -Message "The package $($package.BaseName) importing..."
                     $tmpPackagePath = Join-Path "$tempPath/packages" $package.BaseName
                     Unblock-File $package
                     Expand-7zipArchive -Path $package -DestinationPath $tmpPackagePath
                     $models = Get-ChildItem -Path $tmpPackagePath -Filter "dynamicsax-*.zip" -Recurse -ErrorAction SilentlyContinue -Force
                     foreach($model in $models)
                     {            
+                        Write-PSFMessage -Level Important -Message "$($model.BaseName) processing..."
                         $zipFile = [IO.Compression.ZipFile]::OpenRead($model.FullName)
                         $zipFile.Entries | Where-Object {$_.FullName.Contains(".xref")} | ForEach-Object{
                             $modelName = $_.Name.Replace(".xref", "")
                             $targetModelPath = (Join-Path $MetadataPath "$modelName/")   
-                            Remove-Item $targetModelPath -Recurse -Force 
-                            Expand-7zipArchive -Path $models.FullName -DestinationPath $targetModelPath
+                            if(Test-Path $targetModelPath)
+                            {
+                                Remove-Item $targetModelPath -Recurse -Force
+                            }      
+                            Write-PSFMessage -Level Important -Message "'$($model.FullName)' to the $($targetModelPath)..."
+                            Expand-7zipArchive -Path $model.FullName -DestinationPath $targetModelPath
                         }            
                         $zipFile.Dispose()
                     }
@@ -153,45 +178,75 @@ function Update-FSCPSISVSource {
                 catch {
                     Write-PSFMessage -Level Host -Message "Error:" -Exception $PSItem.Exception
                     Write-PSFMessage -Level Important -Message "The package $($package) is not imported"
-                }
-               
+                }               
             }
 
             if(($axmodelsPaths.Count -gt 0) -and ($PSVersionTable.PSVersion.Major -gt 5)) {
                 Write-PSFMessage -Level Warning -Message "The axmodel cannot be imported. Current PS version is $($PSVersionTable.PSVersion). The latest PS major version acceptable to import the axmodel is 5."
             }
             else {
+
+                $PlatformVersion = (Get-FSCPSVersionInfo -Version 10.0.38).data.PlatformVersion
+                $nugetsPath = Join-Path $tempPath "NuGets"
+                $compilerNugetPath = Join-Path $nugetsPath "Microsoft.Dynamics.AX.Platform.CompilerPackage.$PlatformVersion.nupkg"
+                $compilerPath = Join-Path $tempPath "Microsoft.Dynamics.AX.Platform.CompilerPackage.$PlatformVersion"
+
+                $null = Test-PathExists -Path $compilerPath -Type Container -Create
+                $null = Test-PathExists -Path $nugetsPath -Type Container -Create
+                Write-PSFMessage -Level Important -Message "The $PlatformVersion Platform Version used."
+                Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $nugetsPath
+                Write-PSFMessage -Level Important -Message "The PlatformCompiler NuGet were downloaded at $nugetsPath."
+                Expand-7zipArchive -Path $compilerNugetPath -DestinationPath $compilerPath
+                $curLocation = Get-Location
+                Set-Location $compilerPath
+                                
+                try {
+                    $miscPath = Join-Path -Path $($Script:ModuleRoot) -ChildPath "\internal\misc"
+                    Copy-Item -Path "$miscPath\Microsoft.TeamFoundation.Client.dll" -Destination $compilerPath -Force
+                    Copy-Item -Path "$miscPath\Microsoft.TeamFoundation.Common.dll" -Destination $compilerPath -Force               
+                    Copy-Item -Path "$miscPath\Microsoft.TeamFoundation.Diff.dll" -Destination $compilerPath -Force
+                    Copy-Item -Path "$miscPath\Microsoft.TeamFoundation.VersionControl.Client.dll" -Destination $compilerPath -Force
+                    Copy-Item -Path "$miscPath\Microsoft.TeamFoundation.VersionControl.Common.dll" -Destination $compilerPath -Force
+                }
+                catch {
+                    Write-PSFMessage -Level Important -Message $_.Exception.Message
+                }
+
                 foreach($axModel in $axmodelsPaths)
                 {
                     try {
                         Write-PSFMessage -Level Important -Message "The axmodel $($axModel) importing..."
-                        $PlatformVersion = "7.0.7198.66"
-                        $nugetsPath = Join-Path $tempPath "NuGets"
-                        $compilerNugetPath = Join-Path $nugetsPath "Microsoft.Dynamics.AX.Platform.CompilerPackage.$PlatformVersion.nupkg"
-                        $compilerPath = Join-Path $tempPath "Microsoft.Dynamics.AX.Platform.CompilerPackage.$PlatformVersion"
-        
-                        $null = Test-PathExists -Path $compilerPath -Type Container -Create
-                        $null = Test-PathExists -Path $nugetsPath -Type Container -Create
-        
-                        $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $nugetsPath
-                        Expand-7zipArchive -Path $compilerNugetPath -DestinationPath $compilerPath
                         Enable-D365Exception
-                        Import-D365Model -Path $axModel -MetaDataDir $MetadataPath -BinDir $compilerPath -Replace
+                        
+                        #Import-D365Model -Path $axModel -MetaDataDir $MetadataPath -BinDir $compilerPath -Replace
+
+                        Invoke-ModelUtil -Path $axModel -MetaDataDir $MetadataPath -BinDir $compilerPath -Command Replace
+
+
                         Disable-D365Exception
-                        Write-PSFMessage -Level Important -Message "The axmodel $($package) imported."
+                        Write-PSFMessage -Level Important -Message "The axmodel $($axModel) imported."
                     }
                     catch {
                         Disable-D365Exception
                         Write-PSFMessage -Level Host -Message "Error:" -Exception $PSItem.Exception
-                        Write-PSFMessage -Level Important -Message "The axmodel $($package) is not imported."
+                        Write-PSFMessage -Level Important -Message "The axmodel $($axModel) is not imported."
                     }                   
                 }
+                Set-Location $curLocation
             }            
 
             foreach($sourceCode in $sourceCodePaths)
             {
                 try {
                     Write-PSFMessage -Level Important -Message "The source code $($sourceCode) importing..."
+                    $zipFile = [IO.Compression.ZipFile]::OpenRead($sourceCode)
+                        $zipFile.Entries | Where-Object {$_.FullName.Contains(".xref")} | ForEach-Object{
+                            $modelName = $_.Name.Replace(".xref", "")
+                            $targetModelPath = (Join-Path $MetadataPath "$modelName/")   
+                            Remove-Item $targetModelPath -Recurse -Force 
+                            Expand-7zipArchive -Path $($sourceCode) -DestinationPath $targetModelPath
+                        }            
+                        $zipFile.Dispose()
                     Write-PSFMessage -Level Important -Message "The source code $($sourceCode) imported"
                 }
                 catch {
@@ -199,6 +254,9 @@ function Update-FSCPSISVSource {
                     Write-PSFMessage -Level Important -Message "The source code $($sourceCode) is not imported"
                 }
             }
+
+            ## Cleanup XppMetadata
+            Get-ChildItem -Path $MetadataPath -Directory -Filter "*XppMetadata" -Recurse | ForEach-Object { Remove-Item -Path $_.FullName -Recurse -Force }
         }
         catch {
             Write-PSFMessage -Level Host -Message "Error:" -Exception $PSItem.Exception
