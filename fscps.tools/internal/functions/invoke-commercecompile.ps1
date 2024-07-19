@@ -18,7 +18,7 @@
     .PARAMETER Force
         Cleanup destination build folder befor build
         
-        .EXAMPLE
+    .EXAMPLE
         PS C:\> Invoke-FSCPSCompile -Version 10.0.39
         
         Example output:
@@ -32,14 +32,14 @@
         PACKAGE_NAME      : Master-ContosoForD365Commerce-10.0.39_20240530.48
         ARTIFACTS_PATH    : c:\temp\fscps.tools\_bld\artifacts
         ARTIFACTS_LIST    : ["C:\\temp\\fscps.tools\\_bld\\artifacts\\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
         
         This will build D365FSC package with version "10.0.39" to the Temp folder
         
@@ -57,14 +57,14 @@
         PACKAGE_NAME      : Master-ContosoForD365Commerce-10.0.39_20240530.48
         ARTIFACTS_PATH    : c:\temp\fscps.tools\_bld\artifacts
         ARTIFACTS_LIST    : ["C:\\temp\\fscps.tools\\_bld\\artifacts\\CloudScaleUnitExtensionPackage.Master-ContosoForD365Commerce-10.0.39_20240530.48.zip",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
-                            "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\POS.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.Commerce.Runtime.Master-ContosoForD365Commerce-10.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.HardwareStation.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.ScaleUnit.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\Contoso.StoreCommerce.Installer.Master-ContosoForD365Commerce-10.0.39_20240530.48.exe",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoAddressWebService.2.2.63.1.nupkg",
+        "C:\\temp\\fscps.tools\\_bld\\artifacts\\ContosoWebService.2.2.63.1.nupkg"]
         
         This will build D365FSC package with version "10.0.39" to the Temp folder
         

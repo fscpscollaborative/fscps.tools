@@ -13,7 +13,7 @@ Install software from Choco
 ## SYNTAX
 
 ```
-Invoke-FSCPSChoco [-Command] <String> [[-RemainingArguments] <Object>] [-Silent] [-Force]
+Invoke-FSCPSChoco [-Command] <String> [[-RemainingArguments] <Object>] [-Silent] [-SkipUpdate] [-Force]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -67,6 +67,21 @@ Accept wildcard characters: False
 
 ### -Silent
 Disable output
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkipUpdate
+Skip the chocolatey update
 
 ```yaml
 Type: SwitchParameter
