@@ -12,7 +12,7 @@
 RootModule = 'fscps.tools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.265'
+ModuleVersion = '1.0.266'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
