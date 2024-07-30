@@ -45,7 +45,7 @@ Param (
 $ModuleName = "fscps.tools"
 
 # Base path to the github repository
-$BaseUrl = "https://github.com/<InsertUsernameHere>/fscps.tools"
+$BaseUrl = "https://github.com/onikolaiev/fscps.tools"
 
 # If the module is in a subfolder of the cloned repository, specify relative path here. Empty string to skip.
 $SubFolder = "fscps.tools"
