@@ -16,45 +16,50 @@
         The SAS key that you have created for the storage account or blob container
         
     .PARAMETER DestinationPath
-        The destination folder of the Azure file to download. If enpty just show the info
+        The destination folder of the Azure file to download. If empty just show the file information
         
     .PARAMETER Container
-        Name of the blob container inside the storage account you want to look for files
+        Name of the blob container inside the storage account where you want to look for files
         
     .PARAMETER Name
         Name of the file you are looking for
         
         Accepts wildcards for searching. E.g. -Name "Application*Adaptor"
         
-        Default value is "*" which will search for all packages
+        Default value is "*" which will search for all files
         
     .PARAMETER Latest
         Instruct the cmdlet to only fetch the latest file from the Azure Storage Account
         
-        Latest nugets parameter
-        
     .EXAMPLE
         PS C:\> Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles"
         
-        This will get all files in the blob container "backupfiles".
+        This will get the information of all files in the blob container "backupfiles".
         It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access.
         
     .EXAMPLE
         PS C:\> Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles" -Latest
         
-        This will get the latest (newest) file from the blob container "backupfiles".
+        This will get the information of the latest (newest) file from the blob container "backupfiles".
         It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access to the container.
         
     .EXAMPLE
         PS C:\> Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles" -Name "*UAT*"
         
-        This will get all files in the blob container "backupfiles" that fits the "*UAT*" search value.
+        This will get the information of all files in the blob container "backupfiles" that fits the "*UAT*" search value.
         It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access to the container.
         
     .EXAMPLE
         PS C:\> Get-FSCPSAzureStorageFile -AccountId "miscfiles" -SAS "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" -Container "backupfiles" -Latest
         
-        This will get the latest (newest) file from the blob container "backupfiles".
+        This will get the information of the latest (newest) file from the blob container "backupfiles".
+        It will use the SAS key "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" to gain access to the container.
+
+    .EXAMPLE
+        PS C:\> Get-FSCPSAzureStorageFile -AccountId "miscfiles" -SAS "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" -Container "backupfiles" -Name "*UAT*" -DestinationPath "C:\Temp"
+        
+        This will get the information of all files in the blob container "backupfiles" that fits the "*UAT*" search value.
+        It will also download all the files to the "C:\Temp" folder.
         It will use the SAS key "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" to gain access to the container.
         
     .NOTES
@@ -123,15 +128,13 @@ function Get-FSCPSAzureStorageFile {
             foreach ($obj in $files) {
                 if ($obj.Name -NotLike $Name) { continue }
 
-                if($DestinationPath)
-                {
+                if ($DestinationPath) {
                     $null = Test-PathExists -Path $DestinationPath -Type Container -Create
                     $destinationBlobPath = (Join-Path $DestinationPath ($obj.Name))
                     Get-AzStorageBlobContent -Context $storageContext -Container $($Container.ToLower()) -Blob $obj.Name -Destination ($destinationBlobPath) -ConcurrentTaskCount 10 -Force
                     $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "Path"; Expression = { [string]$destinationBlobPath } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
                 }
-                else
-                {
+                else {
                     $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
                 }
                 
