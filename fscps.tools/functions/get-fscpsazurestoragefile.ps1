@@ -116,7 +116,7 @@ function Get-FSCPSAzureStorageFile {
         $files = Get-AzStorageBlob -Container $($Container.ToLower()) -Context $storageContext | Sort-Object -Descending { $_.LastModified }
 
         if ($Latest) {
-            $files | Select-Object -First 1 | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($_.LastModified) } }
+            $files | Select-Object -First 1 | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
         }
         else {
     
@@ -128,11 +128,11 @@ function Get-FSCPSAzureStorageFile {
                     $null = Test-PathExists -Path $DestinationPath -Type Container -Create
                     $destinationBlobPath = (Join-Path $DestinationPath ($obj.Name))
                     Get-AzStorageBlobContent -Context $storageContext -Container $($Container.ToLower()) -Blob $obj.Name -Destination ($destinationBlobPath) -ConcurrentTaskCount 10 -Force
-                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "Path"; Expression = { [string]$destinationBlobPath } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($_.LastModified) } }
+                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "Path"; Expression = { [string]$destinationBlobPath } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
                 }
                 else
                 {
-                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { [Datetime]::Parse($_.LastModified) } }
+                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
                 }
                 
                 
