@@ -57,7 +57,110 @@ function Update-FSCPSNugetsFromLCS {
     
         try
         {
+
             Get-D365LcsApiConfig
+            $assetList = Get-D365LcsSharedAssetFile -FileType NuGetPackage
+
+            $assetList | Sort-Object{$_.ModifiedDate} | ForEach-Object {
+                $fileName = $_.FileName
+            
+                $fscVersion = Get-FSCVersionFromPackageName $_.Name
+                if($fscVersion -gt $FSCMinimumVersion -and $fscVersion.Length -gt 6)
+                {
+                    Write-Host "#################### $fscVersion #####################"
+                    try
+                    {
+                        #ProcessingNuGet -FSCVersion $fscVersion -AssetId $_.Id -AssetName $fileName -ProjectId $lcsProjectId -LCSToken $lcstoken -StorageSAStoken $StorageSAStoken -LCSAssetName $_.Name
+                    }
+                    catch
+                    {
+                      $_.Exception.Message
+                    }
+                }
+            }
+
+<#
+
+            $assetList = Get-D365LcsSharedAssetFile -FileType NuGetPackage 
+
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $destinationNugetFilePath = Join-Path $PackageDestination $AssetName  
+    
+            #get download link asset
+            $uri = "https://lcsapi.lcs.dynamics.com/box/fileasset/GetFileAsset/$($ProjectId)?assetId=$($AssetId)"
+            $assetJson = (Invoke-RestMethod -Method Get -Uri $uri -Headers $header)
+    
+            if(Test-Path $destinationNugetFilePath)
+            {
+                $regex = [regex] "\b(([0-9]*[0-9])\.){3}(?:[0-9]*[0-9]?)\b"
+                $filenameVersion = $regex.Match($AssetName).Value
+                $version = Get-NuGetVersion $destinationNugetFilePath
+                if($filenameVersion -ne "")
+                {
+                    $newdestinationNugetFilePath = ($destinationNugetFilePath).Replace(".$filenameVersion.nupkg", ".nupkg") 
+                }
+                else { $newdestinationNugetFilePath = $destinationNugetFilePath }
+                $newdestinationNugetFilePath = ($newdestinationNugetFilePath).Replace(".nupkg",".$version.nupkg")
+                if(-not(Test-Path $newdestinationNugetFilePath))
+                {
+                    Rename-Item -Path $destinationNugetFilePath -NewName ([System.IO.DirectoryInfo]$newdestinationNugetFilePath).FullName -Force -PassThru
+                }
+                $destinationNugetFilePath = $newdestinationNugetFilePath
+            }
+            $download = (-not(Test-Path $destinationNugetFilePath))
+    
+            $blob = Get-AzStorageBlob -Context $ctx -Container $storageContainer -Blob $AssetName -ConcurrentTaskCount 10 -ErrorAction SilentlyContinue
+           
+            if(!$blob)
+            {
+                if($download)
+                {               
+                    Invoke-D365AzCopyTransfer -SourceUri $assetJson.FileLocation -DestinationUri "$destinationNugetFilePath"
+    
+                    if(Test-Path $destinationNugetFilePath)
+                    {
+                        $regex = [regex] "\b(([0-9]*[0-9])\.){3}(?:[0-9]*[0-9]?)\b"
+                        $filenameVersion = $regex.Match($AssetName).Value
+                        $version = Get-NuGetVersion $destinationNugetFilePath
+                        if($filenameVersion -ne "")
+                        {
+                            $newdestinationNugetFilePath = ($destinationNugetFilePath).Replace(".$filenameVersion.nupkg", ".nupkg") 
+                        }
+                        else { $newdestinationNugetFilePath = $destinationNugetFilePath }
+                        $newdestinationNugetFilePath = ($newdestinationNugetFilePath).Replace(".nupkg",".$version.nupkg")
+                        if(-not(Test-Path $newdestinationNugetFilePath))
+                        {
+                            Rename-Item -Path $destinationNugetFilePath -NewName ([System.IO.DirectoryInfo]$newdestinationNugetFilePath).FullName -Force -PassThru
+                        }
+                        $destinationNugetFilePath = $newdestinationNugetFilePath
+                    }
+                    #Invoke-D365AzCopyTransfer $assetJson.FileLocation "$destinationNugetFilePath"
+                }
+            }
+            else
+            {
+                if($download)
+                {
+                    $blob = Get-AzStorageBlobContent -Context $ctx -Container $storageContainer -Blob $AssetName -Destination $destinationNugetFilePath -ConcurrentTaskCount 10 -Force
+                    $blob.Name
+                }
+                Write-PSFMessage -Level Host "Blob was found!"
+            }
+    
+            $regex = [regex] "\b(([0-9]*[0-9])\.){3}(?:[0-9]*[0-9]?)\b"
+            $filenameVersion = $regex.Match($AssetName).Value
+            $version = Get-NuGetVersion $destinationNugetFilePath
+            $AssetName = ($AssetName).Replace(".$filenameVersion.nupkg", ".nupkg") 
+            $AssetName = ($AssetName).Replace(".nupkg",".$version.nupkg")
+            Write-PSFMessage -Level Host "FSCVersion:  $FSCVersion"
+            Write-PSFMessage -Level Host "AssetName:  $AssetName"
+    
+            Set-AzStorageBlobContent -Context $ctx -Container $storageContainer -Blob "$AssetName" -File "$destinationNugetFilePath" -StandardBlobTier Hot -ConcurrentTaskCount 10 -Force
+
+
+#>
+
+
         }
         catch {
             Write-PSFMessage -Level Host -Message "Something went wrong while updating D365FSC package versiob" -Exception $PSItem.Exception
