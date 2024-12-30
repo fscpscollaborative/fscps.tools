@@ -117,13 +117,14 @@ function Invoke-CommerceCompile {
             if (Test-Path -Path $artifactDirectory -ErrorAction SilentlyContinue)
             {
                 Remove-Item -Path $artifactDirectory -Recurse -Force -ErrorAction SilentlyContinue
+                
             }
 
             if (!(Test-Path -Path $artifactDirectory))
             {
                 $null = [System.IO.Directory]::CreateDirectory($artifactDirectory)
             }
-
+            Get-ChildItem $artifactDirectory -Recurse
             if($Version -eq "")
             {
                 $Version = $settings.buildVersion

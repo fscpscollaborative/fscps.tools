@@ -29,7 +29,9 @@ The settings file can be everywhere and provided to the fscps.tools through the 
 | buildPath | The FSC-PS system will copy the {github.workspace} into this folder and will do the build from it. The folder will be located inside C:\Temp\  | All | All | _bld |
 | metadataPath | Specify the folder contains the FSC models  {github.workspace}\{metadataPath} | FSCM | All | PackagesLocalDirectory |
 | includeTestModel | Include unit test models into the package. | FSCM | All | false |
-| generatePackages | Option to generate a package after build. Often used in build, deploy and release workflows | All | All | true |
+| generatePackages | Option to enable a packages generation functionality. Often used in build, deploy and release workflows | All | All | true |
+| createRegularPackage | Option to generate an LCS Deployable Package after build. The "generatePackages" option should be enabled. | All | All | true |
+| createCloudPackage | Option to generate a Power Platform Unified Package after build. The "generatePackages" option should be enabled. | All | All | false |
 | uploadPackageToLCS | Option to upload generated package to the LCS after build and generate process. IMPORTANT!!! generatePackages option should be set to True | FSCM | All | false |
 | exportModel | Option to generate axmodel file. IMPORTANT!!! generatePackages option should be set to True | FSCM | All | false |
 | specifyModelsManually | If you need to build only specific models, set to true  | FSCM | All | false |
