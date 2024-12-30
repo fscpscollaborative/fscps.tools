@@ -99,7 +99,7 @@ function Invoke-FSCCompile {
             {
                 $Version = $settings.buildVersion
             }
-
+            
             if([string]::IsNullOrEmpty($Version))
             {
                 throw "D365FSC Version should be specified."
@@ -371,6 +371,9 @@ function Invoke-FSCCompile {
                 else {                
                     Write-PSFMessage -Level Important -Message "//================= Generate package ==========================================//"
 
+                    $createRegularPackage = $settings.createRegularPackage
+                    $createCloudPackage = $settings.createCloudPackage
+
                     switch ($settings.namingStrategy) {
                         { $settings.namingStrategy -eq "Default" }
                         {
@@ -452,44 +455,145 @@ function Invoke-FSCCompile {
 
                         Import-Module (Join-Path -Path $xppToolsPath -ChildPath "CreatePackage.psm1")
                         $outputDir = Join-Path -Path $BuildFolderPath -ChildPath ((New-Guid).ToString())
-                        $tempCombinedPackage = Join-Path -Path $BuildFolderPath -ChildPath "$((New-Guid).ToString()).zip"
-                        try
+
+                        New-Item -Path $outputDir -ItemType Directory > $null
+                        Write-PSFMessage -Level Verbose -Message "Creating binary packages"
+                        Invoke-FSCAssembliesImport $xppToolsPath -Verbose
+
+                        foreach($packagePath in $packages)
                         {
-                            New-Item -Path $outputDir -ItemType Directory > $null
-                            Write-PSFMessage -Level Verbose -Message "Creating binary packages"
-                            Invoke-FSCAssembliesImport $xppToolsPath -Verbose
-                            foreach($packagePath in $packages)
+                            $packageName = (Get-Item $packagePath).Name
+                            Write-PSFMessage -Level Verbose -Message "  - '$packageName'"
+                            $version = ""
+                            $packageDll = Join-Path -Path $packagePath -ChildPath "bin\Dynamics.AX.$packageName.dll"
+                            if (Test-Path $packageDll)
                             {
-                                $packageName = (Get-Item $packagePath).Name
-                                Write-PSFMessage -Level Verbose -Message "  - '$packageName'"
-                                $version = ""
-                                $packageDll = Join-Path -Path $packagePath -ChildPath "bin\Dynamics.AX.$packageName.dll"
-                                if (Test-Path $packageDll)
-                                {
-                                    $version = (Get-Item $packageDll).VersionInfo.FileVersion
-                                }
-                                if (!$version)
-                                {
-                                    $version = "1.0.0.0"
-                                }
-                                $null = New-XppRuntimePackage -packageName $packageName -packageDrop $packagePath -outputDir $outputDir -metadataDir $xppBinariesPath -packageVersion $version -binDir $xppToolsPath -enforceVersionCheck $True
+                                $version = (Get-Item $packageDll).VersionInfo.FileVersion
                             }
-
-                            Write-PSFMessage -Level Important "Creating deployable package"
-                            Add-Type -Path "$xppToolsPath\Microsoft.Dynamics.AXCreateDeployablePackageBase.dll"
-                            Write-PSFMessage -Level Important "  - Creating combined metadata package"
-                            $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::CreateMetadataPackage($outputDir, $tempCombinedPackage)
-                            Write-PSFMessage -Level Important "  - Creating merged deployable package"
-                            $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::MergePackage("$xppToolsPath\BaseMetadataDeployablePackage.zip", $tempCombinedPackage, $deployablePackagePath, $true, [String]::Empty)
-                            Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
-
-                            $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
-                            $responseObject.PACKAGE_NAME = $pname
-                            $responseObject.PACKAGE_PATH = $deployablePackagePath
-                            $responseObject.ARTIFACTS_PATH = $artifactDirectory
+                            if (!$version)
+                            {
+                                $version = "1.0.0.0"
+                            }
+                            $null = New-XppRuntimePackage -packageName $packageName -packageDrop $packagePath -outputDir $outputDir -metadataDir $xppBinariesPath -packageVersion $version -binDir $xppToolsPath -enforceVersionCheck $True
                         }
-                        catch {
-                            throw $_.Exception.Message
+                        
+                        if ($createRegularPackage)
+                        {
+                            $tempCombinedPackage = Join-Path -Path $BuildFolderPath -ChildPath "$((New-Guid).ToString()).zip"
+                            try
+                            {
+                                Write-PSFMessage -Level Important "Creating deployable package"
+                                Add-Type -Path "$xppToolsPath\Microsoft.Dynamics.AXCreateDeployablePackageBase.dll"
+                                Write-PSFMessage -Level Important "  - Creating combined metadata package"
+                                $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::CreateMetadataPackage($outputDir, $tempCombinedPackage)
+                                Write-PSFMessage -Level Important "  - Creating merged deployable package"
+                                $null = [Microsoft.Dynamics.AXCreateDeployablePackageBase.BuildDeployablePackages]::MergePackage("$xppToolsPath\BaseMetadataDeployablePackage.zip", $tempCombinedPackage, $deployablePackagePath, $true, [String]::Empty)
+                                Write-PSFMessage -Level Important "Deployable package '$deployablePackagePath' successfully created."
+
+                                $pname = ($deployablePackagePath.SubString("$deployablePackagePath".LastIndexOf('\') + 1)).Replace(".zip","")
+                                $responseObject.PACKAGE_NAME = $pname
+                                $responseObject.PACKAGE_PATH = $deployablePackagePath
+                                $responseObject.ARTIFACTS_PATH = $artifactDirectory
+                            }
+                            catch {
+                                throw $_.Exception.Message
+                            }
+                        }
+
+                        if ($createCloudPackage)
+                        {
+                            $tempPathForCloudPackage = [System.IO.Path]::GetTempPath()
+                            $tempDirRoot = Join-Path -Path $tempPathForCloudPackage -ChildPath ((New-Guid).ToString())
+                            New-Item -Path $tempDirRoot -ItemType Directory > $null
+                            $copyDir = [System.IO.Path]::Combine($outputDir, "files")
+
+                            # Define regex patterns
+                            $regexInit = [System.Text.RegularExpressions.Regex]::new("dynamicsax-(.+?)(?=\.\d+\.\d+\.\d+\.\d+$)")
+
+                            # Process each zip file in the directory
+                            $ziplist = Get-ChildItem -Path $copyDir -Filter "*.zip"
+                            foreach ($zipFileentry in $ziplist) 
+                            {
+                                $modelZipFile = $zipFileentry.FullName
+                                $modelDirNewName = [System.IO.Path]::GetFileNameWithoutExtension($modelZipFile) # rename pattern: dynamicsax-fleetmanagement.7.0.5030.16453
+                                $modelOrgDirName = $modelDirNewName
+                                if ($modelDirNewName -match $regexInit) {
+                                    $modelDirNewName = $matches[1]
+                                    Write-PSFMessage -Level Important $modelDirNewName
+                                }
+                                try 
+                                {
+                                    $destinationPath = [System.IO.Path]::Combine($tempDirRoot, $modelDirNewName)
+                                    if (Test-Path -Path $destinationPath -PathType Container) 
+                                    {
+                                        throw [System.Exception]::new("Duplicate model directory: $modelOrgDirName")
+                                    }
+                                    else 
+                                    {
+                                        Expand-Archive -Path $modelZipFile -DestinationPath $destinationPath
+                                    }
+                                }
+                                catch 
+                                {
+                                    Write-PSFMessage -Level Host -Message "Exception extracting: $modelZipFile"
+                                    Write-PSFMessage -Level Host -Message $_.Exception.Message
+                                    throw
+                                }
+                            }
+                        
+                            try
+                            {
+                                Write-PSFMessage -Level Important  "Creating cloud runtime deployable package"
+                                Invoke-CloudRuntimeAssembliesImport
+                                $miscPath = Join-Path -Path $($Script:ModuleRoot) -ChildPath "\internal\misc"
+                                $assemblies = ("System", "$miscPath\CloudRuntimeDlls\Microsoft.PowerPlatform.VSShared.Util.dll")   
+                                
+                                $id = get-random
+                                $code = 
+@"
+    using Microsoft.PowerPlatform.VSShared.Util;
+    using System;
+    using System.Threading.Tasks;
+    namespace PackageCreation
+    {
+        public class Program$id
+        {
+            public static async Task<string> MainCreate(string[] args)
+            {
+                var createPkg = new PipelineOperation();
+                var pkgLoc = await createPkg.PerformCreatePackageOperation(args[0], args[1], args[2], Guid.Empty.ToString());
+                return pkgLoc;
+            }
+        }
+    }
+"@
+                            
+                                try
+                                { 
+                                    $cloudDeployablePackageArtifactsPath = Join-Path $artifactDirectory CloudDeployablePackage
+                                    if(-not (Test-Path $cloudDeployablePackageArtifactsPath))
+                                    {                
+                                        $null = [System.IO.Directory]::CreateDirectory($cloudDeployablePackageArtifactsPath)
+                                    }
+                                    Write-PSFMessage -Level Important -Message  "Starting package creation:"
+                                    Add-Type -ReferencedAssemblies $assemblies -TypeDefinition $code -Language CSharp
+                                    [System.AppContext]::SetSwitch('Switch.System.IO.Compression.ZipFile.UseBackslash', $false)
+                                    Invoke-Expression "[PackageCreation.Program$id]::MainCreate(@('$tempDirRoot', '$PlatformVersion', '$ApplicationVersion'))" | Tee-Object -Var packageLocation
+                                    Write-PSFMessage -Level Host -Message $packageLocation.Result
+                                    Write-PSFMessage -Level Host -Message "Ending package creation"
+                                    Write-PSFMessage -Level Host -Message "Placing package to package output location"
+                                    
+                                    Copy-Item -Path (Join-Path $packageLocation.Result '\*') -Destination $cloudDeployablePackageArtifactsPath -Recurse
+                                }
+                                catch
+                                {
+                                    throw
+                                }                          
+}
+                            catch
+                            {
+                                throw
+                            }
                         }
                     }
                     else
