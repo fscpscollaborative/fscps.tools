@@ -540,8 +540,6 @@ function Invoke-FSCCompile {
                                     throw
                                 }
                             }
-
-                            $cloudPackageOutputLocation = Join-Path $artifactDirectory ($packageName.Replace('.zip', '_managed.zip'))
                         
                             try
                             {

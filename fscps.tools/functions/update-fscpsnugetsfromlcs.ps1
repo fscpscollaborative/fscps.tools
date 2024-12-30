@@ -67,7 +67,7 @@ function Update-FSCPSNugetsFromLCS {
                 $fscVersion = Get-FSCVersionFromPackageName $_.Name
                 if($fscVersion -gt $FSCMinimumVersion -and $fscVersion.Length -gt 6)
                 {
-                    Write-Host "#################### $fscVersion #####################"
+                    Write-PSFMessage -Level Host -Message "#################### $fscVersion #####################"
                     try
                     {
                         #ProcessingNuGet -FSCVersion $fscVersion -AssetId $_.Id -AssetName $fileName -ProjectId $lcsProjectId -LCSToken $lcstoken -StorageSAStoken $StorageSAStoken -LCSAssetName $_.Name
