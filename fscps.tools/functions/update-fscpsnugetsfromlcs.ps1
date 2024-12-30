@@ -62,22 +62,22 @@ function Update-FSCPSNugetsFromLCS {
             $assetList = Get-D365LcsSharedAssetFile -FileType NuGetPackage
 
             $assetList | Sort-Object{$_.ModifiedDate} | ForEach-Object {
-                $fileName = $_.FileName
+            #$fileName = $_.FileName
             
-                $fscVersion = Get-FSCVersionFromPackageName $_.Name
-                if($fscVersion -gt $FSCMinimumVersion -and $fscVersion.Length -gt 6)
+            $fscVersion = Get-FSCVersionFromPackageName $_.Name
+            if($fscVersion -gt $FSCMinimumVersion -and $fscVersion.Length -gt 6)
+            {
+                Write-PSFMessage -Level Host -Message "#################### $fscVersion #####################"
+                try
                 {
-                    Write-PSFMessage -Level Host -Message "#################### $fscVersion #####################"
-                    try
-                    {
-                        #ProcessingNuGet -FSCVersion $fscVersion -AssetId $_.Id -AssetName $fileName -ProjectId $lcsProjectId -LCSToken $lcstoken -StorageSAStoken $StorageSAStoken -LCSAssetName $_.Name
-                    }
-                    catch
-                    {
-                      $_.Exception.Message
-                    }
+                    #ProcessingNuGet -FSCVersion $fscVersion -AssetId $_.Id -AssetName $fileName -ProjectId $lcsProjectId -LCSToken $lcstoken -StorageSAStoken $StorageSAStoken -LCSAssetName $_.Name
+                }
+                catch
+                {
+                    $_.Exception.Message
                 }
             }
+        }
 
 <#
 
