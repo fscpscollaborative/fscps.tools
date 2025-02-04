@@ -20,12 +20,6 @@ Write-Host "The user running is: $($env:UserName)"
 #region Installing d365fo.tools and dbatools <--
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-
-mkdir C:\TempPackages
-Invoke-WebRequest -UseBasicParsing -Uri 'https://www.powershellgallery.com/api/v2/package/PoshRSJob/1.7.4.4' -OutFile 'C:\TempPackages\PoshRSJob.1.7.4.4.nupkg'
-Register-PSRepository -Name local -SourceLocation C:\TempPackages -InstallationPolicy Trusted
-Install-Module PoshRSJob -Verbose -Scope AllUsers -Repository local
-
 Install-PackageProvider Nuget –force –verbose -ErrorAction SilentlyContinue
 $modules = @("PowerShellGet", "PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
 #Register-PSRepository -Default -Verbose
@@ -41,12 +35,12 @@ $modules | ForEach-Object {
     }
     if (-not (Get-InstalledModule -Name $_ -ErrorAction SilentlyContinue)) {
         Write-Host "Installing module $_"
-        Install-Module $_ -Force -AllowClobber | Out-Null
+        Install-Module $_ -Force -AllowClobber -ErrorAction SilentlyContinue | Out-Null
     }
 }
 $modules | ForEach-Object {
     Write-Host "Importing module $_"
-    Import-Module $_ -DisableNameChecking -WarningAction SilentlyContinue | Out-Null
+    Import-Module $_ -DisableNameChecking -WarningAction SilentlyContinue  -ErrorAction SilentlyContinue | Out-Null
 }
 Set-DbatoolsConfig -Name Import.EncryptionMessageCheck -Value $false -PassThru | Register-DbatoolsConfig
 Set-DbatoolsConfig -FullName 'sql.connection.trustcert' -Value $true -Register
