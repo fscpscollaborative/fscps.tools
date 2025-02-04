@@ -14,7 +14,7 @@ Retrieves the test cases in a specified test suite from Azure DevOps.
 
 ```
 Get-FSCPSADOTestCasesBySuite [[-TestSuiteId] <Int32>] [[-TestPlanId] <Int32>] [[-Organization] <String>]
- [[-Project] <String>] [[-BearerToken] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Project] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,7 +33,7 @@ $organization = "https://dev.azure.com/dev-inc"
 $token = "Bearer your_access_token"
 ```
 
-$testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -BearerToken $token
+$testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -Token $token
 Write-Output $testCases
 
 ## PARAMETERS
@@ -98,7 +98,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BearerToken
+### -Token
 The authorization token for accessing the Azure DevOps API.
 
 ```yaml

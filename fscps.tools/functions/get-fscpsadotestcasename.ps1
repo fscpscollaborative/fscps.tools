@@ -17,16 +17,16 @@
     .PARAMETER Organization
         The name of the Azure DevOps organization.
         
-    .PARAMETER BearerToken
-        The bearer token for accessing the Azure DevOps API.
+    .PARAMETER Token
+        The token for accessing the Azure DevOps API.
         
     .EXAMPLE
         $testCaseId = 4927
         $project = "MyProject"
         $organization = "https://dev.azure.com/dev-inc"
-        $bearerToken = "Bearer your_access_token"
+        $token = "Bearer your_access_token"
         
-        $testCaseName = Get-FSCPSADOTestCaseName -TestCaseId $testCaseId -Project $project -Organization $organization -BearerToken $bearerToken
+        $testCaseName = Get-FSCPSADOTestCaseName -TestCaseId $testCaseId -Project $project -Organization $organization -Token $token
         Write-Output $testCaseName
         
     .NOTES
@@ -40,11 +40,11 @@ function Get-FSCPSADOTestCaseName {
         [int]$TestCaseId,
         [string]$Project,
         [string]$Organization,
-        [string]$BearerToken
+        [string]$Token
     )
     begin {
-        if ($BearerToken -eq $null) {
-            Write-PSFMessage -Level Error -Message "BearerToken is required"
+        if ($Token -eq $null) {
+            Write-PSFMessage -Level Error -Message "Token is required"
             return
         }
         if ($TestCaseId -eq $null) {
@@ -59,14 +59,14 @@ function Get-FSCPSADOTestCaseName {
             Write-PSFMessage -Level Error -Message "Organization is required"
             return
         }
-        if ($BearerToken.StartsWith("Bearer") -eq $false) {
+        if ($Token.StartsWith("Bearer") -eq $false) {
             $authHeader = @{
-                Authorization = "$BearerToken"
+                Authorization = "$Token"
             }
         }
         else {
             $authHeader = @{
-                Authorization = "Bearer $BearerToken"
+                Authorization = "Bearer $Token"
             }
         }
     }
@@ -74,9 +74,12 @@ function Get-FSCPSADOTestCaseName {
         # Construct the URL for the operation
         $operationTestCaseNameUrl = "$($Organization)/$($Project)/_apis/wit/workItems/$($TestCaseId)?api-version=7.1"        
         # Invoke the REST method to get the test case name
-        $responseTCN = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -ContentType "application/json" -Headers $authHeader        
-        # Return the title of the test case
-        return $responseTCN.fields."System.Title"
+        $response = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -ContentType "application/json" -Headers $authHeader        
+        if ($response.StatusCode -eq 200) {
+                    return $response.fields."System.Title"
+        } else {
+            Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+        }
     }
     end {
 
