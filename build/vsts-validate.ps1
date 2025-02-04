@@ -21,19 +21,26 @@ Write-Host "The user running is: $($env:UserName)"
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 #Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
+$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PoshRSJob", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
 #Register-PSRepository -Default -Verbose
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-foreach ($module in  $modules) {
-        Write-Host "..working on module" $module -ForegroundColor Yellow
-        if ($null -eq $(Get-Command -Module $module)) {
-            Write-Host "....installing module" $module -ForegroundColor Gray
-            Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -AllowClobber
+$modules | ForEach-Object {
+    if ($_ -eq "Az") {
+        Set-ExecutionPolicy RemoteSigned CurrentUser -Force
+        try {
+            Uninstall-AzureRm 
+        } catch {
+            Write-Host "AzureRm module is not installed or an error occurred during uninstallation."
         }
-        else {
-            Write-Host "....updating module" $module -ForegroundColor Gray
-            #Update-Module -Name $module
-        }
+    }
+    if (-not (Get-InstalledModule -Name $_ -ErrorAction SilentlyContinue)) {
+        Write-Host "Installing module $_"
+        Install-Module $_ -Force -AllowClobber | Out-Null
+    }
+}
+$modules | ForEach-Object {
+    Write-Host "Importing module $_"
+    Import-Module $_ -DisableNameChecking -WarningAction SilentlyContinue | Out-Null
 }
 Set-DbatoolsConfig -Name Import.EncryptionMessageCheck -Value $false -PassThru | Register-DbatoolsConfig
 Set-DbatoolsConfig -FullName 'sql.connection.trustcert' -Value $true -Register
