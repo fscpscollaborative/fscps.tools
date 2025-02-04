@@ -20,7 +20,7 @@
     .PARAMETER Project
         The name of the Azure DevOps project.
         
-    .PARAMETER BearerToken
+    .PARAMETER Token
         The authorization token for accessing the Azure DevOps API.
         
     .EXAMPLE
@@ -30,7 +30,7 @@
         $organization = "https://dev.azure.com/dev-inc"
         $token = "Bearer your_access_token"
         
-        $testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -BearerToken $token
+        $testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -Token $token
         Write-Output $testCases
         
     .NOTES
@@ -45,11 +45,11 @@ function Get-FSCPSADOTestCasesBySuite {
         [int]$TestPlanId,
         [string]$Organization,
         [string]$Project,
-        [string]$BearerToken
+        [string]$Token
     )
     begin {
-        if ($BearerToken -eq $null) {
-            Write-PSFMessage -Level Error -Message "BearerToken is required"
+        if ($Token -eq $null) {
+            Write-PSFMessage -Level Error -Message "Token is required"
             return
         }
         if ($TestSuiteId -eq $null) {
@@ -68,23 +68,28 @@ function Get-FSCPSADOTestCasesBySuite {
             Write-PSFMessage -Level Error -Message "TestPlanId is required"
             return
         }
-        if ($BearerToken.StartsWith("Bearer") -eq $false) {
+        if ($Token.StartsWith("Bearer") -eq $false) {
             $authHeader = @{
-                Authorization = "$BearerToken"
+                Authorization = "$Token"
             }
         }
         else {
             $authHeader = @{
-                Authorization = "Bearer $BearerToken"
+                Authorization = "Bearer $Token"
             }
         }
     }
     process {
-        $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases?api-version=7.1"
-        $responsets = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader
-        return $responsets.value
+        $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases"
+        $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader
+        if ($response.StatusCode -eq 200) {
+            return $response.value
+        } else {
+            Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+        }
+        
     }
     end {
-        Write-PSFMessage -Level Host -Message "Test cases count in the test suite: $($responsets.value.count)"
+        Write-PSFMessage -Level Host -Message "Test cases count in the test suite: $($response.value.count)"
     }
 }

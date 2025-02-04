@@ -14,7 +14,7 @@ Retrieves the test suite ID and name for a given test case from Azure DevOps.
 
 ```
 Get-FSCPSADOTestSuiteByTestCase [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>]
- [[-BearerToken] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,10 +29,10 @@ The function returns a hashtable with the test suite ID and name.
 $testCaseId = 4927
 $project = "MyProject"
 $organization = "https://dev.azure.com/dev-inc"
-$bearerToken = "your_access_token"
+$token = "Bearer your_access_token"
 ```
 
-$testSuiteInfo = Get-FSCPSADOTestSuiteByTestCase -TestCaseId $testCaseId -Project $project -Organization $organization -BearerToken $bearerToken
+$testSuiteInfo = Get-FSCPSADOTestSuiteByTestCase -TestCaseId $testCaseId -Project $project -Organization $organization -Token $token
 Write-Output $testSuiteInfo
 
 ## PARAMETERS
@@ -82,7 +82,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BearerToken
+### -Token
 The authorization token for accessing the Azure DevOps API.
 
 ```yaml
@@ -119,6 +119,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Collections.Hashtable
 ## NOTES
 Ensure you have the correct permissions and a valid access token in the authorization header.
 The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.

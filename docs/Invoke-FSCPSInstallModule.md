@@ -8,37 +8,51 @@ schema: 2.0.0
 # Invoke-FSCPSInstallModule
 
 ## SYNOPSIS
-Installs and imports specified PowerShell modules, with special handling for the "Az" module.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
 ```
-Invoke-FSCPSInstallModule [[-modules] <String[]>]
+Invoke-FSCPSInstallModule [[-Modules] <String[]>] [[-Scope] <ModuleScope>]
 ```
 
 ## DESCRIPTION
-The \`Invoke-FSCPSInstallModules\` function takes an array of module names, installs them if they are not already installed, and then imports them.
-It also handles the uninstallation of the "AzureRm" module if "Az" is specified.
-Real-time monitoring is temporarily disabled during the installation process to speed it up.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-Invoke-FSCPSInstallModules -modules @("Az", "Pester")
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-This example installs and imports the "Az" and "Pester" modules.
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -modules
-An array of module names to be installed and imported.
+### -Modules
+{{ Fill Modules Description }}
 
 ```yaml
 Type: String[]
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Scope
+{{ Fill Scope Description }}
+
+```yaml
+Type: ModuleScope
+Parameter Sets: (All)
+Aliases:
+Accepted values: AllUsers, CurrentUser
 
 Required: False
 Position: 1
@@ -49,10 +63,11 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
 
+### System.Object
 ## NOTES
-- Real-time monitoring is disabled during the installation process to improve performance.
-- The "AzureRm" module is uninstalled if "Az" is specified.
 
 ## RELATED LINKS
