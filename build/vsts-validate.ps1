@@ -20,8 +20,14 @@ Write-Host "The user running is: $($env:UserName)"
 #region Installing d365fo.tools and dbatools <--
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+
+mkdir C:\TempPackages
+Invoke-WebRequest -UseBasicParsing -Uri 'https://www.powershellgallery.com/api/v2/package/PoshRSJob/1.7.4.4' -OutFile 'C:\TempPackages\PoshRSJob.1.7.4.4.nupkg'
+Register-PSRepository -Name local -SourceLocation C:\TempPackages -InstallationPolicy Trusted
+Install-Module PoshRSJob -Verbose -Scope AllUsers -Repository local
+
 Install-PackageProvider Nuget –force –verbose -ErrorAction SilentlyContinue
-$modules = @("PowerShellGet", "PSFramework", "PSScriptAnalyzer", "Az.Storage", "PoshRSJob", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
+$modules = @("PowerShellGet", "PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
 #Register-PSRepository -Default -Verbose
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 $modules | ForEach-Object {
