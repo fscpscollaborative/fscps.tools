@@ -1,40 +1,41 @@
+
 <#
-.SYNOPSIS
-Retrieves the test cases in a specified test suite from Azure DevOps.
-
-.DESCRIPTION
-This function constructs a URL to access the test cases within a specific test suite in Azure DevOps.
-It sends a GET request to the Azure DevOps API and retrieves the test cases in the specified test suite.
-The function returns the test cases.
-
-.PARAMETER TestSuiteId
-The ID of the test suite.
-
-.PARAMETER TestPlanId
-The ID of the test plan.
-
-.PARAMETER Organization
-The name of the Azure DevOps organization.
-
-.PARAMETER Project
-The name of the Azure DevOps project.
-
-.PARAMETER BearerToken
-The authorization token for accessing the Azure DevOps API.
-
-.EXAMPLE
-$testSuiteId = 5261
-$testPlanId = 6
-$project = "MyProject"
-$organization = "https://dev.azure.com/dev-inc"
-$token = "Bearer your_access_token"
-
-$testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -BearerToken $token
-Write-Output $testCases
-
-.NOTES
-Ensure you have the correct permissions and valid access token in the authorization header.
-The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
+    .SYNOPSIS
+        Retrieves the test cases in a specified test suite from Azure DevOps.
+        
+    .DESCRIPTION
+        This function constructs a URL to access the test cases within a specific test suite in Azure DevOps.
+        It sends a GET request to the Azure DevOps API and retrieves the test cases in the specified test suite.
+        The function returns the test cases.
+        
+    .PARAMETER TestSuiteId
+        The ID of the test suite.
+        
+    .PARAMETER TestPlanId
+        The ID of the test plan.
+        
+    .PARAMETER Organization
+        The name of the Azure DevOps organization.
+        
+    .PARAMETER Project
+        The name of the Azure DevOps project.
+        
+    .PARAMETER BearerToken
+        The authorization token for accessing the Azure DevOps API.
+        
+    .EXAMPLE
+        $testSuiteId = 5261
+        $testPlanId = 6
+        $project = "MyProject"
+        $organization = "https://dev.azure.com/dev-inc"
+        $token = "Bearer your_access_token"
+        
+        $testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -BearerToken $token
+        Write-Output $testCases
+        
+    .NOTES
+        Ensure you have the correct permissions and valid access token in the authorization header.
+        The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
 #>
 
 function Get-FSCPSADOTestCasesBySuite {

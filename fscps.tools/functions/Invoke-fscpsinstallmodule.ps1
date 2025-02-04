@@ -18,7 +18,7 @@
         - Real-time monitoring is disabled during the installation process to improve performance.
         - The "AzureRm" module is uninstalled if "Az" is specified.
 #>
-function Invoke-FSCPSInstallModules {
+function Invoke-FSCPSInstallModule {
     Param(
         [String[]] $modules
     )

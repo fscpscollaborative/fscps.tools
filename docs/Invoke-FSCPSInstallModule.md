@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-FSCPSInstallModules
+# Invoke-FSCPSInstallModule
 
 ## SYNOPSIS
 Installs and imports specified PowerShell modules, with special handling for the "Az" module.
@@ -13,7 +13,7 @@ Installs and imports specified PowerShell modules, with special handling for the
 ## SYNTAX
 
 ```
-Invoke-FSCPSInstallModules [[-modules] <String[]>]
+Invoke-FSCPSInstallModule [[-modules] <String[]>]
 ```
 
 ## DESCRIPTION

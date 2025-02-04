@@ -36,6 +36,7 @@
 
 function Get-FSCPSADOTestSuiteByTestCase {
     [CmdletBinding()]
+    [OutputType([hashtable])]    
     param (
         [int]$TestCaseId,
         [string]$Project,

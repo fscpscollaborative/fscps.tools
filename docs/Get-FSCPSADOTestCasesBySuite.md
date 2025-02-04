@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-FSCPSADOTestCasesBySuite
 
 ## SYNOPSIS
-Retrieves the count of test cases in a specified test suite from Azure DevOps.
+Retrieves the test cases in a specified test suite from Azure DevOps.
 
 ## SYNTAX
 
@@ -19,21 +19,22 @@ Get-FSCPSADOTestCasesBySuite [[-TestSuiteId] <Int32>] [[-TestPlanId] <Int32>] [[
 
 ## DESCRIPTION
 This function constructs a URL to access the test cases within a specific test suite in Azure DevOps.
-It sends a GET request to the Azure DevOps API and retrieves the count of test cases in the specified test suite.
-The function returns the count of test cases.
+It sends a GET request to the Azure DevOps API and retrieves the test cases in the specified test suite.
+The function returns the test cases.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 $testSuiteId = 5261
+$testPlanId = 6
 $project = "MyProject"
 $organization = "https://dev.azure.com/dev-inc"
-$bearerToken = "your_access_token"
+$token = "Bearer your_access_token"
 ```
 
-$testCaseCount = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -Project $project -Organization $organization -BearerToken $bearerToken
-Write-Output $testCaseCount
+$testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -BearerToken $token
+Write-Output $testCases
 
 ## PARAMETERS
 
@@ -53,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -TestPlanId
-{{ Fill TestPlanId Description }}
+The ID of the test plan.
 
 ```yaml
 Type: Int32
@@ -98,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -BearerToken
-The bearer token for accessing the Azure DevOps API.
+The authorization token for accessing the Azure DevOps API.
 
 ```yaml
 Type: String
@@ -135,7 +136,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Ensure you have the correct permissions and a valid access token in the authorization header.
+Ensure you have the correct permissions and valid access token in the authorization header.
 The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
 
 ## RELATED LINKS
