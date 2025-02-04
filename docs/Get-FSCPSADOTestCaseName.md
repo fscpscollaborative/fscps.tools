@@ -14,7 +14,7 @@ Retrieves the title of a test case from Azure DevOps.
 
 ```
 Get-FSCPSADOTestCaseName [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>]
- [[-BearerToken] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,10 +29,10 @@ The function returns the title of the test case.
 $testCaseId = 4927
 $project = "MyProject"
 $organization = "https://dev.azure.com/dev-inc"
-$bearerToken = "Bearer your_access_token"
+$token = "Bearer your_access_token"
 ```
 
-$testCaseName = Get-FSCPSADOTestCaseName -TestCaseId $testCaseId -Project $project -Organization $organization -BearerToken $bearerToken
+$testCaseName = Get-FSCPSADOTestCaseName -TestCaseId $testCaseId -Project $project -Organization $organization -Token $token
 Write-Output $testCaseName
 
 ## PARAMETERS
@@ -82,8 +82,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BearerToken
-The bearer token for accessing the Azure DevOps API.
+### -Token
+The token for accessing the Azure DevOps API.
 
 ```yaml
 Type: String

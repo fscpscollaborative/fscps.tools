@@ -63,9 +63,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter BearerToken' {
-			$parameter = (Get-Command Get-FSCPSADOTestCasesBySuite).Parameters['BearerToken']
-			$parameter.Name | Should -Be 'BearerToken'
+		It 'Should have the expected parameter Token' {
+			$parameter = (Get-Command Get-FSCPSADOTestCasesBySuite).Parameters['Token']
+			$parameter.Name | Should -Be 'Token'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -94,7 +94,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -
-		__AllParameterSets -TestSuiteId -TestPlanId -Organization -Project -BearerToken -ProgressAction
+		__AllParameterSets -TestSuiteId -TestPlanId -Organization -Project -Token -ProgressAction
 		#>
 	}
 
