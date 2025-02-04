@@ -20,8 +20,8 @@ Write-Host "The user running is: $($env:UserName)"
 #region Installing d365fo.tools and dbatools <--
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-#Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PoshRSJob", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
+Install-PackageProvider Nuget –force –verbose -ErrorAction SilentlyContinue
+$modules = @("PowerShellGet", "PSFramework", "PSScriptAnalyzer", "Az.Storage", "PoshRSJob", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools")
 #Register-PSRepository -Default -Verbose
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 $modules | ForEach-Object {
