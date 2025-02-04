@@ -34,7 +34,7 @@ Get all files from an Azure Storage Account
 Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles"
 ```
 
-This will get all files in the blob container "backupfiles".
+This will get the information of all files in the blob container "backupfiles".
 It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access.
 
 ### EXAMPLE 2
@@ -42,7 +42,7 @@ It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34x
 Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles" -Latest
 ```
 
-This will get the latest (newest) file from the blob container "backupfiles".
+This will get the information of the latest (newest) file from the blob container "backupfiles".
 It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access to the container.
 
 ### EXAMPLE 3
@@ -50,7 +50,7 @@ It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34x
 Get-FSCPSAzureStorageFile -AccountId "miscfiles" -AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" -Container "backupfiles" -Name "*UAT*"
 ```
 
-This will get all files in the blob container "backupfiles" that fits the "*UAT*" search value.
+This will get the information of all files in the blob container "backupfiles" that fits the "*UAT*" search value.
 It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51" to gain access to the container.
 
 ### EXAMPLE 4
@@ -58,7 +58,16 @@ It will use the AccessToken "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34x
 Get-FSCPSAzureStorageFile -AccountId "miscfiles" -SAS "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" -Container "backupfiles" -Latest
 ```
 
-This will get the latest (newest) file from the blob container "backupfiles".
+This will get the information of the latest (newest) file from the blob container "backupfiles".
+It will use the SAS key "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" to gain access to the container.
+
+### EXAMPLE 5
+```
+Get-FSCPSAzureStorageFile -AccountId "miscfiles" -SAS "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" -Container "backupfiles" -Name "*UAT*" -DestinationPath "C:\Temp"
+```
+
+This will get the information of all files in the blob container "backupfiles" that fits the "*UAT*" search value.
+It will also download all the files to the "C:\Temp" folder.
 It will use the SAS key "sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk" to gain access to the container.
 
 ## PARAMETERS
@@ -109,7 +118,7 @@ Accept wildcard characters: False
 ```
 
 ### -Container
-Name of the blob container inside the storage account you want to look for files
+Name of the blob container inside the storage account where you want to look for files
 
 ```yaml
 Type: String
@@ -130,7 +139,7 @@ Accepts wildcards for searching.
 E.g.
 -Name "Application*Adaptor"
 
-Default value is "*" which will search for all packages
+Default value is "*" which will search for all files
 
 ```yaml
 Type: String
@@ -146,7 +155,7 @@ Accept wildcard characters: False
 
 ### -DestinationPath
 The destination folder of the Azure file to download.
-If enpty just show the info
+If empty just show the file information
 
 ```yaml
 Type: String
@@ -162,8 +171,6 @@ Accept wildcard characters: False
 
 ### -Latest
 Instruct the cmdlet to only fetch the latest file from the Azure Storage Account
-
-Latest nugets parameter
 
 ```yaml
 Type: SwitchParameter
@@ -202,7 +209,29 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 Tags: Azure, Azure Storage, Token, Blob, File, Container
 
-This is refactored function from d365fo.tools
+This is refactored function from d365fo.tools (https://github.com/d365collaborative/d365fo.tools) under the
+MIT License
+
+Copyright (c) 2018 Mötz Jensen & Rasmus Andersen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
