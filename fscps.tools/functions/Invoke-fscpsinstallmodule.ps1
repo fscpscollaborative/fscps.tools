@@ -9,11 +9,8 @@
     .PARAMETER Modules
         An array of module names to be installed and imported.
         
-    .PARAMETER Scope
-        Specifies the scope in which to install the modules. Valid values are "AllUsers" or "CurrentUser".
-        
     .EXAMPLE
-        Invoke-FSCPSInstallModule Modules @("Az", "Pester") -scope CurrentUser
+        Invoke-FSCPSInstallModule -Modules @("Az", "Pester")
         
         This example installs and imports the "Az" and "Pester" modules in the current user scope.
         
@@ -22,40 +19,34 @@
         - The "AzureRm" module is uninstalled if "Az" is specified.
 #>
 
-enum ModuleScope {
-    AllUsers
-    CurrentUser
-}
-
 function Invoke-FSCPSInstallModule {
     Param(
-        [String[]] $Modules,
-        [ModuleScope] $Scope = [ModuleScope]::CurrentUser
+        [String[]] $Modules
     )
     begin {
         # Disable real-time monitoring to speed up installation
         Set-MpPreference -DisableRealtimeMonitoring $true
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Install-Module PowershellGet -Force -AllowClobber -SkipPublisherCheck -Scope $Scope.ToString() -ErrorAction SilentlyContinue
+        Install-Module PowershellGet -Force -AllowClobber -Scope CurrentUser -SkipPublisherCheck  -ErrorAction SilentlyContinue
     }
     process {
         $modules | ForEach-Object {
             if ($_ -eq "Az") {
-                Set-ExecutionPolicy RemoteSigned -Scope $Scope.ToString() -Force
+                Set-ExecutionPolicy RemoteSigned  -Force
                 try {
                     Uninstall-AzureRm 
                 } catch {
                     Write-PSFMessage -Level Host -Message "AzureRm module is not installed or an error occurred during uninstallation."
                 }
             }
-            if (-not (Get-InstalledModule -Name $_ -Scope $Scope.ToString() -ErrorAction SilentlyContinue)) {
+            if (-not (Get-InstalledModule -Name $_ -Scope CurrentUser -ErrorAction SilentlyContinue)) {
                 Write-PSFMessage -Level Host -Message "Installing module $_"
-                Install-Module $_ -Scope $scope.ToString() -Force -AllowClobber | Out-Null
+                Install-Module $_ -Scope CurrentUser -Force -AllowClobber | Out-Null
             }
         }
         $modules | ForEach-Object {
             Write-PSFMessage -Level Host -Message "Importing module $_"
-            Import-Module $_ -Scope $Scope.ToString() -DisableNameChecking -WarningAction SilentlyContinue | Out-Null
+            Import-Module $_ -Scope CurrentUser -DisableNameChecking -WarningAction SilentlyContinue | Out-Null
         }
     }
     end {
