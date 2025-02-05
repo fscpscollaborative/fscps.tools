@@ -13,17 +13,18 @@
         
     .EXAMPLE
         Update-FSCPSRSATWebDriver -webDriversPath "C:\CustomPath\WebDrivers"
-
+        
         This example will update the webdrivers for the RSAT tool located at the specified path.
 #>
 
 function Update-FSCPSRSATWebDriver {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     param (
         [string]$webDriversPath = "C:\Program Files (x86)\Regression Suite Automation Tool\Common\External\Selenium"
     )
 
     if (Test-Path $webDriversPath) {
-        Write-Host "Web drivers path exists. Going to update the drivers."
+        Write-PSFMessage -Level Host -Message "Web drivers path exists. Going to update the drivers."
     } else {
         $webDriversPath = "C:\Program Files\Regression Suite Automation Tool\Common\External\Selenium"
     }
@@ -65,7 +66,9 @@ function Update-FSCPSRSATWebDriver {
                 return ($processStOutput -split " ")[1]                     # ... while Chrome on 2nd place
             }
         }
-        catch{}
+        catch{
+            Write-PSFMessage -Level Error -Message "EdgeDriver download URL invalid or inaccessible."
+        }
     }
     # Function to evaluate if update is needed
     function Confirm-NeedForUpdate {
@@ -92,7 +95,7 @@ function Update-FSCPSRSATWebDriver {
             [string]$edgeDriverPath
         )
         if (-not $EdgeVersion) {
-            Write-Error "Cannot retrieve installed Edge version."
+            Write-PSFMessage -Level Error -Message "Cannot retrieve installed Edge version."
             return
         }
     
@@ -104,7 +107,7 @@ function Update-FSCPSRSATWebDriver {
             $response = Invoke-WebRequest -Uri $driverZipUrl -Method Head -ErrorAction Stop
         }
         catch {
-            Write-Error "EdgeDriver download URL invalid or inaccessible."
+            Write-PSFMessage -Level Error -Message "EdgeDriver download URL invalid or inaccessible."
             return
         }
     
@@ -115,7 +118,7 @@ function Update-FSCPSRSATWebDriver {
         Remove-Item $zipPath
     
         # (Optional) Update PATH
-        Write-Host "EdgeDriver updated at $edgeDriverPath"
+        Write-PSFMessage -Level Host -Message "EdgeDriver updated at $edgeDriverPath"
     }
 
     # Function to update Chrome driver
@@ -137,7 +140,7 @@ function Update-FSCPSRSATWebDriver {
     $zipPath = Join-Path $env:TEMP "chromedriver_win32.zip"
 
     try {
-        Write-Host "Downloading ChromeDriver version $exactOrFallbackVersion..."
+        Write-PSFMessage -Level Host -Message "Downloading ChromeDriver version $exactOrFallbackVersion..."
         Invoke-WebRequest -Uri $chromeDriverUrl -OutFile $zipPath -UseBasicParsing
         # epand archive and replace the old file
         Expand-Archive -Path $zipPath -DestinationPath "$env:TEMP/chromeNewDriver/"  -Force        
@@ -150,10 +153,10 @@ function Update-FSCPSRSATWebDriver {
 
 
         Remove-Item $zipPath
-        Write-Host "ChromeDriver installed at $webDriversPath."
+        Write-PSFMessage -Level Host -Message "ChromeDriver installed at $webDriversPath."
     }
     catch {
-        Write-Error "No matching version found for download."
+        Write-PSFMessage -Level Error -Message "No matching version found for download."
     }
     }
 
@@ -164,7 +167,7 @@ $edgeDriverVersion = Get-LocalDriverVersion -pathToDriver $edgeDriverPath
 $chromeDriverVersion = Get-LocalDriverVersion -pathToDriver $chromeDriverPath
 
 if (-not (Test-Path $edgeDriverPath)) {
-    Write-Host "EdgeDriver not found. Downloading..."
+    Write-PSFMessage -Level Host -Message "EdgeDriver not found. Downloading..."
     Update-EdgeDriver -edgeVersion $edgeVersion -edgeDriverPath $webDriversPath
 }
 elseif ($edgeVersion -and $edgeDriverVersion -and (Confirm-NeedForUpdate -v1 $edgeVersion -v2 $edgeDriverVersion)) {
@@ -172,7 +175,7 @@ elseif ($edgeVersion -and $edgeDriverVersion -and (Confirm-NeedForUpdate -v1 $ed
 }
 
 if (-not (Test-Path $chromeDriverPath)) {
-    Write-Host "ChromeDriver not found. Downloading..."
+    Write-PSFMessage -Level Host -Message "ChromeDriver not found. Downloading..."
     Update-ChromeDriver -chromeVersion $chromeVersion -webDriversPath $webDriversPath
 }
 elseif ($chromeVersion -and $chromeDriverVersion -and (Confirm-NeedForUpdate -v1 $chromeVersion -v2 $chromeDriverVersion)) {

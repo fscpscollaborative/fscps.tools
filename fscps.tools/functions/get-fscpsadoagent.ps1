@@ -4,7 +4,7 @@
         Retrieves agents from a specified agent pool in Azure DevOps.
         
     .DESCRIPTION
-        The `Get-FSCPSADOAgents` function retrieves agents from a specified agent pool in Azure DevOps.
+        The `Get-FSCPSADOAgent` function retrieves agents from a specified agent pool in Azure DevOps.
         It requires the organization, agent pool ID, and a valid authentication token. The function constructs
         the appropriate URL, makes the REST API call, and returns detailed information about the agents,
         including their capabilities and statuses. It also handles errors and interruptions gracefully.
@@ -22,7 +22,7 @@
         The authentication token for accessing Azure DevOps.
         
     .EXAMPLE
-        Get-FSCPSADOAgents -AgentPoolId 1 -Organization "my-org" -Token "Bearer my-token"
+        Get-FSCPSADOAgent -AgentPoolId 1 -Organization "my-org" -Token "Bearer my-token"
         
         This example retrieves agents from the agent pool with ID 1 in the specified organization.
         
@@ -32,8 +32,9 @@
         - Handles errors and interruptions gracefully.
 #>
 
-function Get-FSCPSADOAgents {
+function Get-FSCPSADOAgent {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         [int]$AgentPoolId,
         [string]$Organization,

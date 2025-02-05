@@ -37,6 +37,7 @@
 
 function Get-FSCPSADOTestCase {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         [int]$TestCaseId,
         [string]$Project,
