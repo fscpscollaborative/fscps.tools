@@ -8,37 +8,34 @@ schema: 2.0.0
 # Get-FSCPSADOTestSuiteByTestCase
 
 ## SYNOPSIS
-Retrieves the test suite ID and name for a given test case from Azure DevOps.
+Retrieves the test suite associated with a specific test case from Azure DevOps.
 
 ## SYNTAX
 
 ```
 Get-FSCPSADOTestSuiteByTestCase [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>]
- [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-apiVersion] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function constructs a URL to access the test suite details for a specific test case in Azure DevOps.
-It sends a GET request to the Azure DevOps API and retrieves the test suite ID and name for the specified test case.
-The function returns a hashtable with the test suite ID and name.
+The \`Get-FSCPSADOTestSuiteByTestCase\` function retrieves the test suite associated with a specified test case ID from Azure DevOps.
+It requires the organization, project, test case ID, and a valid authentication token.
+The function returns the test suite information
+and handles any errors that may occur during the request.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$testCaseId = 4927
-$project = "MyProject"
-$organization = "https://dev.azure.com/dev-inc"
-$token = "Bearer your_access_token"
+Get-FSCPSADOTestSuiteByTestCase -TestCaseId 1460 -Project "my-project" -Organization "my-org" -Token "Bearer my-token"
 ```
 
-$testSuiteInfo = Get-FSCPSADOTestSuiteByTestCase -TestCaseId $testCaseId -Project $project -Organization $organization -Token $token
-Write-Output $testSuiteInfo
+This example retrieves the test suite associated with the test case ID 1460 in the specified organization and project.
 
 ## PARAMETERS
 
 ### -TestCaseId
-The ID of the test case.
+The ID of the test case for which to retrieve the associated test suite.
 
 ```yaml
 Type: Int32
@@ -82,8 +79,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-The authorization token for accessing the Azure DevOps API.
+### -apiVersion
+The version of the Azure DevOps REST API to use.
+Default is "5.0".
 
 ```yaml
 Type: String
@@ -92,6 +90,21 @@ Aliases:
 
 Required: False
 Position: 4
+Default value: 5.0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+The authentication token for accessing Azure DevOps.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -121,7 +134,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Collections.Hashtable
 ## NOTES
-Ensure you have the correct permissions and a valid access token in the authorization header.
-The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
+- The function uses the Azure DevOps REST API to retrieve the test suite.
+- An authentication token is required.
+- Handles errors and interruptions gracefully.
 
 ## RELATED LINKS

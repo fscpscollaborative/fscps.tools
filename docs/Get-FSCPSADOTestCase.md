@@ -5,40 +5,39 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-FSCPSADOTestCaseName
+# Get-FSCPSADOTestCase
 
 ## SYNOPSIS
-Retrieves the title of a test case from Azure DevOps.
+Retrieves information about a specific test case from Azure DevOps.
 
 ## SYNTAX
 
 ```
-Get-FSCPSADOTestCaseName [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>]
- [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-FSCPSADOTestCase [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>]
+ [[-apiVersion] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function constructs a URL to access the work item details of a test case in Azure DevOps.
-It sends a GET request to the Azure DevOps API and retrieves the title of the specified test case.
-The function returns the title of the test case.
+The \`Get-FSCPSADOTestCase\` function retrieves detailed information about a specified test case from Azure DevOps.
+It requires the organization, project, test case ID, and a valid authentication token.
+The function constructs
+the appropriate URL, makes the REST API call, and returns the fields of the test case.
+It also handles errors
+and interruptions gracefully.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$testCaseId = 4927
-$project = "MyProject"
-$organization = "https://dev.azure.com/dev-inc"
-$token = "Bearer your_access_token"
+Get-FSCPSADOTestCase -TestCaseId 1234 -Project "my-project" -Organization "my-org" -Token "Bearer my-token"
 ```
 
-$testCaseName = Get-FSCPSADOTestCaseName -TestCaseId $testCaseId -Project $project -Organization $organization -Token $token
-Write-Output $testCaseName
+This example retrieves detailed information about the test case with ID 1234 in the specified organization and project.
 
 ## PARAMETERS
 
 ### -TestCaseId
-The ID of the test case.
+The ID of the test case to retrieve information for.
 
 ```yaml
 Type: Int32
@@ -69,6 +68,7 @@ Accept wildcard characters: False
 
 ### -Organization
 The name of the Azure DevOps organization.
+If not in the form of a URL, it will be prefixed with "https://dev.azure.com/".
 
 ```yaml
 Type: String
@@ -82,8 +82,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-The token for accessing the Azure DevOps API.
+### -apiVersion
+The version of the Azure DevOps REST API to use.
+Default is "7.1".
 
 ```yaml
 Type: String
@@ -92,6 +93,21 @@ Aliases:
 
 Required: False
 Position: 4
+Default value: 7.1
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+The authentication token for accessing Azure DevOps.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -120,7 +136,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Ensure you have the correct permissions and valid access token in the authorization header.
-The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
+- The function uses the Azure DevOps REST API to retrieve test case information.
+- An authentication token is required.
+- Handles errors and interruptions gracefully.
 
 ## RELATED LINKS
