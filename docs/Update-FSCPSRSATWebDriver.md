@@ -30,6 +30,8 @@ The function updates the web drivers for both Microsoft Edge and Google Chrome b
 Update-FSCPSRSATWebDriver -webDriversPath "C:\CustomPath\WebDrivers"
 ```
 
+This example will update the webdrivers for the RSAT tool located at the specified path.
+
 ## PARAMETERS
 
 ### -webDriversPath

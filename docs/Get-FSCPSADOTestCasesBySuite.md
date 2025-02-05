@@ -149,6 +149,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Collections.Hashtable
 ## NOTES
 - The function uses the Azure DevOps REST API to retrieve test cases.
 - An authentication token is required.

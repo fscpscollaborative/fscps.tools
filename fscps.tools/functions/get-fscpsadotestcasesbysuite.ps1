@@ -39,6 +39,7 @@
 
 function Get-FSCPSADOTestCasesBySuite {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         [int]$TestSuiteId,
         [int]$TestPlanId,
