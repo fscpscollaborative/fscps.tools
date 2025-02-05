@@ -104,7 +104,7 @@ function Update-FSCPSRSATWebDriver {
         $driverZipUrl = "$baseUrl/$EdgeVersion/edgedriver_win64.zip"
         # Validate URL
         try {
-            $response = Invoke-WebRequest -Uri $driverZipUrl -Method Head -ErrorAction Stop
+            Invoke-WebRequest -Uri $driverZipUrl -Method Head -ErrorAction Stop > $null
         }
         catch {
             Write-PSFMessage -Level Error -Message "EdgeDriver download URL invalid or inaccessible."
