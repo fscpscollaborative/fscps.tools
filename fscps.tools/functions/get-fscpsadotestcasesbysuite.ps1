@@ -1,18 +1,18 @@
 
 <#
     .SYNOPSIS
-        Retrieves the test cases in a specified test suite from Azure DevOps.
+        Retrieves test cases from a specified test suite in Azure DevOps.
         
     .DESCRIPTION
-        This function constructs a URL to access the test cases within a specific test suite in Azure DevOps.
-        It sends a GET request to the Azure DevOps API and retrieves the test cases in the specified test suite.
-        The function returns the test cases.
+        The `Get-FSCPSADOTestCasesBySuite` function retrieves test cases from a specified test suite within a specified test plan
+        in an Azure DevOps project. The function requires the organization, project, test suite ID, test plan ID, and a valid
+        authentication token. It uses the Azure DevOps REST API to perform the operation and handles errors gracefully.
         
     .PARAMETER TestSuiteId
-        The ID of the test suite.
+        The ID of the test suite from which to retrieve test cases.
         
     .PARAMETER TestPlanId
-        The ID of the test plan.
+        The ID of the test plan containing the test suite.
         
     .PARAMETER Organization
         The name of the Azure DevOps organization.
@@ -20,22 +20,21 @@
     .PARAMETER Project
         The name of the Azure DevOps project.
         
+    .PARAMETER apiVersion
+        The version of the Azure DevOps REST API to use. Default is "6.0".
+        
     .PARAMETER Token
-        The authorization token for accessing the Azure DevOps API.
+        The authentication token for accessing Azure DevOps.
         
     .EXAMPLE
-        $testSuiteId = 5261
-        $testPlanId = 6
-        $project = "MyProject"
-        $organization = "https://dev.azure.com/dev-inc"
-        $token = "Bearer your_access_token"
+        Get-FSCPSADOTestCasesBySuite -TestSuiteId 1001 -TestPlanId 2001 -Organization "my-org" -Project "my-project" -Token "Bearer my-token"
         
-        $testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -Token $token
-        Write-Output $testCases
+        This example retrieves the test cases from the test suite with ID 1001 within the test plan with ID 2001 in the specified organization and project.
         
     .NOTES
-        Ensure you have the correct permissions and valid access token in the authorization header.
-        The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
+        - The function uses the Azure DevOps REST API to retrieve test cases.
+        - An authentication token is required.
+        - Handles errors and interruptions gracefully.
 #>
 
 function Get-FSCPSADOTestCasesBySuite {
@@ -45,9 +44,11 @@ function Get-FSCPSADOTestCasesBySuite {
         [int]$TestPlanId,
         [string]$Organization,
         [string]$Project,
+        [string]$apiVersion = "6.0",
         [string]$Token
     )
     begin {
+        Invoke-TimeSignal -Start
         if ($Token -eq $null) {
             Write-PSFMessage -Level Error -Message "Token is required"
             return
@@ -68,7 +69,11 @@ function Get-FSCPSADOTestCasesBySuite {
             Write-PSFMessage -Level Error -Message "TestPlanId is required"
             return
         }
-        if ($Token.StartsWith("Bearer") -eq $false) {
+        if($Organization.StartsWith("https://dev.azure.com") -eq $false) {
+            $Organization = "https://dev.azure.com/$Organization"
+
+        }
+        if ($Token.StartsWith("Bearer") -eq $true) {
             $authHeader = @{
                 Authorization = "$Token"
             }
@@ -80,16 +85,26 @@ function Get-FSCPSADOTestCasesBySuite {
         }
     }
     process {
-        $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases"
-        $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader
-        if ($response.StatusCode -eq 200) {
-            return $response.value
-        } else {
-            Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+        if (Test-PSFFunctionInterrupt) { return }
+
+        try {
+            $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases?api-version=$apiVersion"
+            $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader
+            if ($response.StatusCode -eq 200) {
+                return @{
+                    Response = $response.value
+                }
+            } else {
+                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+            }
         }
-        
+        catch {
+            Write-PSFMessage -Level Host -Message "Something went wrong during request to ADO" -Exception $PSItem.Exception
+            Stop-PSFFunction -Message "Stopping because of errors"
+            return
+        }        
     }
     end {
-        Write-PSFMessage -Level Host -Message "Test cases count in the test suite: $($response.value.count)"
+        Invoke-TimeSignal -End
     }
 }

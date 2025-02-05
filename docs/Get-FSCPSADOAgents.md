@@ -5,39 +5,39 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-FSCPSADOTestCasesBySuite
+# Get-FSCPSADOAgents
 
 ## SYNOPSIS
-Retrieves test cases from a specified test suite in Azure DevOps.
+Retrieves agents from a specified agent pool in Azure DevOps.
 
 ## SYNTAX
 
 ```
-Get-FSCPSADOTestCasesBySuite [[-TestSuiteId] <Int32>] [[-TestPlanId] <Int32>] [[-Organization] <String>]
- [[-Project] <String>] [[-apiVersion] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-FSCPSADOAgents [[-AgentPoolId] <Int32>] [[-Organization] <String>] [[-apiVersion] <String>]
+ [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The \`Get-FSCPSADOTestCasesBySuite\` function retrieves test cases from a specified test suite within a specified test plan
-in an Azure DevOps project.
-The function requires the organization, project, test suite ID, test plan ID, and a valid
-authentication token.
-It uses the Azure DevOps REST API to perform the operation and handles errors gracefully.
+The \`Get-FSCPSADOAgents\` function retrieves agents from a specified agent pool in Azure DevOps.
+It requires the organization, agent pool ID, and a valid authentication token.
+The function constructs
+the appropriate URL, makes the REST API call, and returns detailed information about the agents,
+including their capabilities and statuses.
+It also handles errors and interruptions gracefully.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-FSCPSADOTestCasesBySuite -TestSuiteId 1001 -TestPlanId 2001 -Organization "my-org" -Project "my-project" -Token "Bearer my-token"
+Get-FSCPSADOAgents -AgentPoolId 1 -Organization "my-org" -Token "Bearer my-token"
 ```
 
-This example retrieves the test cases from the test suite with ID 1001 within the test plan with ID 2001 in the specified organization and project.
+This example retrieves agents from the agent pool with ID 1 in the specified organization.
 
 ## PARAMETERS
 
-### -TestSuiteId
-The ID of the test suite from which to retrieve test cases.
+### -AgentPoolId
+The ID of the agent pool from which to retrieve agents.
 
 ```yaml
 Type: Int32
@@ -51,23 +51,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TestPlanId
-The ID of the test plan containing the test suite.
+### -Organization
+The name of the Azure DevOps organization.
+If not in the form of a URL, it will be prefixed with "https://dev.azure.com/".
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 2
-Default value: 0
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Organization
-The name of the Azure DevOps organization.
+### -apiVersion
+The version of the Azure DevOps REST API to use.
+Default is "7.0".
 
 ```yaml
 Type: String
@@ -76,38 +78,7 @@ Aliases:
 
 Required: False
 Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Project
-The name of the Azure DevOps project.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -apiVersion
-The version of the Azure DevOps REST API to use.
-Default is "6.0".
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: 6.0
+Default value: 7.0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -121,7 +92,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -150,7 +121,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-- The function uses the Azure DevOps REST API to retrieve test cases.
+- The function uses the Azure DevOps REST API to retrieve agent information.
 - An authentication token is required.
 - Handles errors and interruptions gracefully.
 
