@@ -8,38 +8,36 @@ schema: 2.0.0
 # Get-FSCPSADOTestCasesBySuite
 
 ## SYNOPSIS
-Retrieves the test cases in a specified test suite from Azure DevOps.
+Retrieves test cases from a specified test suite in Azure DevOps.
 
 ## SYNTAX
 
 ```
 Get-FSCPSADOTestCasesBySuite [[-TestSuiteId] <Int32>] [[-TestPlanId] <Int32>] [[-Organization] <String>]
- [[-Project] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Project] <String>] [[-apiVersion] <String>] [[-Token] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This function constructs a URL to access the test cases within a specific test suite in Azure DevOps.
-It sends a GET request to the Azure DevOps API and retrieves the test cases in the specified test suite.
-The function returns the test cases.
+The \`Get-FSCPSADOTestCasesBySuite\` function retrieves test cases from a specified test suite within a specified test plan
+in an Azure DevOps project.
+The function requires the organization, project, test suite ID, test plan ID, and a valid
+authentication token.
+It uses the Azure DevOps REST API to perform the operation and handles errors gracefully.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$testSuiteId = 5261
-$testPlanId = 6
-$project = "MyProject"
-$organization = "https://dev.azure.com/dev-inc"
-$token = "Bearer your_access_token"
+Get-FSCPSADOTestCasesBySuite -TestSuiteId 1001 -TestPlanId 2001 -Organization "my-org" -Project "my-project" -Token "Bearer my-token"
 ```
 
-$testCases = Get-FSCPSADOTestCasesBySuite -TestSuiteId $testSuiteId -TestPlanId $testPlanId -Project $project -Organization $organization -Token $token
-Write-Output $testCases
+This example retrieves the test cases from the test suite with ID 1001 within the test plan with ID 2001 in the specified organization and project.
 
 ## PARAMETERS
 
 ### -TestSuiteId
-The ID of the test suite.
+The ID of the test suite from which to retrieve test cases.
 
 ```yaml
 Type: Int32
@@ -54,7 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -TestPlanId
-The ID of the test plan.
+The ID of the test plan containing the test suite.
 
 ```yaml
 Type: Int32
@@ -98,8 +96,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-The authorization token for accessing the Azure DevOps API.
+### -apiVersion
+The version of the Azure DevOps REST API to use.
+Default is "6.0".
 
 ```yaml
 Type: String
@@ -108,6 +107,21 @@ Aliases:
 
 Required: False
 Position: 5
+Default value: 6.0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+The authentication token for accessing Azure DevOps.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -135,8 +149,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Collections.Hashtable
 ## NOTES
-Ensure you have the correct permissions and valid access token in the authorization header.
-The function assumes the Azure DevOps API is available and accessible from the environment where the script is executed.
+- The function uses the Azure DevOps REST API to retrieve test cases.
+- An authentication token is required.
+- Handles errors and interruptions gracefully.
 
 ## RELATED LINKS

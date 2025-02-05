@@ -85,8 +85,10 @@ FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Invoke-FSCPSChoco
                'Invoke-FSCPSAzureStorageDownload', 
                'Invoke-FSCPSAzureStorageUpload', 'Invoke-FSCPSAzureStorageDelete', 
                'Update-FSCPSISVSource', 'Update-FSCPSNugetsFromLCS', 
-               'Invoke-FSCPSInstallModule', 'Get-FSCPSADOTestCaseName', 
-               'Get-FSCPSADOTestSuiteByTestCase', 'Get-FSCPSADOTestCasesBySuite'
+               'Invoke-FSCPSInstallModule', 'Get-FSCPSADOTestCase', 
+               'Get-FSCPSADOTestSuiteByTestCase', 'Get-FSCPSADOTestCasesBySuite', 
+               'Get-FSCPSADOTestSuitesByTestPlan', 'Get-FSCPSADOAgent',
+               'Update-FSCPSRSATWebDriver'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
