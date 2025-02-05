@@ -74,11 +74,12 @@ function Get-FSCPSADOAgent {
         if (Test-PSFFunctionInterrupt) { return }
 
         try {
+            $statusCode = $null
             $agents = @{}
             $poolsUrl = "$Organization/_apis/distributedtask/pools/"+$($AgentPoolId)+"/agents?includeCapabilities=true&api-version=$apiVersion"
-            $response = Invoke-RestMethod -Uri $poolsUrl -Method Get -ContentType "application/json" -Headers $authHeader      
-            if ($response.StatusCode -eq 200) {
-                ($response.value | ForEach-Object {    
+            $response = Invoke-RestMethod -Uri $poolsUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode      
+            if ($statusCode -eq 200) {
+                ($response.value | ForEach-Object {
                     $agents += @{
                         Id = $_.id
                         Name = $_.name
@@ -95,7 +96,7 @@ function Get-FSCPSADOAgent {
                 }
             } 
             else {
-                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($statusCode)"
             }
         }
         catch {

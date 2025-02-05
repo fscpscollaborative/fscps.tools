@@ -89,14 +89,13 @@ function Get-FSCPSADOTestCasesBySuite {
         if (Test-PSFFunctionInterrupt) { return }
 
         try {
+            $statusCode = $null
             $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases?api-version=$apiVersion"
-            $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader
-            if ($response.StatusCode -eq 200) {
-                return @{
-                    Response = $response.value
-                }
+            $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode  
+            if ($statusCode -eq 200) {
+                return  $response.value                
             } else {
-                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($statusCode)"
             }
         }
         catch {
