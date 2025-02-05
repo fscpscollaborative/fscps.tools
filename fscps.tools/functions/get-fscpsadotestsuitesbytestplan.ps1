@@ -83,6 +83,7 @@ function Get-FSCPSADOTestSuitesByTestPlan {
         if (Test-PSFFunctionInterrupt) { return }
 
         try {
+            $statusCode = $null
             # Construct the URL with continuation token if available
             $operationStatusUrl = "$Organization/$Project/_apis/testplan/Plans/$TestPlanId/suites?api-version=$apiVersion"
             if ($continuationToken) {
@@ -90,18 +91,18 @@ function Get-FSCPSADOTestSuitesByTestPlan {
             }
 
             # Make the REST API call
-            $response = Invoke-RestMethod -Uri $operationStatusUrl -Method Get -Headers $authHeader -ResponseHeadersVariable responseHeaders
+            $response = Invoke-RestMethod -Uri $operationStatusUrl -Method Get -Headers $authHeader -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
             
             # Extract the continuation token from response headers
             $newContinuationToken = $responseHeaders['X-MS-ContinuationToken']
 
-            if ($response.StatusCode -eq 200) {
+            if ($statusCode -eq 200) {
                 return @{
                     Response = $response.value
                     ContinuationToken = $newContinuationToken
                 }
             } else {
-                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($statusCode)"
             }
         }
         catch {
