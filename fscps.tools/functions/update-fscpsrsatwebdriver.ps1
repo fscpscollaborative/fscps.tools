@@ -44,31 +44,38 @@ function Update-FSCPSRSATWebDriver {
         param(
             $pathToDriver                                               # direct path to the driver
         )
-        try{
-            $processInfo = New-Object System.Diagnostics.ProcessStartInfo   # need to pass the switch & catch the output, hence ProcessStartInfo is used
 
-            $processInfo.FileName               = $pathToDriver
-            $processInfo.RedirectStandardOutput = $true                     # need to catch the output - the version
-            $processInfo.Arguments              = "-v"
-            $processInfo.UseShellExecute        = $false                    # hide execution
-
-            $process = New-Object System.Diagnostics.Process
-
-            $process.StartInfo  = $processInfo
-            $process.Start()    | Out-Null
-            $process.WaitForExit()                                          # run synchronously, we need to wait for result
-            $processStOutput    = $process.StandardOutput.ReadToEnd()
-
-            if ($pathToDriver.Contains("msedgedriver")){
-                return ($processStOutput -split " ")[3]                     # MS Edge returns version on 4th place in the output (be carefulm in old versions it was on 1st as well)... 
+        if (-not (Test-Path $pathToDriver)) {
+            Write-PSFMessage -Level Host -Message "Web driver does not exists. Going to download the drivers."
+            
+        } 
+        else{
+            try{
+                $processInfo = New-Object System.Diagnostics.ProcessStartInfo   # need to pass the switch & catch the output, hence ProcessStartInfo is used
+    
+                $processInfo.FileName               = $pathToDriver
+                $processInfo.RedirectStandardOutput = $true                     # need to catch the output - the version
+                $processInfo.Arguments              = "-v"
+                $processInfo.UseShellExecute        = $false                    # hide execution
+    
+                $process = New-Object System.Diagnostics.Process
+    
+                $process.StartInfo  = $processInfo
+                $process.Start()    | Out-Null
+                $process.WaitForExit()                                          # run synchronously, we need to wait for result
+                $processStOutput    = $process.StandardOutput.ReadToEnd()
+    
+                if ($pathToDriver.Contains("msedgedriver")){
+                    return ($processStOutput -split " ")[3]                     # MS Edge returns version on 4th place in the output (be carefulm in old versions it was on 1st as well)... 
+                }
+                else {
+                    return ($processStOutput -split " ")[1]                     # ... while Chrome on 2nd place
+                }
             }
-            else {
-                return ($processStOutput -split " ")[1]                     # ... while Chrome on 2nd place
+            catch{
+                Write-PSFMessage -Level Error -Message "WebDriver download URL invalid or inaccessible."
             }
-        }
-        catch{
-            Write-PSFMessage -Level Error -Message "EdgeDriver download URL invalid or inaccessible."
-        }
+        }        
     }
     # Function to evaluate if update is needed
     function Confirm-NeedForUpdate {

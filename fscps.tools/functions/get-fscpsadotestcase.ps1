@@ -82,18 +82,20 @@ function Get-FSCPSADOTestCase {
         if (Test-PSFFunctionInterrupt) { return }
 
         try {
+            $statusCode = $null
             # Construct the URL for the operation
             $operationTestCaseNameUrl = "$($Organization)/$($Project)/_apis/wit/workItems/$($TestCaseId)?api-version=$apiVersion"        
             # Invoke the REST method to get the test case name
-            $response = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -ContentType "application/json" -Headers $authHeader        
-            if ($response.StatusCode -eq 200) {
+            $response = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode        
+            if ($statusCode -eq 200) {
                 return @{
-                    Response = $response.fields
+                    Fields = $response.fields
+                    URL = $response.url
                 }
                 #return $response.fields."System.Title" #Name of the test case
             } 
             else {
-                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($response.StatusCode)"
+                Write-PSFMessage -Level Error -Message  "The request failed with status code: $($statusCode)"
             }
         }
         catch {
