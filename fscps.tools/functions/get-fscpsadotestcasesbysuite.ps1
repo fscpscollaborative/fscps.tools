@@ -91,7 +91,17 @@ function Get-FSCPSADOTestCasesBySuite {
         try {
             $statusCode = $null
             $operationTestSuiteIdByTestCaseIdUrl = "$Organization/$Project/_apis/test/Plans/$TestPlanId/suites/$TestSuiteId/testcases?api-version=$apiVersion"
-            $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode  
+
+            # Make the REST API call
+            if ($PSVersionTable.PSVersion.Major -ge 7) {
+                $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader -ContentType "application/json" -StatusCodeVariable statusCode
+            } else {
+                $response = Invoke-WebRequest -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader
+                $statusCode = $response.StatusCode
+                $response = $response.Content | ConvertFrom-Json 
+            }
+            
+            
             if ($statusCode -eq 200) {
                 return  $response.value                
             } else {
