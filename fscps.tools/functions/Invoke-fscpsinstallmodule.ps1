@@ -24,7 +24,7 @@ function Invoke-FSCPSInstallModule {
     )
     begin {
         # Disable real-time monitoring to improve performance
-        Write-Host "Disabling real-time monitoring..."
+        Write-PSFMessage -Level Host -Message "Disabling real-time monitoring..."
         Set-MpPreference -DisableRealtimeMonitoring $true
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Install-Module PowershellGet -Force -AllowClobber -SkipPublisherCheck -ErrorAction SilentlyContinue
@@ -34,14 +34,14 @@ function Invoke-FSCPSInstallModule {
             if ($module -eq "Az") {
                 # Uninstall AzureRm module if Az is specified
                 if (Get-Module -ListAvailable -Name "AzureRm") {
-                    Write-Host "Uninstalling AzureRm module..."
+                    Write-PSFMessage -Level Host -Message "Uninstalling AzureRm module..."
                     Uninstall-Module -Name "AzureRm" -AllVersions -Force
                 }
             }
 
             # Check if the module is already installed
             if (-not (Get-Module -ListAvailable -Name $module)) {
-                Write-Host "Installing module $module..."
+                Write-PSFMessage -Level Host -Message "Installing module $module..."
                 try {
                     if ($PSVersionTable.PSVersion.Major -ge 5) {
                         Install-Module -Name $module -Scope CurrentUser -Force
@@ -54,13 +54,13 @@ function Invoke-FSCPSInstallModule {
             }
 
             # Import the module
-            Write-Host "Importing module $module..."
+            Write-PSFMessage -Level Host -Message "Importing module $module..."
             Import-Module -Name $module -Force
         }
     }
     end {
         # Re-enable real-time monitoring
-        Write-Host "Re-enabling real-time monitoring..."
+        Write-PSFMessage -Level Host -Message "Re-enabling real-time monitoring..."
         # Add your code to re-enable real-time monitoring here
         Set-MpPreference -DisableRealtimeMonitoring $false
     }
