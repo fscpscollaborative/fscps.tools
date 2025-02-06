@@ -95,7 +95,7 @@ function Get-FSCPSADOTestSuitesByTestPlan {
                 $response = Invoke-RestMethod -Uri $operationStatusUrl -Method Get -Headers $authHeader -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
                 $newContinuationToken = $responseHeaders['X-MS-ContinuationToken']
             } else {
-                $response = Invoke-WebRequest -Uri $operationStatusUrl -Method Get -Headers $authHeader
+                $response = Invoke-WebRequest -Uri $operationStatusUrl -Method Get -Headers $authHeader -UseBasicParsing
                 $newContinuationToken = $response.Headers['X-MS-ContinuationToken']
                 $statusCode = $response.StatusCode
                 $response = $response.Content | ConvertFrom-Json 
