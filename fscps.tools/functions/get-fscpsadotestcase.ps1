@@ -85,8 +85,16 @@ function Get-FSCPSADOTestCase {
             $statusCode = $null
             # Construct the URL for the operation
             $operationTestCaseNameUrl = "$($Organization)/$($Project)/_apis/wit/workItems/$($TestCaseId)?api-version=$apiVersion"        
-            # Invoke the REST method to get the test case name
-            $response = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode        
+
+            # Make the REST API call
+            if ($PSVersionTable.PSVersion.Major -ge 7) {
+                $response = Invoke-RestMethod -Uri $operationTestCaseNameUrl -Method Get -Headers $authHeader -ContentType "application/json" -StatusCodeVariable statusCode
+            } else {
+                $response = Invoke-WebRequest -Uri $operationTestCaseNameUrl -Method Get -Headers $authHeader
+                $statusCode = $response.StatusCode
+                $response = $response.Content | ConvertFrom-Json 
+            }
+
             if ($statusCode -eq 200) {
                 return @{
                     Fields = $response.fields

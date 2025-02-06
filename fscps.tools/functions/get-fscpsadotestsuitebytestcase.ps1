@@ -83,12 +83,22 @@ function Get-FSCPSADOTestSuiteByTestCase {
         try {
             $statusCode = $null
             $operationTestSuiteIdByTestCaseIdUrl = "$Organization/_apis/test/suites?testCaseId=$TestCaseId&api-version=$apiVersion"
-            $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -ContentType "application/json" -Headers $authHeader -StatusCodeVariable statusCode
+
+            # Make the REST API call
+            if ($PSVersionTable.PSVersion.Major -ge 7) {
+                $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader -ContentType "application/json" -StatusCodeVariable statusCode
+            } else {
+                $response = Invoke-WebRequest -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader
+                $statusCode = $response.StatusCode
+                $response = $response.Content | ConvertFrom-Json 
+            }
+
             if ($statusCode -eq 200) {
                 return $response.value
             } else {
                 Write-PSFMessage -Level Error -Message  "The request failed with status code: $($statusCode)"
             }
+
         }
         catch {
             Write-PSFMessage -Level Host -Message "Something went wrong during request to ADO" -Exception $PSItem.Exception
