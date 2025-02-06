@@ -1,4 +1,3 @@
-
 <#
     .SYNOPSIS
         Installs and imports specified PowerShell modules, with special handling for the "Az" module.
@@ -24,33 +23,45 @@ function Invoke-FSCPSInstallModule {
         [String[]] $Modules
     )
     begin {
-        # Disable real-time monitoring to speed up installation
+        # Disable real-time monitoring to improve performance
+        Write-Host "Disabling real-time monitoring..."
         Set-MpPreference -DisableRealtimeMonitoring $true
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Install-Module PowershellGet -Force -AllowClobber -Scope CurrentUser -SkipPublisherCheck  -ErrorAction SilentlyContinue
+        Install-Module PowershellGet -Force -AllowClobber -SkipPublisherCheck -ErrorAction SilentlyContinue
     }
     process {
-        $modules | ForEach-Object {
-            if ($_ -eq "Az") {
-                Set-ExecutionPolicy RemoteSigned  -Force
-                try {
-                    Uninstall-AzureRm 
-                } catch {
-                    Write-PSFMessage -Level Host -Message "AzureRm module is not installed or an error occurred during uninstallation."
+        foreach ($module in $Modules) {
+            if ($module -eq "Az") {
+                # Uninstall AzureRm module if Az is specified
+                if (Get-Module -ListAvailable -Name "AzureRm") {
+                    Write-Host "Uninstalling AzureRm module..."
+                    Uninstall-Module -Name "AzureRm" -AllVersions -Force
                 }
             }
-            if (-not (Get-InstalledModule -Name $_ -Scope CurrentUser -ErrorAction SilentlyContinue)) {
-                Write-PSFMessage -Level Host -Message "Installing module $_"
-                Install-Module $_ -Scope CurrentUser -Force -AllowClobber | Out-Null
+
+            # Check if the module is already installed
+            if (-not (Get-Module -ListAvailable -Name $module)) {
+                Write-Host "Installing module $module..."
+                try {
+                    if ($PSVersionTable.PSVersion.Major -ge 5) {
+                        Install-Module -Name $module -Scope CurrentUser -Force
+                    } else {
+                        Install-Module -Name $module -Force
+                    }
+                } catch {
+                    Write-Error "Failed to install module $module : $_"
+                }
             }
-        }
-        $modules | ForEach-Object {
-            Write-PSFMessage -Level Host -Message "Importing module $_"
-            Import-Module $_ -Scope CurrentUser -DisableNameChecking -WarningAction SilentlyContinue | Out-Null
+
+            # Import the module
+            Write-Host "Importing module $module..."
+            Import-Module -Name $module -Force
         }
     }
     end {
         # Re-enable real-time monitoring
+        Write-Host "Re-enabling real-time monitoring..."
+        # Add your code to re-enable real-time monitoring here
         Set-MpPreference -DisableRealtimeMonitoring $false
     }
 }
