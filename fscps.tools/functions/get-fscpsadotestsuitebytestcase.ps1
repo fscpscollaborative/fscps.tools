@@ -88,7 +88,7 @@ function Get-FSCPSADOTestSuiteByTestCase {
             if ($PSVersionTable.PSVersion.Major -ge 7) {
                 $response = Invoke-RestMethod -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader -ContentType "application/json" -StatusCodeVariable statusCode
             } else {
-                $response = Invoke-WebRequest -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader
+                $response = Invoke-WebRequest -Uri $operationTestSuiteIdByTestCaseIdUrl -Method Get -Headers $authHeader -UseBasicParsing
                 $statusCode = $response.StatusCode
                 $response = $response.Content | ConvertFrom-Json 
             }
