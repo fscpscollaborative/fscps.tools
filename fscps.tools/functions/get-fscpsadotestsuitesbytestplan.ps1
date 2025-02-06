@@ -91,10 +91,15 @@ function Get-FSCPSADOTestSuitesByTestPlan {
             }
 
             # Make the REST API call
-            $response = Invoke-RestMethod -Uri $operationStatusUrl -Method Get -Headers $authHeader -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
-            
-            # Extract the continuation token from response headers
-            $newContinuationToken = $responseHeaders['X-MS-ContinuationToken']
+            if ($PSVersionTable.PSVersion.Major -ge 7) {
+                $response = Invoke-RestMethod -Uri $operationStatusUrl -Method Get -Headers $authHeader -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
+                $newContinuationToken = $responseHeaders['X-MS-ContinuationToken']
+            } else {
+                $response = Invoke-WebRequest -Uri $operationStatusUrl -Method Get -Headers $authHeader
+                $newContinuationToken = $response.Headers['X-MS-ContinuationToken']
+                $response = $response.Content | ConvertFrom-Json
+                $statusCode = $response.StatusCode
+            }
 
             if ($statusCode -eq 200) {
                 return @{
