@@ -116,54 +116,63 @@ function Get-FSCPSAzureStorageFile {
         [switch] $Latest
     )
 
-    if (([string]::IsNullOrEmpty($AccountId) -eq $true) -or
-        ([string]::IsNullOrEmpty($Container)) -or
-        (([string]::IsNullOrEmpty($AccessToken)) -and ([string]::IsNullOrEmpty($SAS)))) {
-        Write-PSFMessage -Level Host -Message "It seems that you are missing some of the parameters. Please make sure that you either supplied them or have the right configuration saved."
-        Stop-PSFFunction -Message "Stopping because of missing parameters"
-        return
+    begin {
+        Write-PSFMessage -Level Verbose -Message "Starting Get-FSCPSAzureStorageFile"
+        Invoke-TimeSignal -Start
     }
+    process{
+        if (Test-PSFFunctionInterrupt) { return}
+        if (([string]::IsNullOrEmpty($AccountId) -eq $true) -or
+            ([string]::IsNullOrEmpty($Container)) -or
+            (([string]::IsNullOrEmpty($AccessToken)) -and ([string]::IsNullOrEmpty($SAS)))) {
+            Write-PSFMessage -Level Host -Message "It seems that you are missing some of the parameters. Please make sure that you either supplied them or have the right configuration saved."
+            Stop-PSFFunction -Message "Stopping because of missing parameters"
+            return
+        }
 
-    Invoke-TimeSignal -Start
+        if ([string]::IsNullOrEmpty($SAS)) {
+            Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with AccessToken"
 
-    if ([string]::IsNullOrEmpty($SAS)) {
-        Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with AccessToken"
-
-        $storageContext = New-AzStorageContext -StorageAccountName $AccountId.ToLower() -StorageAccountKey $AccessToken
-    }
-    else {
-        Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with SAS"
-
-        $conString = $("BlobEndpoint=https://{0}.blob.core.windows.net/;QueueEndpoint=https://{0}.queue.core.windows.net/;FileEndpoint=https://{0}.file.core.windows.net/;TableEndpoint=https://{0}.table.core.windows.net/;SharedAccessSignature={1}" -f $AccountId.ToLower(), $SAS)
-        $storageContext = New-AzStorageContext -ConnectionString $conString
-    }
-
-    try {
-        $files = Get-AzStorageBlob -Container $($Container.ToLower()) -Context $storageContext | Sort-Object -Descending { $_.LastModified }
-
-        if ($Latest) {
-            $files | Select-Object -First 1 | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
+            $storageContext = New-AzStorageContext -StorageAccountName $AccountId.ToLower() -StorageAccountKey $AccessToken
         }
         else {
-    
-            foreach ($obj in $files) {
-                if ($obj.Name -NotLike $Name) { continue }
+            Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with SAS"
 
-                if ($DestinationPath) {
-                    $null = Test-PathExists -Path $DestinationPath -Type Container -Create
-                    $destinationBlobPath = (Join-Path $DestinationPath ($obj.Name))
-                    Get-AzStorageBlobContent -Context $storageContext -Container $($Container.ToLower()) -Blob $obj.Name -Destination ($destinationBlobPath) -ConcurrentTaskCount 10 -Force
-                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "Path"; Expression = { [string]$destinationBlobPath } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
+            $conString = $("BlobEndpoint=https://{0}.blob.core.windows.net/;QueueEndpoint=https://{0}.queue.core.windows.net/;FileEndpoint=https://{0}.file.core.windows.net/;TableEndpoint=https://{0}.table.core.windows.net/;SharedAccessSignature={1}" -f $AccountId.ToLower(), $SAS)
+            $storageContext = New-AzStorageContext -ConnectionString $conString
+        }
+
+        try {
+            $files = Get-AzStorageBlob -Container $($Container.ToLower()) -Context $storageContext | Sort-Object -Descending { $_.LastModified }
+
+            if ($Latest) {
+                $files | Select-Object -First 1 | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
+            }
+            else {
+        
+                foreach ($obj in $files) {
+                    if ($obj.Name -NotLike $Name) { continue }
+
+                    if ($DestinationPath) {
+                        $null = Test-PathExists -Path $DestinationPath -Type Container -Create
+                        $destinationBlobPath = (Join-Path $DestinationPath ($obj.Name))
+                        Get-AzStorageBlobContent -Context $storageContext -Container $($Container.ToLower()) -Blob $obj.Name -Destination ($destinationBlobPath) -ConcurrentTaskCount 10 -Force
+                        $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "Path"; Expression = { [string]$destinationBlobPath } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
+                    }
+                    else {
+                        $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
+                    }
+                    
+                    
                 }
-                else {
-                    $obj | Select-PSFObject -TypeName FSCPS.TOOLS.Azure.Blob "name", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, @{Name = "LastModified"; Expression = { $_.LastModified.UtcDateTime } }
-                }
-                
-                
             }
         }
-    }
-    catch {
-        Write-PSFMessage -Level Warning -Message "Something broke" -ErrorRecord $_
+        catch {
+            Write-PSFMessage -Level Warning -Message "Something broke" -ErrorRecord $_
+        }
+    }   
+
+    end {
+        Invoke-TimeSignal -End
     }
 }
