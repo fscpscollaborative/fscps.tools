@@ -135,9 +135,13 @@ function Get-FSCPSSystemUpdatePackage {
             if($download)
             {
                 Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $OutputPath -Force:$Force
-            }
-            
-            return $destinationFilePath
+                if (-not [System.IO.Path]::GetExtension($downloadedFilePath)) {
+                    # Rename the file to have a .zip extension
+                    $newFilePath = "$downloadedFilePath.zip"
+                    Rename-Item -Path $downloadedFilePath -NewName $newFilePath
+                    Write-PSFMessage -Level Host -Message "Package saved to $newFilePath"
+                }                
+            }                        
         }
         catch {            
             Write-PSFMessage -Level Host -Message "Something went wrong while downloading NuGet package" -Exception $PSItem.Exception
