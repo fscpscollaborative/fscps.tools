@@ -28,5 +28,6 @@ function Init-AzureStorageDefault {
     Register-FSCPSAzureStorageConfig -ConfigStorageLocation "System"
     
     Add-FSCPSAzureStorageConfig -Name NuGetStorage -SAS $Script:NuGetStorageSASToken -AccountId $Script:NuGetStorageAccountName -Container $Script:NuGetStorageContainer -Force
-    Add-FSCPSAzureStorageConfig -Name ModelStorage -SAS $Script:ModelCacheStorageSASToken -AccountId $Script:NuGetStorageAccountName -Container $Script:ModelsStorageContainer -Force
+    Add-FSCPSAzureStorageConfig -Name ModelStorage -SAS $Script:ModelCacheStorageSASToken -AccountId $Script:NuGetStorageAccountName -Container $Script:ModelsStorageContainer -Force    
+    Add-FSCPSAzureStorageConfig -Name PackageStorage -SAS $Script:PackageStorageSASToken -AccountId $Script:NuGetStorageAccountName -Container $Script:PackageStorageContainer -Force
 }

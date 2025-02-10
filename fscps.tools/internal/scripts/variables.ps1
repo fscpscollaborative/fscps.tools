@@ -116,6 +116,8 @@ $Script:NuGetStorageContainer = "nuget"
 $Script:NuGetStorageSASToken = "sp=rl&st=2024-04-26T01:44:36Z&se=2034-04-26T09:44:36Z&spr=https&sv=2022-11-02&sr=c&sig=svD1T8qTAFTb8MmquBQ3ljWP83FNJ5ev5gPuQUpNmEE%3D"
 $Script:ModelsStorageContainer = "models-hash"
 $Script:ModelCacheStorageSASToken = "sp=racwdl&st=2024-04-26T21:17:33Z&se=2034-04-27T05:17:33Z&spr=https&sv=2022-11-02&sr=c&sig=YQj8BKjGyZoqheoe9MqCcUEnqPy7Twtfd0ZTq1e9%2BfQ%3D"
+$Script:PackageStorageContainer = "deployablepackages"
+$Script:PackageStorageSASToken = "sp=rl&st=2025-02-10T11:04:46Z&se=2035-02-10T19:04:46Z&spr=https&sv=2022-11-02&sr=c&sig=IjAL%2Fp2RVaKJHsOV%2FJ5wmIQTTY7hDRyDDaqhHBh3KSc%3D"
 
 foreach ($item in (Get-PSFConfig -FullName fscps.tools.active*)) {
     $nameTemp = $item.FullName -replace "^fscps.tools.", ""
