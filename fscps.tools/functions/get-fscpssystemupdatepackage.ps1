@@ -88,13 +88,13 @@ function Get-FSCPSSystemUpdatePackage {
 
          # Set the destination file name based on the UpdateType
          if ($UpdateType -eq [UpdateType]::SystemUpdate) {
-            $destinationFileName = "Service Update - $D365FSCVersion.zip"
+            $destinationFileName = "Service Update - $D365FSCVersion"
         } elseif ($UpdateType -eq [UpdateType]::Preview) {
-            $destinationFileName = "Preview Version - $D365FSCVersion.zip"
+            $destinationFileName = "Preview Version - $D365FSCVersion"
         } elseif ($UpdateType -eq [UpdateType]::FinalQualityUpdate) {
-            $destinationFileName = "Final Quality Update - $D365FSCVersion.zip"
+            $destinationFileName = "Final Quality Update - $D365FSCVersion"
         } elseif ($UpdateType -eq [UpdateType]::ProactiveQualityUpdate) {
-            $destinationFileName = "Proactive Quality Update - $D365FSCVersion.zip"
+            $destinationFileName = "Proactive Quality Update - $D365FSCVersion"
         }
 
         # Combine the OutputPath with the destination file name
@@ -112,7 +112,14 @@ function Get-FSCPSSystemUpdatePackage {
             if(!$download)
             {
                 Write-PSFMessage -Level Host -Message $destinationFileName
-                $blobFile = Get-FSCPSAzureStorageFile -Name $destinationFileName
+                try {
+                    $blobFile = Get-FSCPSAzureStorageFile -Name $destinationFileName
+                }
+                catch {
+                    Write-PSFMessage -Level Error -Message "File $destinationFileName is not found at $($azureDetails.Container)"
+                    throw                    
+                }
+                
                 $blobSize = $blobFile.Length
                 $localSize = (Get-Item $destinationFilePath).length
                 Write-PSFMessage -Level Verbose -Message "BlobSize is: $blobSize"
@@ -127,7 +134,7 @@ function Get-FSCPSSystemUpdatePackage {
 
             if($download)
             {
-                Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $Path -Force:$Force
+                Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $OutputPath -Force:$Force
             }
             
             return $destinationFilePath
