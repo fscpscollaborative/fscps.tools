@@ -23,11 +23,13 @@
         
     .EXAMPLE
         Get-FSCPSSystemUpdatePackage -UpdateType SystemUpdate -D365FSCVersion "10.0.40" -OutputPath "C:\Packages\"
-
+        
         Downloads the system update package for version 10.0.40 and saves it to "C:\Packages\".
         
     .NOTES
         Uses the `Get-FSCPSAzureStorageFile` function to download the package from Azure Storage.
+
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Get-FSCPSSystemUpdatePackage {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
@@ -127,6 +129,8 @@ function Get-FSCPSSystemUpdatePackage {
             {
                 Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $Path -Force:$Force
             }
+            
+            return $destinationFilePath
         }
         catch {            
             Write-PSFMessage -Level Host -Message "Something went wrong while downloading NuGet package" -Exception $PSItem.Exception

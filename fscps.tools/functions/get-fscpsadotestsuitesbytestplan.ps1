@@ -35,6 +35,8 @@
         - The function uses the Azure DevOps REST API to retrieve test suites.
         - An authentication token is required.
         - Handles pagination through continuation tokens.
+
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Get-FSCPSADOTestSuitesByTestPlan {
