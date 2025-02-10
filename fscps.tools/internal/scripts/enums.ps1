@@ -40,3 +40,10 @@ enum FSCPSType {
     Commerce
     ECommerce
 }
+
+enum UpdateType {
+    SystemUpdate
+    Preview
+    FinalQualityUpdate
+    ProactiveQualityUpdate
+}
