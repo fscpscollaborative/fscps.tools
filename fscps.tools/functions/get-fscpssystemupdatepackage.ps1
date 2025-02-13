@@ -137,7 +137,7 @@ function Get-FSCPSSystemUpdatePackage {
                 Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $OutputPath -Force:$Force
                 if (-not [System.IO.Path]::GetExtension($destinationFilePath) -ne ".zip") {
                     # Rename the file to have a .zip extension
-                    $newFilePath = "$destinationFilePath.zip"
+                    $newFilePath = "$destinationFilePath.zip".Replace(" ", "")
                     Rename-Item -Path $destinationFilePath -NewName $newFilePath
                     Write-PSFMessage -Level Host -Message "Package saved to $newFilePath"
                 }                
