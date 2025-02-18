@@ -673,7 +673,7 @@ function Invoke-FSCCompile {
         finally
         {
             try {
-                if($settings.cleanupAfterBuild)
+                if($($settings.cleanupAfterBuild) -eq "true")
                 {
                     if($SolutionBuildFolderPath)
                     {
