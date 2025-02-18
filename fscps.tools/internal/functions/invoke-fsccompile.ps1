@@ -673,32 +673,35 @@ function Invoke-FSCCompile {
         finally
         {
             try {
-                if($SolutionBuildFolderPath)
+                if($settings.cleanupAfterBuild)
                 {
-                    if (Test-Path -Path $SolutionBuildFolderPath -ErrorAction SilentlyContinue)
+                    if($SolutionBuildFolderPath)
                     {
-                        Remove-Item -Path $SolutionBuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
+                        if (Test-Path -Path $SolutionBuildFolderPath -ErrorAction SilentlyContinue)
+                        {
+                            Remove-Item -Path $SolutionBuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
+                        }
                     }
-                }
-                if($NuGetPackagesPath)
-                {
-                    if (Test-Path -Path $NuGetPackagesPath -ErrorAction SilentlyContinue)
+                    if($NuGetPackagesPath)
                     {
-                        Remove-Item -Path $NuGetPackagesPath -Recurse -Force -ErrorAction SilentlyContinue
+                        if (Test-Path -Path $NuGetPackagesPath -ErrorAction SilentlyContinue)
+                        {
+                            Remove-Item -Path $NuGetPackagesPath -Recurse -Force -ErrorAction SilentlyContinue
+                        }
                     }
-                }
-                if($outputDir)
-                {
-                    if (Test-Path -Path $outputDir -ErrorAction SilentlyContinue)
+                    if($outputDir)
                     {
-                        Remove-Item -Path $outputDir -Recurse -Force -ErrorAction SilentlyContinue
+                        if (Test-Path -Path $outputDir -ErrorAction SilentlyContinue)
+                        {
+                            Remove-Item -Path $outputDir -Recurse -Force -ErrorAction SilentlyContinue
+                        }
                     }
-                }
-                if($tempCombinedPackage)
-                {
-                    if (Test-Path -Path $tempCombinedPackage -ErrorAction SilentlyContinue)
+                    if($tempCombinedPackage)
                     {
-                        Remove-Item -Path $tempCombinedPackage -Recurse -Force -ErrorAction SilentlyContinue
+                        if (Test-Path -Path $tempCombinedPackage -ErrorAction SilentlyContinue)
+                        {
+                            Remove-Item -Path $tempCombinedPackage -Recurse -Force -ErrorAction SilentlyContinue
+                        }
                     }
                 }
             }
