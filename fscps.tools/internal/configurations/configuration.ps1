@@ -47,6 +47,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.all.workflowName' -Value '' -Initi
 Set-PSFConfig -FullName 'fscps.tools.settings.all.buildVersion' -Value '' -Initialize -Description 'The default D365 FSC version used to build and generate the package.'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.solutionName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.all.enableBuildCaching' -Value $false -Initialize -Description ''
+Set-PSFConfig -FullName 'fscps.tools.settings.all.cleanupAfterBuild' -Value $true -Initialize -Description 'Cleanup build cache after build'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.exportModel' -Value $false -Initialize -Description 'Option to generate axmodel file. IMPORTANT!!! generatePackages option should be set to True'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.uploadPackageToLCS' -Value $false -Initialize -Description 'Option to upload the generated package to the LCS after the build and generate process. IMPORTANT!!! generatePackages option should be set to True'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.models' -Value '' -Initialize -Description 'Comma-delimited array of models.'
