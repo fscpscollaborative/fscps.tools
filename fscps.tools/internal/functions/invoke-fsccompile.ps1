@@ -673,6 +673,7 @@ function Invoke-FSCCompile {
         finally
         {
             try {
+                <#
                 if($SolutionBuildFolderPath)
                 {
                     if (Test-Path -Path $SolutionBuildFolderPath -ErrorAction SilentlyContinue)
@@ -701,6 +702,7 @@ function Invoke-FSCCompile {
                         Remove-Item -Path $tempCombinedPackage -Recurse -Force -ErrorAction SilentlyContinue
                     }
                 }
+                    #>
             }
             catch {
                 Write-PSFMessage -Level Verbose -Message "Cleanup warning: $($PSItem.Exception)" 
