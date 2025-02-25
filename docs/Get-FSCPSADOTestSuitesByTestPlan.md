@@ -135,4 +135,6 @@ Accept wildcard characters: False
 - An authentication token is required.
 - Handles pagination through continuation tokens.
 
+Author: Oleksandr Nikolaiev (@onikolaiev)
+
 ## RELATED LINKS
