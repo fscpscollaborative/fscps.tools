@@ -28,7 +28,7 @@
         
     .NOTES
         Uses the `Get-FSCPSAzureStorageFile` function to download the package from Azure Storage.
-
+        
         Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Get-FSCPSSystemUpdatePackage {
