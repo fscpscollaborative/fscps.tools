@@ -14,14 +14,14 @@ Retrieves test suites from an Azure DevOps test plan.
 
 ```
 Get-FSCPSADOTestSuitesByTestPlan [[-Organization] <String>] [[-Project] <String>] [[-TestPlanId] <Int32>]
- [[-Token] <String>] [[-apiVersion] <String>] [[-continuationToken] <String>]
+ [[-Token] <String>] [[-apiVersion] <String>]
 ```
 
 ## DESCRIPTION
 The \`Get-FSCPSADOTestSuitesByTestPlan\` function retrieves test suites from a specified Azure DevOps test plan.
 It requires the organization, project, test plan ID, and a valid authentication token.
 The function handles
-pagination through the use of a continuation token and returns the test suites along with the new continuation token.
+pagination through the use of a continuation token and returns the test suites.
 
 ## EXAMPLES
 
@@ -106,22 +106,6 @@ Aliases:
 Required: False
 Position: 5
 Default value: 7.1
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -continuationToken
-The continuation token for pagination.
-Default is $null.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
