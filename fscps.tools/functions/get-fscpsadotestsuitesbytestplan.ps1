@@ -98,11 +98,10 @@ function Get-FSCPSADOTestSuitesByTestPlan {
                 } else {
                     $response = Invoke-WebRequest -Uri $operationStatusUrl -Headers $authHeader -Method Get -UseBasicParsing
                     $continuationToken = $response.Headers['x-ms-continuationtoken']
+                    $statusCode = $response.StatusCode
                     $response = $response.Content | ConvertFrom-Json
                 }
     
-                $allTestSuites += $response.value
-
                 if ($statusCode -eq 200) {
                     $allTestSuites += $response.value
                 } else {
