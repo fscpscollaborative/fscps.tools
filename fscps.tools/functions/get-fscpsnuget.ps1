@@ -115,7 +115,6 @@ function Get-FSCPSNuget {
 
             if(!$download)
             {
-                Write-PSFMessage -Level Host -Message $packageName
                 $blobFile = Get-FSCPSAzureStorageFile -Name $packageName
                 $blobSize = $blobFile.Length
                 $localSize = (Get-Item $destinationNugetFilePath).length
@@ -132,6 +131,10 @@ function Get-FSCPSNuget {
             if($download)
             {
                 Invoke-FSCPSAzureStorageDownload -FileName $packageName -Path $Path -Force:$Force
+            }
+            return @{
+                Package = $packageName
+                Path = $Path
             }
         }
         catch {            
