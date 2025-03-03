@@ -278,7 +278,6 @@ function Invoke-FSCCompile {
             
             if ($PSVersionTable.PSVersion.Major -ge 7) {
                 # Use -Parallel in PowerShell 7
-
                 $null = ( $downloadNuGetCommands | ForEach-Object -Parallel {
                     $command = $_
                     switch ($command.Type) {
@@ -293,14 +292,12 @@ function Invoke-FSCCompile {
                 $nuGetDownloadJobs = @()
                 Get-Job | Remove-Job -Force -ErrorAction SilentlyContinue
 
-                foreach ($command in $downloadNuGetCommands) {                    
+                foreach ($command in $downloadNuGetCommands) {
                     $nuGetDownloadJobs += Start-Job -ScriptBlock {
                         $cmd = $using:command
                         switch ($cmd.Type) {
-                            "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $cmd.Version -Type PlatformCompilerPackage -Path $using:NuGetPackagesPath -Force }
-                            "PlatformDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type PlatformDevALM -Path $using:NuGetPackagesPath -Force }
-                            "ApplicationDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type ApplicationDevALM -Path $using:NuGetPackagesPath  -Force }
-                            "ApplicationSuiteDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type ApplicationSuiteDevALM -Path $using:NuGetPackagesPath  -Force }
+                            "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $cmd.Version -Type PlatformCompilerPackage -Path $using:NuGetPackagesPath -Force | Out-Null }
+                            
                         }
                     }
                 }
