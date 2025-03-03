@@ -45,6 +45,7 @@ function Get-FSCPSNuget {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignment", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
+    [OutputType([System.Collections.Hashtable])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
