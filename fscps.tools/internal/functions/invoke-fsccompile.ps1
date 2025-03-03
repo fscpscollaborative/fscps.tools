@@ -268,10 +268,56 @@ function Invoke-FSCCompile {
     
             Write-PSFMessage -Level Important -Message "//================= Download NuGet packages ====================================//"
             $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
-            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+
+            $downloadNuGetCommands = @(
+                @{ Version = $PlatformVersion; Type = "PlatformCompilerPackage" }
+                @{ Version = $PlatformVersion; Type = "PlatformDevALM" }
+                @{ Version = $ApplicationVersion; Type = "ApplicationDevALM" }
+                @{ Version = $ApplicationVersion; Type = "ApplicationSuiteDevALM" }
+            )
+            
+            if ($PSVersionTable.PSVersion.Major -ge 7) {
+                # Use -Parallel in PowerShell 7
+
+                $null = ( $downloadNuGetCommands | ForEach-Object -Parallel {
+                    $command = $_
+                    switch ($command.Type) {
+                        "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $command.Version -Type PlatformCompilerPackage -Path $using:NuGetPackagesPath -Force @using:CMDOUT }
+                        "PlatformDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type PlatformDevALM -Path $using:NuGetPackagesPath -Force @using:CMDOUT }
+                        "ApplicationDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type ApplicationDevALM -Path $using:NuGetPackagesPath -Force @using:CMDOUT }
+                        "ApplicationSuiteDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type ApplicationSuiteDevALM -Path $using:NuGetPackagesPath -Force @using:CMDOUT }
+                    }
+                } -ThrottleLimit 4) | Out-Null
+            } else {
+                # Use background jobs in PowerShell 5
+                $nuGetDownloadJobs = @()
+                Get-Job | Remove-Job -Force -ErrorAction SilentlyContinue
+
+                foreach ($command in $downloadNuGetCommands) {                    
+                    $nuGetDownloadJobs += Start-Job -ScriptBlock {
+                        $cmd = $using:command
+                        switch ($cmd.Type) {
+                            "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $cmd.Version -Type PlatformCompilerPackage -Path $using:NuGetPackagesPath -Force }
+                            "PlatformDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type PlatformDevALM -Path $using:NuGetPackagesPath -Force }
+                            "ApplicationDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type ApplicationDevALM -Path $using:NuGetPackagesPath  -Force }
+                            "ApplicationSuiteDevALM" { $null = Get-FSCPSNuget -Version $cmd.Version -Type ApplicationSuiteDevALM -Path $using:NuGetPackagesPath  -Force }
+                        }
+                    }
+                }
+
+                # Wait for all jobs to complete
+                $nuGetDownloadJobs | ForEach-Object {
+                    $job = $_
+                    $job | Wait-Job | Out-Null
+                }
+
+                # Process job output and remove jobs
+                $nuGetDownloadJobs | ForEach-Object {
+                    $job = $_
+                    $job | Receive-Job -OutVariable output -ErrorVariable errors -WarningVariable warnings -InformationVariable information | Out-Null
+                    Remove-Job -Job $job -Force
+                }
+            }
 
             Write-PSFMessage -Level Important -Message "Complete"
             $responseObject.NUGETS_FOLDER = $NuGetPackagesPath
