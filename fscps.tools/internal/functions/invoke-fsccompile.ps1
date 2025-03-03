@@ -295,12 +295,12 @@ function Invoke-FSCCompile {
 
                 foreach ($command in $downloadNuGetCommands) {
                     $nuGetDownloadJobs += Start-Job -ScriptBlock {
-                        param ($using:command, $using:NuGetPackagesPath)
-                        switch ($using:command.Type) {
-                            "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $using:command.Version -Type PlatformCompilerPackage -Path $using:NuGetPackagesPath -Force }
-                            "PlatformDevALM" { $null = Get-FSCPSNuget -Version $using:command.Version -Type PlatformDevALM -Path $using:NuGetPackagesPath -Force }
-                            "ApplicationDevALM" { $null = Get-FSCPSNuget -Version $using:command.Version -Type ApplicationDevALM -Path $using:NuGetPackagesPath  -Force }
-                            "ApplicationSuiteDevALM" { $null = Get-FSCPSNuget -Version $using:command.Version -Type ApplicationSuiteDevALM -Path $using:NuGetPackagesPath  -Force }
+                        param ($command, $NuGetPackagesPath)
+                        switch ($command.Type) {
+                            "PlatformCompilerPackage" { $null = Get-FSCPSNuget -Version $command.Version -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force }
+                            "PlatformDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type PlatformDevALM -Path $NuGetPackagesPath -Force }
+                            "ApplicationDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type ApplicationDevALM -Path $NuGetPackagesPath  -Force }
+                            "ApplicationSuiteDevALM" { $null = Get-FSCPSNuget -Version $command.Version -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath  -Force }
                         }
                     } -ArgumentList $command, $NuGetPackagesPath
                 }
