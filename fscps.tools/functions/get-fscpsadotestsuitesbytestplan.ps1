@@ -93,8 +93,7 @@ function Get-FSCPSADOTestSuitesByTestPlan {
                 }
 
                 if ($PSVersionTable.PSVersion.Major -ge 7) {
-                    $response = Invoke-RestMethod -Uri $operationStatusUrl -Headers $authHeader -Method Get -ResponseHeadersVariable responseHeaders
-                    $statusCode = $response.StatusCode
+                    $response = Invoke-RestMethod -Uri $operationStatusUrl -Headers $authHeader -Method Get -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
                     $continuationToken = $responseHeaders['x-ms-continuationtoken']
                 } else {
                     $response = Invoke-WebRequest -Uri $operationStatusUrl -Headers $authHeader -Method Get -UseBasicParsing
