@@ -130,6 +130,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Collections.Hashtable
 ## NOTES
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
