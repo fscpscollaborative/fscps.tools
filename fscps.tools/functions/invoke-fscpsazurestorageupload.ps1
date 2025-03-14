@@ -78,16 +78,12 @@
 function Invoke-FSCPSAzureStorageUpload {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        [Parameter(Mandatory = $false)]
         [string] $AccountId = $Script:AzureStorageAccountId,
 
-        [Parameter(Mandatory = $false)]
         [string] $AccessToken = $Script:AzureStorageAccessToken,
 
-        [Parameter(Mandatory = $false)]
         [string] $SAS = $Script:AzureStorageSAS,
 
-        [Parameter(Mandatory = $false)]
         [Alias('Blob')]
         [Alias('Blobname')]
         [string] $Container = $Script:AzureStorageContainer,
@@ -98,11 +94,10 @@ function Invoke-FSCPSAzureStorageUpload {
         [Alias('Path')]
         [string] $Filepath,
 
-        [Parameter(Mandatory = $false)]
         [string] $ContentType,
 
         [switch] $Force,
-        [Parameter(Mandatory = $false)]
+
         [switch] $DeleteOnUpload,
 
         [switch] $EnableException
