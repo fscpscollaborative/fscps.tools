@@ -84,7 +84,7 @@ function Validate-FSCModelCache {
                     $activeStorageConfigName = $_.Name
                 }
             }
-        } 
+        }
         $null = Set-FSCPSActiveAzureStorageConfig ModelStorage
     }
     process{
@@ -93,13 +93,13 @@ function Validate-FSCModelCache {
         $modelFileNameWithHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_$($hash).7z".Replace(" ", "-")
         $modelFileNameWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_$($BranchName.ToLower())_$($Version)_*.7z".Replace(" ", "-")
         $modelFileNameGatedWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_*gated*_$($Version)_*.7z".Replace(" ", "-")
-        $modelFileNamePRWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_*refspull*_$($Version)_*.7z".Replace(" ", "-") 
-    
+        $modelFileNamePRWithoutHash = "$($RepoOwner.ToLower())_$($RepoName.ToLower())_$($ModelName.ToLower())_*refspull*_$($Version)_*.7z".Replace(" ", "-")
+
         Write-PSFMessage -Level Verbose -Message "Looking for $modelFileNameWithHash blob."
         $modelFile = Get-FSCPSAzureStorageFile -Name $modelFileNameWithHash
-    
+
         try
-        {       
+        {
             #Delete gated builds
             Invoke-FSCPSAzureStorageDelete -FileName $modelFileNameGatedWithoutHash
             Invoke-FSCPSAzureStorageDelete -FileName $modelFileNamePRWithoutHash
@@ -107,10 +107,10 @@ function Validate-FSCModelCache {
             {
                 Write-PSFMessage -Level Important -Message "Blob $modelFileNameWithHash found.The model $ModelName will be skipped for building."
                 $null = Invoke-FSCPSAzureStorageDownload -FileName $modelFileNameWithHash -Path $tempFolder -Force
-        
+
                 $modelFileTmpPath = (Join-Path $tempFolder $modelFileNameWithHash)
                 Expand-7zipArchive -Path $modelFileTmpPath -DestinationPath $modelRootPath
-                
+
                 return $true;
             }
             else {
@@ -121,26 +121,26 @@ function Validate-FSCModelCache {
 
                 return $false;
             }
-            
+
         }
         catch{
             return $false;
-        }        
+        }
     }
     end{
         if(-not [string]::IsNullOrEmpty($activeStorageConfigName)){
             Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
         }
-    }    
+    }
 }
 
 function Update-7ZipInstallation
 {
         # Modern websites require TLS 1.2
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        
+
         #requires -RunAsAdministrator
-        
+
         # Let's go directly to the website and see what it lists as the current version
         $BaseUri = "https://www.7-zip.org/"
         $BasePage = Invoke-WebRequest -Uri ( $BaseUri + 'download.html' ) -UseBasicParsing
@@ -152,10 +152,10 @@ function Update-7ZipInstallation
             # The most recent 'current' (non-beta/alpha) is listed at the top, so we only need the first.
             $ChildPath = $BasePage.Links | Where-Object { $_.href -like '*7z*.msi' } | Select-Object -First 1 | Select-Object -ExpandProperty href
         }
-        
+
         # Let's build the required download link
         $DownloadUrl = $BaseUri + $ChildPath
-        
+
         Write-Host "Downloading the latest 7-Zip to the temp folder"
         Invoke-WebRequest -Uri $DownloadUrl -OutFile "$env:TEMP\$( Split-Path -Path $DownloadUrl -Leaf )" | Out-Null
         Write-Host "Installing the latest 7-Zip"
@@ -248,10 +248,10 @@ function Get-MediaTypeByFilename {
       [Parameter(Mandatory, ValueFromPipeline)]
       [string[]] $Filename
     )
-    begin { 
+    begin {
       # Download and parse the list of media types (MIME types) via
       # https://github.com/jshttp/mime-db.
-      # NOTE: 
+      # NOTE:
       #  * For better performance consider caching the JSON file.
       #  * A fixed release is targeted, to ensure that future changes to the JSON
       #    format do not break the command.
@@ -262,9 +262,9 @@ function Get-MediaTypeByFilename {
     process {
       foreach ($name in $Filename) {
         # Find the matching media type by filename extension.
-        $matchingMediaType = 
+        $matchingMediaType =
           $mediaTypes.Where(
-            { $_.Value.extensions -contains [IO.Path]::GetExtension($name).Substring(1) }, 
+            { $_.Value.extensions -contains [IO.Path]::GetExtension($name).Substring(1) },
             'First'
           ).Name
         # Use a fallback type, if no match was found.
