@@ -26,8 +26,8 @@
 
         The value will be used for the blob property "Content Type".
         If the parameter is left empty, the commandlet will try to automatically determined the value based on the file's extension.
-        If the parameter is left empty and the value cannot be automatically be determined, Azure storage will automatically assign "application/octet-stream" as the content type.
-        Valid media type values can be found here: https://www.iana.org/assignments/media-types/media-types.xhtml
+        The content type "application/octet-stream" will be used as fallback if no value can be determined.
+        Valid media type values can be found here: https://github.com/jshttp/mime-db
 
     .PARAMETER Force
         Instruct the cmdlet to overwrite the file in the container if it already exists
@@ -67,10 +67,10 @@
     .NOTES
         Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, File, Files, Bacpac, Container
 
-        This is refactored function from d365fo.tools
+        This is a wrapper for the d365fo.tools function Invoke-D365AzureStorageUpload to enable uploading files to an Azure Storage Account.
 
-        Original Author: Mötz Jensen (@Splaxi)
         Author: Oleksandr Nikolaiev (@onikolaiev)
+        Author: Florian Hopfner (@FH-Inway)
 
         The cmdlet supports piping and can be used in advanced scenarios. See more on github and the wiki pages.
 
@@ -102,65 +102,23 @@ function Invoke-FSCPSAzureStorageUpload {
 
         [switch] $EnableException
     )
-    BEGIN {
-        if (([string]::IsNullOrEmpty($AccountId) -eq $true) -or
-            ([string]::IsNullOrEmpty($Container)) -or
-            (([string]::IsNullOrEmpty($AccessToken)) -and ([string]::IsNullOrEmpty($SAS)))) {
-            Write-PSFMessage -Level Host -Message "It seems that you are missing some of the parameters. Please make sure that you either supplied them or have the right configuration saved."
-            Stop-PSFFunction -Message "Stopping because of missing parameters"
-            return
+
+    if (Test-PSFFunctionInterrupt) { return }
+
+    Invoke-TimeSignal -Start
+    try {
+        if ([string]::IsNullOrEmpty($ContentType)) {
+            $FileName = Split-Path -Path $Filepath -Leaf
+            $ContentType = Get-MediaTypeByFilename $FileName
+
+            Write-PSFMessage -Level Verbose -Message "Content Type is automatically set to value: $ContentType"
         }
+        $params = Get-ParameterValue
+        $params["ContentType"] = $ContentType
+
+        Invoke-D365AzureStorageUpload @params
     }
-    PROCESS {
-        if (Test-PSFFunctionInterrupt) { return }
-
-        Invoke-TimeSignal -Start
-
-        $FileName = Split-Path -Path $Filepath -Leaf
-        try {
-
-            if ([string]::IsNullOrEmpty($SAS)) {
-                Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with AccessToken"
-
-                $storageContext = New-AzStorageContext -StorageAccountName $AccountId.ToLower() -StorageAccountKey $AccessToken
-            }
-            else {
-                $conString = $("BlobEndpoint=https://{0}.blob.core.windows.net/;QueueEndpoint=https://{0}.queue.core.windows.net/;FileEndpoint=https://{0}.file.core.windows.net/;TableEndpoint=https://{0}.table.core.windows.net/;SharedAccessSignature={1}" -f $AccountId.ToLower(), $SAS)
-
-                Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with SAS" -Target $conString
-
-                $storageContext = New-AzStorageContext -ConnectionString $conString
-            }
-
-            Write-PSFMessage -Level Verbose -Message "Start uploading the file to Azure"
-
-            if ([string]::IsNullOrEmpty($ContentType)) {
-                $ContentType = Get-MediaTypeByFilename $FileName # Available since .NET4.5, so it can be used with PowerShell 5.0 and higher.
-
-                Write-PSFMessage -Level Verbose -Message "Content Type is automatically set to value: $ContentType"
-            }
-
-            $null = Set-AzStorageBlobContent -Context $storageContext -File $Filepath -Container $($Container.ToLower()) -Properties @{"ContentType" = $ContentType} -Force:$Force
-
-            if ($DeleteOnUpload) {
-                Remove-Item $Filepath -Force
-            }
-
-            [PSCustomObject]@{
-                File     = $Filepath
-                Filename = $FileName
-            }
-        }
-        catch {
-            $messageString = "Something went wrong while <c='em'>uploading</c> the file to Azure."
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $FileName
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
-            return
-        }
-        finally {
-            Invoke-TimeSignal -End
-        }
+    finally {
+        Invoke-TimeSignal -End
     }
-
-    END { }
 }
