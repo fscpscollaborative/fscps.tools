@@ -256,7 +256,7 @@ function Get-MediaTypeByFilename {
       #  * A fixed release is targeted, to ensure that future changes to the JSON
       #    format do not break the command.
       $mediaTypes = (
-        Invoke-RestMethod https://cdn.jsdelivr.net/gh/jshttp/mime-db@v1.52.0/db.json
+        Invoke-RestMethod https://cdn.jsdelivr.net/gh/jshttp/mime-db@v1.53.0/db.json
       ).psobject.Properties
     }
     process {
