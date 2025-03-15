@@ -16,8 +16,9 @@ Set-PSFConfig -Module 'fscps.tools' -Name 'Import.IndividualFiles' -Value $false
 
 Set-PSFConfig -FullName "fscps.tools.path.azcopy" -Value "C:\temp\fscps.tools\AzCopy\AzCopy.exe" -Initialize -Description "Path to the default location where AzCopy.exe is located."
 Set-PSFConfig -FullName "fscps.tools.path.nuget" -Value "C:\temp\fscps.tools\nuget\nuget.exe" -Initialize -Description "Path to the default location where nuget.exe is located."
+Set-PSFConfig -FullName "fscps.tools.path.mediatypes" -Value "C:\temp\fscps.tools\mediatypes\mediatypes.json" -Initialize -Description "Path to the default location where the media types file is located."
 Set-PSFConfig -FullName 'fscps.tools.settings.github.templateUrl' -Value 'https://github.com/ciellosinc/FSC-PS-Template' -Initialize -Description ''
-Set-PSFConfig -FullName 'fscps.tools.settings.github.templateBranch' -Value 'main' -Initialize -Description '' 
+Set-PSFConfig -FullName 'fscps.tools.settings.github.templateBranch' -Value 'main' -Initialize -Description ''
 
 Set-PSFConfig -FullName "fscps.tools.path.sqlpackage" -Value "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\SqlPackage.exe" -Initialize -Description "Path to the default location where SqlPackage.exe is located."
 Set-PSFConfig -FullName "fscps.tools.azure.common.oauth.token" -Value "https://login.microsoftonline.com/common/oauth2/token" -Initialize -Description "URI / URL for the Azure Active Directory OAuth 2.0 endpoint for tokens"
