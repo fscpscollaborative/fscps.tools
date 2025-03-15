@@ -103,22 +103,24 @@ function Invoke-FSCPSAzureStorageUpload {
         [switch] $EnableException
     )
 
-    if (Test-PSFFunctionInterrupt) { return }
+    PROCESS {
+        if (Test-PSFFunctionInterrupt) { return }
 
-    Invoke-TimeSignal -Start
-    try {
-        if ([string]::IsNullOrEmpty($ContentType)) {
-            $FileName = Split-Path -Path $Filepath -Leaf
-            $ContentType = Get-MediaTypeByFilename $FileName
+        Invoke-TimeSignal -Start
+        try {
+            if ([string]::IsNullOrEmpty($ContentType)) {
+                $FileName = Split-Path -Path $Filepath -Leaf
+                $ContentType = Get-MediaTypeByFilename $FileName
 
-            Write-PSFMessage -Level Verbose -Message "Content Type is automatically set to value: $ContentType"
+                Write-PSFMessage -Level Verbose -Message "Content Type is automatically set to value: $ContentType"
+            }
+            $params = Get-ParameterValue
+            $params["ContentType"] = $ContentType
+
+            Invoke-D365AzureStorageUpload @params
         }
-        $params = Get-ParameterValue
-        $params["ContentType"] = $ContentType
-
-        Invoke-D365AzureStorageUpload @params
-    }
-    finally {
-        Invoke-TimeSignal -End
+        finally {
+            Invoke-TimeSignal -End
+        }
     }
 }
