@@ -25,6 +25,7 @@
 	
 #>
 Function Set-PathVariable {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     param (
         [string]$AddPath,
         [string]$RemovePath,
