@@ -87,7 +87,6 @@ function Get-FSCPSAzureStorageFile {
         [Alias('FileName')]
         [string] $Name = "*",
 
-        [Parameter(ParameterSetName = 'Default')]
         [string] $DestinationPath = "",
 
         [Parameter(Mandatory = $true, ParameterSetName = 'Latest')]
@@ -99,12 +98,12 @@ function Get-FSCPSAzureStorageFile {
         Write-PSFMessage -Level Verbose -Message "Starting Get-FSCPSAzureStorageFile"
         Invoke-TimeSignal -Start
     }
-    process{
+    process {
 
         if (Test-PSFFunctionInterrupt) { return}
 
-        $params = Get-ParameterValue
-        if ($params.ContainsKey("DestinationPath")) { $null = $params.Remove("DestinationPath") }
+        $params = Get-ParameterValue |
+            ConvertTo-PSFHashtable -ReferenceCommand Get-D365AzureStorageFile -ReferenceParameterSetName $PSCmdlet.ParameterSetName
         $files = Get-D365AzureStorageFile @params
 
         try {
@@ -117,17 +116,18 @@ function Get-FSCPSAzureStorageFile {
                     "LastModified"
             }
 
-            if ($Latest) {
-                $files | Select-Object -First 1 | Select-PSFObject @selectParams
+            if (-not $DestinationPath) {
+                $files | Select-PSFObject @selectParams
             }
-            elseif ($DestinationPath) {
-                $d365AzureStorageDownloadParams = Get-DeepClone $params
+            else {
+                $d365AzureStorageDownloadParams = $params |
+                    ConvertTo-PSFHashtable -ReferenceCommand Invoke-FSCPSAzureStorageDownload -Exclude Latest
                 $d365AzureStorageDownloadParams.Force = $true
                 foreach ($obj in $files) {
                     $null = Test-PathExists -Path $DestinationPath -Type Container -Create
                     $d365AzureStorageDownloadParams.Name = $obj.Name
                     $d365AzureStorageDownloadParams.Path = $DestinationPath
-                    $null = Invoke-D365AzureStorageDownload @d365AzureStorageDownloadParams
+                    $null = Invoke-FSCPSAzureStorageDownload @d365AzureStorageDownloadParams
                     $destinationBlobPath = (Join-Path $DestinationPath ($obj.Name))
                     $selectParams.Property =
                         "Name",
@@ -136,9 +136,6 @@ function Get-FSCPSAzureStorageFile {
                         "LastModified"
                     $obj | Select-PSFObject @selectParams
                 }
-            }
-            else {
-                $files | Select-PSFObject @selectParams
             }
         }
         catch {
