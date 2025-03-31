@@ -158,8 +158,8 @@ Media type of the file that is going to be uploaded
 
 The value will be used for the blob property "Content Type".
 If the parameter is left empty, the commandlet will try to automatically determined the value based on the file's extension.
-If the parameter is left empty and the value cannot be automatically be determined, Azure storage will automatically assign "application/octet-stream" as the content type.
-Valid media type values can be found here: https://www.iana.org/assignments/media-types/media-types.xhtml
+The content type "application/octet-stream" will be used as fallback if no value can be determined.
+Valid media type values can be found here: https://github.com/jshttp/mime-db
 
 ```yaml
 Type: String
@@ -244,10 +244,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, File, Files, Bacpac, Container
 
-This is refactored function from d365fo.tools
+This is a wrapper for the d365fo.tools function Invoke-D365AzureStorageUpload to enable uploading files to an Azure Storage Account.
 
-Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
+Author: Florian Hopfner (@FH-Inway)
 
 The cmdlet supports piping and can be used in advanced scenarios.
 See more on github and the wiki pages.

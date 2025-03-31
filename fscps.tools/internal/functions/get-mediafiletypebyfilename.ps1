@@ -36,18 +36,18 @@ function Get-MediaTypeByFilename {
             Invoke-RestMethod -Uri https://cdn.jsdelivr.net/gh/jshttp/mime-db@v1.53.0/db.json -OutFile $Script:MediaTypesPath
         }
         $mediaTypes = (Get-Content -Path $Script:MediaTypesPath | ConvertFrom-Json).psobject.Properties
-    }
+        }
     process {
         foreach ($name in $Filename) {
-            # Find the matching media type by filename extension.
-            $matchingMediaType =
-                $mediaTypes.Where(
-                    { $_.Value.extensions -contains [IO.Path]::GetExtension($name).Substring(1) },
-                    'First'
-                ).Name
-            # Use a fallback type, if no match was found.
-            if (-not $matchingMediaType) { $matchingMediaType = 'application/octet-stream' }
-            $matchingMediaType # output
+        # Find the matching media type by filename extension.
+        $matchingMediaType = 
+            $mediaTypes.Where(
+            { $_.Value.extensions -contains [IO.Path]::GetExtension($name).Substring(1) }, 
+            'First'
+            ).Name
+        # Use a fallback type, if no match was found.
+        if (-not $matchingMediaType) { $matchingMediaType = 'application/octet-stream' }
+        $matchingMediaType # output
         }
     }
 }

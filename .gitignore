@@ -11,6 +11,7 @@ library/fscps.tools/obj/*
 
 # Ignore staging info from Visual Studio
 fscps.tools/bin/*
+!fscps.tools/bin/*.json
 
 # ignore PowerShell Studio MetaData
 fscps.tools/fscps.tools.psproj

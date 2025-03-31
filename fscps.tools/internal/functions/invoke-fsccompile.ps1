@@ -319,36 +319,40 @@ function Invoke-FSCCompile {
                         Write-PSFMessage -Level Important -Message "//================= Upload cached models to the storageaccount ================//"
                         foreach ($model in $modelsToBuild.Split(","))
                         {
-                            $modelName = $model
-                            $modelHash = $modelsHash.$modelName
-                            $modelBinPath = (Join-Path $msOutputDirectory $modelName)
-                            $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($settings.sourceBranch.ToLower())_$($Version)_$($modelHash).7z".Replace(" ", "-")
-                            $modelArchivePath = (Join-Path $BuildFolderPath $modelFileNameWithHash)
+                            try {
+                                $modelName = $model
+                                $modelHash = $modelsHash.$modelName
+                                $modelBinPath = (Join-Path $msOutputDirectory $modelName)
+                                $modelFileNameWithHash = "$(($settings.repoOwner).ToLower())_$(($settings.repoName).ToLower())_$($modelName.ToLower())_$($settings.sourceBranch.ToLower())_$($Version)_$($modelHash).7z".Replace(" ", "-")
+                                $modelArchivePath = (Join-Path $BuildFolderPath $modelFileNameWithHash)
 
-                            $storageConfigs = Get-FSCPSAzureStorageConfig
-                            $activeStorageConfigName = "ModelStorage"
-                            if($storageConfigs)
-                            {
-                                $activeStorageConfig = Get-FSCPSActiveAzureStorageConfig
-                                $storageConfigs | ForEach-Object {
-                                    if($_.AccountId -eq $activeStorageConfig.AccountId -and $_.Container -eq $activeStorageConfig.Container -and $_.SAS -eq $activeStorageConfig.SAS)
-                                    {
-                                        if($activeStorageConfigName)
+                                $storageConfigs = Get-FSCPSAzureStorageConfig
+                                $activeStorageConfigName = "ModelStorage"
+                                if($storageConfigs)
+                                {
+                                    $activeStorageConfig = Get-FSCPSActiveAzureStorageConfig
+                                    $storageConfigs | ForEach-Object {
+                                        if($_.AccountId -eq $activeStorageConfig.AccountId -and $_.Container -eq $activeStorageConfig.Container -and $_.SAS -eq $activeStorageConfig.SAS)
                                         {
-                                            $activeStorageConfigName = $_.Name
+                                            if($activeStorageConfigName)
+                                            {
+                                                $activeStorageConfigName = $_.Name
+                                            }
                                         }
                                     }
                                 }
+                                Write-PSFMessage -Level Host -Message "Uploading compiled model binaries: $modelName"
+                                Write-PSFMessage -Level Host -Message "File: $modelFileNameWithHash"
+                                Compress-7zipArchive -Path $modelBinPath\* -DestinationPath $modelArchivePath
+                                Set-FSCPSActiveAzureStorageConfig ModelStorage
+                                $null = Invoke-FSCPSAzureStorageUpload -FilePath $modelArchivePath
+                                if(-not [string]::IsNullOrEmpty($activeStorageConfigName)){
+                                    Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+                                }
                             }
-                            Write-PSFMessage -Level Host -Message "Uploading compiled model binaries: $modelName"
-                            Write-PSFMessage -Level Host -Message "File: $modelFileNameWithHash"
-                            Compress-7zipArchive -Path $modelBinPath\* -DestinationPath $modelArchivePath
-                            Set-FSCPSActiveAzureStorageConfig ModelStorage
-                            $null = Invoke-FSCPSAzureStorageUpload -FilePath $modelArchivePath
-                            if(-not [string]::IsNullOrEmpty($activeStorageConfigName)){
-                                Set-FSCPSActiveAzureStorageConfig $activeStorageConfigName
+                            catch {
+                                Write-PSFMessage -Level Host -Message "Error: " -Exception $PSItem.Exception
                             }
-
                         }
                         Write-PSFMessage -Level Important -Message "Complete"
                     }
