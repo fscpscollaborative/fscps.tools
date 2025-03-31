@@ -72,12 +72,12 @@
         
     .NOTES
         Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, File, Files, Latest, Bacpac, Container
-        
-        This is refactored function from d365fo.tools
-        
-        Original Author: Mötz Jensen (@Splaxi)
+
+        This is a wrapper for the d365fo.tools function Invoke-D365AzureStorageDownload.
+
         Author: Oleksandr Nikolaiev (@onikolaiev)
-        
+        Author: Florian Hopfner (@FH-Inway)
+
         The cmdlet supports piping and can be used in advanced scenarios. See more on github and the wiki pages.
         
 #>
@@ -112,74 +112,9 @@ function Invoke-FSCPSAzureStorageDownload {
         [switch] $EnableException
     )
 
-    BEGIN {
-        if (-not (Test-PathExists -Path $Path -Type Container -Create)) {
-            return
-        }
-
-        if (([string]::IsNullOrEmpty($AccountId) -eq $true) -or
-            ([string]::IsNullOrEmpty($Container)) -or
-            (([string]::IsNullOrEmpty($AccessToken)) -and ([string]::IsNullOrEmpty($SAS)))) {
-            Write-PSFMessage -Level Host -Message "It seems that you are missing some of the parameters. Please make sure that you either supplied them or have the right configuration saved."
-            Stop-PSFFunction -Message "Stopping because of missing parameters"
-            return
-        }
-    }
     PROCESS {
-        if (Test-PSFFunctionInterrupt) { return }
-
-        Invoke-TimeSignal -Start
-
-        try {
-
-            if ([string]::IsNullOrEmpty($SAS)) {
-                Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with AccessToken"
-
-                $storageContext = New-AzStorageContext -StorageAccountName $AccountId.ToLower() -StorageAccountKey $AccessToken
-            }
-            else {
-                Write-PSFMessage -Level Verbose -Message "Working against Azure Storage Account with SAS"
-
-                $conString = $("BlobEndpoint=https://{0}.blob.core.windows.net/;QueueEndpoint=https://{0}.queue.core.windows.net/;FileEndpoint=https://{0}.file.core.windows.net/;TableEndpoint=https://{0}.table.core.windows.net/;SharedAccessSignature={1}" -f $AccountId.ToLower(), $SAS)
-                $storageContext = New-AzStorageContext -ConnectionString $conString
-            }
-
-            Write-PSFMessage -Level Verbose -Message "Start download from Azure Storage Account"
-
-            if ($Latest) {
-                $files = Get-AzStorageBlob -Container $($Container.ToLower()) -Context $storageContext
-
-                $File = ($files | Sort-Object -Descending { $_.LastModified } | Select-Object -First 1)
-
-                $FileName = $File.Name
-                
-                Write-PSFMessage -Level Verbose -Message "Filename is: $FileName"
-
-                $NewFile = Join-Path $Path $($File.Name)
-
-                $null = Get-AzStorageBlobContent -Container $($Container.ToLower()) -Blob $File.Name -Destination $NewFile -Context $storageContext -Force:$Force
-            }
-            else {
-
-                Write-PSFMessage -Level Verbose -Message "Filename is: $FileName"
-
-                $NewFile = Join-Path $Path $FileName
-
-                $null = Get-AzStorageBlobContent -Container $($Container.ToLower()) -Blob $FileName -Destination $NewFile -Context $storageContext -Force:$Force
-            }
-
-            Get-Item -Path $NewFile | Select-PSFObject "Name as Filename", @{Name = "Size"; Expression = { [PSFSize]$_.Length } }, "LastWriteTime as LastModified", "Fullname as File"
-        }
-        catch {
-            $messageString = "Something went wrong while <c='em'>downloading</c> the file from Azure."
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $NewFile
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
-            return
-        }
-        finally {
-            Invoke-TimeSignal -End
-        }
+        $params = Get-ParameterValue |
+            ConvertTo-PSFHashtable -ReferenceCommand Invoke-D365AzureStorageDownload
+        Invoke-D365AzureStorageDownload @params
     }
-
-    END { }
 }

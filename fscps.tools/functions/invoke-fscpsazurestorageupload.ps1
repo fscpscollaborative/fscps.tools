@@ -114,8 +114,8 @@ function Invoke-FSCPSAzureStorageUpload {
 
                 Write-PSFMessage -Level Verbose -Message "Content Type is automatically set to value: $ContentType"
             }
-            $params = Get-ParameterValue
-            $params["ContentType"] = $ContentType
+            $params = Get-ParameterValue |
+                ConvertTo-PSFHashtable -ReferenceCommand Invoke-D365AzureStorageUpload -ReferenceParameterSetName $PSCmdlet.ParameterSetName
 
             Invoke-D365AzureStorageUpload @params
         }
