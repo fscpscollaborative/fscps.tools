@@ -1,4 +1,4 @@
-Describe "Get-FSCPSAzureStorageFile Unit Tests" -Tag "Unit" {
+﻿Describe "Get-FSCPSAzureStorageFile Unit Tests" -Tag "Unit" {
 	BeforeAll {
 		# Place here all things needed to prepare for the tests
 	}
@@ -126,7 +126,7 @@ Describe "Get-FSCPSAzureStorageFile Unit Tests" -Tag "Unit" {
  	Describe "Testing parameterset Latest" {
 		<#
 		Latest -Latest
-		Latest -AccountId -AccessToken -SAS -Container -Latest -ProgressAction
+		Latest -AccountId -AccessToken -SAS -Container -DestinationPath -Latest -ProgressAction
 		#>
 	}
 

@@ -1,0 +1,1610 @@
+[
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Add-FSCPSAzureStorageConfig -Name \"UAT-Exports\" -AccountId \"1234\" -AccessToken \"dafdfasdfasdf\" -Container \"testblob\"\nThis will add an entry into the list of Azure Storage Accounts that is stored with the name \"UAT-Exports\" with AccountId \"1234\", AccessToken \"dafdfasdfasdf\" and blob container \"testblob\".\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Add-FSCPSAzureStorageConfig -Name UAT-Exports -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -AccountId \"1234\" -Container \"testblob\"\nThis will add an entry into the list of Azure Storage Accounts that is stored with the name \"UAT-Exports\" with AccountId \"1234\", SAS \r\n\"sv=2018-03-28&si=unlisted&sr=c&sig=AUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" and blob container \"testblob\".\r\nThe SAS key enables you to provide explicit access to a given blob container inside an Azure Storage Account.\r\nThe SAS key can easily be revoked and that way you have control over the access to the container and its content.\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>Add-FSCPSAzureStorageConfig -Name UAT-Exports -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -AccountId \"1234\" -Container \"testblob\" -Temporary\nThis will add an entry into the list of Azure Storage Accounts that is stored with the name \"UAT-Exports\" with AccountId \"1234\", SAS \r\n\"sv=2018-03-28&si=unlisted&sr=c&sig=AUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" and blob container \"testblob\".\r\nThe SAS key enables you to provide explicit access to a given blob container inside an Azure Storage Account.\r\nThe SAS key can easily be revoked and that way you have control over the access to the container and its content.\nThe configuration will only last for the rest of this PowerShell console session.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "Container"
+    ],
+    "Params": [
+      [
+        "Name",
+        "The logical name of the Azure Storage Account you are about to registered in the configuration store",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "AccountId",
+        "The account id for the Azure Storage Account you want to register in the configuration store",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "AccessToken",
+        "The access token for the Azure Storage Account you want to register in the configuration store",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "SAS",
+        "The SAS key that you have created for the storage account or blob container",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Container",
+        "The name of the blob container inside the Azure Storage Account you want to register in the configuration store",
+        "Blobname,Blob",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Temporary",
+        "Instruct the cmdlet to only temporarily add the azure storage account configuration in the configuration store",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "Force",
+        "Switch to instruct the cmdlet to overwrite already registered Azure Storage Account entry",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Add-FSCPSAzureStorageConfig",
+    "Links": null,
+    "Syntax": "Add-FSCPSAzureStorageConfig -Name <String> -AccountId <String> -AccessToken <String> -Container <String> [-Temporary] [-Force] [<CommonParameters>]\nAdd-FSCPSAzureStorageConfig -Name <String> -AccountId <String> -SAS <String> -Container <String> [-Temporary] [-Force] [<CommonParameters>]",
+    "Synopsis": "Save an Azure Storage Account config",
+    "Alias": "",
+    "Description": "Adds an Azure Storage Account config to the configuration store",
+    "CommandName": "Add-FSCPSAzureStorageConfig"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Disable-FSCPSException\nThis will restore the default behavior of the module to not support throwing exceptions.",
+    "Tags": [
+      "Exception",
+      "Exceptions",
+      "Warning",
+      "Warnings"
+    ],
+    "Params": [],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Disable-FSCPSException",
+    "Links": null,
+    "Syntax": "Disable-FSCPSException [<CommonParameters>]",
+    "Synopsis": "Disables throwing of exceptions",
+    "Alias": "",
+    "Description": "Restore the default exception behavior of the module to not support throwing exceptions\n\nUseful when the default behavior was changed with Enable-FSCPSException and the default behavior should be restored",
+    "CommandName": "Disable-FSCPSException"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Enable-FSCPSException\nThis will for the rest of the current PowerShell session make sure that exceptions will be thrown.",
+    "Tags": [
+      "Exception",
+      "Exceptions",
+      "Warning",
+      "Warnings"
+    ],
+    "Params": [],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Enable-FSCPSException",
+    "Links": null,
+    "Syntax": "Enable-FSCPSException [<CommonParameters>]",
+    "Synopsis": "Enable exceptions to be thrown",
+    "Alias": "",
+    "Description": "Change the default exception behavior of the module to support throwing exceptions\n\nUseful when the module is used in an automated fashion, like inside Azure DevOps pipelines and large PowerShell scripts",
+    "CommandName": "Enable-FSCPSException"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Find-FSCPSCommand \"snapshot\"\nFor lazy typers: finds all commands searching the entire help for \"snapshot\"\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Find-FSCPSCommand -Pattern \"snapshot\"\nFor rigorous typers: finds all commands searching the entire help for \"snapshot\"\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>Find-FSCPSCommand -Tag copy\nFinds all commands tagged with \"copy\"\n-------------------------- EXAMPLE 4 --------------------------\nPS C:\\>Find-FSCPSCommand -Tag copy,user\nFinds all commands tagged with BOTH \"copy\" and \"user\"\n-------------------------- EXAMPLE 5 --------------------------\nPS C:\\>Find-FSCPSCommand -Author Mötz\nFinds every command whose author contains \"Mötz\"\n-------------------------- EXAMPLE 6 --------------------------\nPS C:\\>Find-FSCPSCommand -Author Mötz -Tag copy\nFinds every command whose author contains \"Mötz\" and it tagged as \"copy\"\n-------------------------- EXAMPLE 7 --------------------------\nPS C:\\>Find-FSCPSCommand -Rebuild\nFinds all commands and rebuilding the index (good for developers)",
+    "Tags": [
+      "Find",
+      "Help",
+      "Command"
+    ],
+    "Params": [
+      [
+        "Pattern",
+        "Searches help for all commands in fscps.tools for the specified pattern and displays all results",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Tag",
+        "Finds all commands tagged with this auto-populated tag",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Author",
+        "Finds all commands tagged with this author",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "MinimumVersion",
+        "Finds all commands tagged with this auto-populated minimum version",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "MaximumVersion",
+        "Finds all commands tagged with this auto-populated maximum version",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Rebuild",
+        "Rebuilds the index",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "EnableException",
+        "By default, when something goes wrong we try to catch it, interpret it and give you a friendly warning message.\r\nThis avoids overwhelming you with \"sea of red\" exceptions, but is inconvenient because it basically disables advanced scripting.\r\nUsing this switch turns this \"nice by default\" feature off and enables you to catch exceptions with your own try/catch.",
+        "Silent",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "WhatIf",
+        "Displays what would happen if the command is run",
+        "wi",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Confirm",
+        "Confirms overwrite of index",
+        "cf",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Find-FSCPSCommand",
+    "Links": null,
+    "Syntax": "Find-FSCPSCommand [[-Pattern] <String>] [[-Tag] <String[]>] [[-Author] <String>] [[-MinimumVersion] <String>] [[-MaximumVersion] <String>] [-Rebuild] [-EnableException] [-WhatIf] [-Confirm] [<CommonParameters>]",
+    "Synopsis": "Finds fscps.tools commands searching through the inline help text",
+    "Alias": "",
+    "Description": "Finds fscps.tools commands searching through the inline help text, building a consolidated json index and querying it because Get-Help is too slow",
+    "CommandName": "Find-FSCPSCommand"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSActiveAzureStorageConfig\nThis will get the active Azure Storage configuration.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Get-FSCPSActiveAzureStorageConfig -OutputAsPsCustomObject:$true\nThis will get the active Azure Storage configuration.\r\nThe object will be output as a PsCustomObject, for you to utilize across your scripts.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "Container"
+    ],
+    "Params": [
+      [
+        "OutputAsPsCustomObject",
+        "Instruct the cmdlet to return a PsCustomObject object",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSActiveAzureStorageConfig",
+    "Links": null,
+    "Syntax": "Get-FSCPSActiveAzureStorageConfig [-OutputAsPsCustomObject] [<CommonParameters>]",
+    "Synopsis": "Get active Azure Storage Account configuration",
+    "Alias": "",
+    "Description": "Get active Azure Storage Account configuration object from the configuration store",
+    "CommandName": "Get-FSCPSActiveAzureStorageConfig"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSADOAgent -AgentPoolId 1 -Organization \"my-org\" -Token \"Bearer my-token\"\nThis example retrieves agents from the agent pool with ID 1 in the specified organization.",
+    "Params": [
+      [
+        "AgentPoolId",
+        "The ID of the agent pool from which to retrieve agents.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "Organization",
+        "The name of the Azure DevOps organization. If not in the form of a URL, it will be prefixed with \"https://dev.azure.com/\".",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "apiVersion",
+        "The version of the Azure DevOps REST API to use. Default is \"7.0\".",
+        "",
+        false,
+        "false",
+        "7.0"
+      ],
+      [
+        "Token",
+        "The authentication token for accessing Azure DevOps.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Name": "Get-FSCPSADOAgent",
+    "Links": null,
+    "Syntax": "Get-FSCPSADOAgent [[-AgentPoolId] <Int32>] [[-Organization] <String>] [[-apiVersion] <String>] [[-Token] <String>] [<CommonParameters>]",
+    "Synopsis": "Retrieves agents from a specified agent pool in Azure DevOps.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSADOAgent` function retrieves agents from a specified agent pool in Azure DevOps.\nIt requires the organization, agent pool ID, and a valid authentication token. The function constructs\nthe appropriate URL, makes the REST API call, and returns detailed information about the agents,\nincluding their capabilities and statuses. It also handles errors and interruptions gracefully.",
+    "CommandName": "Get-FSCPSADOAgent"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSADOTestCase -TestCaseId 1234 -Project \"my-project\" -Organization \"my-org\" -Token \"Bearer my-token\"\nThis example retrieves detailed information about the test case with ID 1234 in the specified organization and project.",
+    "Params": [
+      [
+        "TestCaseId",
+        "The ID of the test case to retrieve information for.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "Project",
+        "The name of the Azure DevOps project.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Organization",
+        "The name of the Azure DevOps organization. If not in the form of a URL, it will be prefixed with \"https://dev.azure.com/\".",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "apiVersion",
+        "The version of the Azure DevOps REST API to use. Default is \"7.1\".",
+        "",
+        false,
+        "false",
+        "7.1"
+      ],
+      [
+        "Token",
+        "The authentication token for accessing Azure DevOps.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Name": "Get-FSCPSADOTestCase",
+    "Links": null,
+    "Syntax": "Get-FSCPSADOTestCase [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>] [[-apiVersion] <String>] [[-Token] <String>] [<CommonParameters>]",
+    "Synopsis": "Retrieves information about a specific test case from Azure DevOps.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSADOTestCase` function retrieves detailed information about a specified test case from Azure DevOps.\nIt requires the organization, project, test case ID, and a valid authentication token. The function constructs\nthe appropriate URL, makes the REST API call, and returns the fields of the test case. It also handles errors\nand interruptions gracefully.",
+    "CommandName": "Get-FSCPSADOTestCase"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSADOTestCasesBySuite -TestSuiteId 1001 -TestPlanId 2001 -Organization \"my-org\" -Project \"my-project\" -Token \"Bearer my-token\"\nThis example retrieves the test cases from the test suite with ID 1001 within the test plan with ID 2001 in the specified organization and project.",
+    "Params": [
+      [
+        "TestSuiteId",
+        "The ID of the test suite from which to retrieve test cases.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "TestPlanId",
+        "The ID of the test plan containing the test suite.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "Organization",
+        "The name of the Azure DevOps organization.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Project",
+        "The name of the Azure DevOps project.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "apiVersion",
+        "The version of the Azure DevOps REST API to use. Default is \"6.0\".",
+        "",
+        false,
+        "false",
+        "6.0"
+      ],
+      [
+        "Token",
+        "The authentication token for accessing Azure DevOps.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Name": "Get-FSCPSADOTestCasesBySuite",
+    "Links": null,
+    "Syntax": "Get-FSCPSADOTestCasesBySuite [[-TestSuiteId] <Int32>] [[-TestPlanId] <Int32>] [[-Organization] <String>] [[-Project] <String>] [[-apiVersion] <String>] [[-Token] <String>] [<CommonParameters>]",
+    "Synopsis": "Retrieves test cases from a specified test suite in Azure DevOps.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSADOTestCasesBySuite` function retrieves test cases from a specified test suite within a specified test plan\nin an Azure DevOps project. The function requires the organization, project, test suite ID, test plan ID, and a valid\nauthentication token. It uses the Azure DevOps REST API to perform the operation and handles errors gracefully.",
+    "CommandName": "Get-FSCPSADOTestCasesBySuite"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSADOTestSuiteByTestCase -TestCaseId 1460 -Project \"my-project\" -Organization \"my-org\" -Token \"Bearer my-token\"\nThis example retrieves the test suite associated with the test case ID 1460 in the specified organization and project.",
+    "Params": [
+      [
+        "TestCaseId",
+        "The ID of the test case for which to retrieve the associated test suite.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "Project",
+        "The name of the Azure DevOps project.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Organization",
+        "The name of the Azure DevOps organization.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "apiVersion",
+        "The version of the Azure DevOps REST API to use. Default is \"5.0\".",
+        "",
+        false,
+        "false",
+        "5.0"
+      ],
+      [
+        "Token",
+        "The authentication token for accessing Azure DevOps.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Name": "Get-FSCPSADOTestSuiteByTestCase",
+    "Links": null,
+    "Syntax": "Get-FSCPSADOTestSuiteByTestCase [[-TestCaseId] <Int32>] [[-Project] <String>] [[-Organization] <String>] [[-apiVersion] <String>] [[-Token] <String>] [<CommonParameters>]",
+    "Synopsis": "Retrieves the test suite associated with a specific test case from Azure DevOps.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSADOTestSuiteByTestCase` function retrieves the test suite associated with a specified test case ID from Azure DevOps.\nIt requires the organization, project, test case ID, and a valid authentication token. The function returns the test suite information\nand handles any errors that may occur during the request.",
+    "CommandName": "Get-FSCPSADOTestSuiteByTestCase"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSADOTestSuitesByTestPlan -Organization \"my-org\" -Project \"my-project\" -TestPlanId 123 -Token \"Bearer my-token\"\nThis example retrieves test suites from the test plan with ID 123 in the specified organization and project.",
+    "Params": [
+      [
+        "Organization",
+        "The name of the Azure DevOps organization.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Project",
+        "The name of the Azure DevOps project.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "TestPlanId",
+        "The ID of the test plan from which to retrieve test suites.",
+        "",
+        false,
+        "false",
+        "0"
+      ],
+      [
+        "Token",
+        "The authentication token for accessing Azure DevOps.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "apiVersion",
+        "The version of the Azure DevOps REST API to use. Default is \"7.1\".",
+        "",
+        false,
+        "false",
+        "7.1"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSADOTestSuitesByTestPlan",
+    "Links": null,
+    "Syntax": "Get-FSCPSADOTestSuitesByTestPlan [[-Organization] <String>] [[-Project] <String>] [[-TestPlanId] <Int32>] [[-Token] <String>] [[-apiVersion] <String>] [<CommonParameters>]",
+    "Synopsis": "Retrieves test suites from an Azure DevOps test plan.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSADOTestSuitesByTestPlan` function retrieves test suites from a specified Azure DevOps test plan.\nIt requires the organization, project, test plan ID, and a valid authentication token. The function handles\npagination through the use of a continuation token and returns the test suites.",
+    "CommandName": "Get-FSCPSADOTestSuitesByTestPlan"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSAzureStorageConfig\nThis will show all Azure Storage Account configs\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Get-FSCPSAzureStorageConfig -OutputAsHashtable\nThis will show all Azure Storage Account configs.\r\nEvery object will be output as a hashtable, for you to utilize as parameters for other cmdlets.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "Container"
+    ],
+    "Params": [
+      [
+        "Name",
+        "The name of the Azure Storage Account you are looking for\nDefault value is \"*\" to display all Azure Storage Account configs",
+        "",
+        false,
+        "false",
+        "*"
+      ],
+      [
+        "OutputAsHashtable",
+        "Instruct the cmdlet to return a hastable object",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSAzureStorageConfig",
+    "Links": null,
+    "Syntax": "Get-FSCPSAzureStorageConfig [[-Name] <String>] [-OutputAsHashtable] [<CommonParameters>]",
+    "Synopsis": "Get Azure Storage Account configs",
+    "Alias": "",
+    "Description": "Get all Azure Storage Account configuration objects from the configuration store",
+    "CommandName": "Get-FSCPSAzureStorageConfig"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSAzureStorageFile -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\"\nThis will get the information of all files in the blob container \"backupfiles\".\r\nIt will use the AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" to gain access.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Get-FSCPSAzureStorageFile -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\" -Latest\nThis will get the information of the latest (newest) file from the blob container \"backupfiles\".\r\nIt will use the AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" to gain access to the container.\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>Get-FSCPSAzureStorageFile -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\" -Name \"*UAT*\"\nThis will get the information of all files in the blob container \"backupfiles\" that fits the \"*UAT*\" search value.\r\nIt will use the AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" to gain access to the container.\n-------------------------- EXAMPLE 4 --------------------------\nPS C:\\>Get-FSCPSAzureStorageFile -AccountId \"miscfiles\" -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -Container \"backupfiles\" -Latest\nThis will get the information of the latest (newest) file from the blob container \"backupfiles\".\r\nIt will use the SAS key \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" to gain access to the container.\n-------------------------- EXAMPLE 5 --------------------------\nPS C:\\>Get-FSCPSAzureStorageFile -AccountId \"miscfiles\" -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -Container \"backupfiles\" -Name \"*UAT*\" -DestinationPath \"C:\\Temp\"\nThis will get the information of all files in the blob container \"backupfiles\" that fits the \"*UAT*\" search value.\r\nIt will also download all the files to the \"C:\\Temp\" folder.\r\nIt will use the SAS key \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" to gain access to the container.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Token",
+      "Blob",
+      "File",
+      "Container"
+    ],
+    "Params": [
+      [
+        "AccountId",
+        "Storage Account Name / Storage Account Id where you want to look for files",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccountId"
+      ],
+      [
+        "AccessToken",
+        "The token that has the needed permissions for the search action",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccessToken"
+      ],
+      [
+        "SAS",
+        "The SAS key that you have created for the storage account or blob container",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageSAS"
+      ],
+      [
+        "Container",
+        "Name of the blob container inside the storage account where you want to look for files",
+        "Blobname,Blob",
+        false,
+        "false",
+        "$Script:AzureStorageContainer"
+      ],
+      [
+        "Name",
+        "Name of the file you are looking for\nAccepts wildcards for searching. E.g. -Name \"Application*Adaptor\"\nDefault value is \"*\" which will search for all files",
+        "FileName",
+        false,
+        "false",
+        "*"
+      ],
+      [
+        "DestinationPath",
+        "The destination folder of the Azure file to download. If empty just show the file information",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Latest",
+        "Instruct the cmdlet to only fetch the latest file from the Azure Storage Account",
+        "GetLatest",
+        true,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSAzureStorageFile",
+    "Links": null,
+    "Syntax": "Get-FSCPSAzureStorageFile [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] [-Name <String>] [-DestinationPath <String>] [<CommonParameters>]\nGet-FSCPSAzureStorageFile [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -Latest [<CommonParameters>]",
+    "Synopsis": "Get a file from Azure",
+    "Alias": "",
+    "Description": "Get all files from an Azure Storage Account",
+    "CommandName": "Get-FSCPSAzureStorageFile"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSNuget -Version \"10.0.1777.99\" -Type PlatformCompilerPackage\nThis will download the NuGet package with version \"10.0.1777.99\" and type \"PlatformCompilerPackage\" to the current folder\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Get-FSCPSNuget -Version \"10.0.1777.99\" -Type PlatformCompilerPackage -Path \"c:\\temp\"\nThis will download the NuGet package with version \"10.0.1777.99\" and type \"PlatformCompilerPackage\" to the c:\\temp folder\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>Get-FSCPSNuget -Version \"10.0.1777.99\" -Type PlatformCompilerPackage -Path \"c:\\temp\" -Force\nThis will download the NuGet package with version \"10.0.1777.99\" and type \"PlatformCompilerPackage\" to the c:\\temp folder and override if the package with the same name exists.",
+    "Params": [
+      [
+        "Version",
+        "The version of the NuGet package to download",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Type",
+        "The type of the NuGet package to download",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Path",
+        "The destination folder of the NuGet package to download",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Force",
+        "Instruct the cmdlet to override the package if exists",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSNuget",
+    "Links": null,
+    "Syntax": "Get-FSCPSNuget [-Version] <String> [-Type] {ApplicationSuiteDevALM | ApplicationDevALM | PlatformDevALM | PlatformCompilerPackage} [[-Path] <String>] [-Force] [<CommonParameters>]",
+    "Synopsis": "Get the D365FSC NuGet package",
+    "Alias": "",
+    "Description": "Get the D365FSC NuGet package from storage account\n\nFull list of NuGet: https://lcs.dynamics.com/V2/SharedAssetLibrary and select NuGet packages",
+    "CommandName": "Get-FSCPSNuget"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSSettings\nThis will output the current FSCPS configuration.\r\nThe object returned will be a PSCustomObject.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Get-FSCPSSettings -OutputAsHashtable\nThis will output the current FSCPS configuration.\r\nThe object returned will be a Hashtable.",
+    "Tags": [
+      "Environment",
+      "Url",
+      "Config",
+      "Configuration",
+      "LCS",
+      "Upload",
+      "ClientId"
+    ],
+    "Params": [
+      [
+        "SettingsJsonString",
+        "String contains settings JSON",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "SettingsJsonPath",
+        "String contains path to the settings.json",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "OutputAsHashtable",
+        "Instruct the cmdlet to return a hashtable object",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSSettings",
+    "Links": null,
+    "Syntax": "Get-FSCPSSettings [[-SettingsJsonString] <String>] [[-SettingsJsonPath] <String>] [-OutputAsHashtable] [<CommonParameters>]",
+    "Synopsis": "Get the FSCPS configuration details",
+    "Alias": "",
+    "Description": "Get the FSCPS configuration details from the configuration store\n\nAll settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets",
+    "CommandName": "Get-FSCPSSettings"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Get-FSCPSSystemUpdatePackage -UpdateType SystemUpdate -D365FSCVersion \"10.0.40\" -OutputPath \"C:\\Packages\\\"\nDownloads the system update package for version 10.0.40 and saves it to \"C:\\Packages\\\".",
+    "Params": [
+      [
+        "UpdateType",
+        "Specifies the type of update package to download. Valid values are \"SystemUpdate\" and \"Preview\".",
+        "",
+        false,
+        "false",
+        "SystemUpdate"
+      ],
+      [
+        "D365FSCVersion",
+        "Specifies the version of the D365FSC package to download.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "OutputPath",
+        "Specifies the path where the downloaded package will be saved.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "StorageAccountConfig",
+        "Specifies the storage account configuration to use. Default is \"PackageStorage\".",
+        "",
+        false,
+        "false",
+        "PackageStorage"
+      ],
+      [
+        "Force",
+        "Forces the operation to proceed without prompting for confirmation.",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSSystemUpdatePackage",
+    "Links": null,
+    "Syntax": "Get-FSCPSSystemUpdatePackage [[-UpdateType] {SystemUpdate | Preview | FinalQualityUpdate | ProactiveQualityUpdate}] [[-D365FSCVersion] <String>] [[-OutputPath] <String>] [[-StorageAccountConfig] <String>] [-Force] [<CommonParameters>]",
+    "Synopsis": "Downloads a system update package for D365FSC.",
+    "Alias": "",
+    "Description": "The `Get-FSCPSSystemUpdatePackage` function downloads a system update package for Dynamics 365 Finance and Supply Chain (D365FSC) based on the specified update type and version. The package is downloaded from Azure Storage using the specified storage account configuration and saved to the specified output path.",
+    "CommandName": "Get-FSCPSSystemUpdatePackage"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Get-FSCPSVersionInfo -Version \"10.0.39\"\nThis will show the list of file versions for the FSCPS module of the 10.0.39 D365FSC.",
+    "Params": [
+      [
+        "Version",
+        "The version of the D365FSC",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Get-FSCPSVersionInfo",
+    "Links": null,
+    "Syntax": "Get-FSCPSVersionInfo [[-Version] <String>] [<CommonParameters>]",
+    "Synopsis": "Get the list of D365FSC components versions",
+    "Alias": "",
+    "Description": "Get the list of D365FSC components versions (NuGets, Packages, Frameworks etc.)",
+    "CommandName": "Get-FSCPSVersionInfo"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Install-FSCPSNugetCLI -Path \"C:\\temp\\fscps.tools\\nuget\" -Url \"https://dist.nuget.org/win-x86-commandline/latest/nuget.exe\"\nThis will download the latest version of nuget.",
+    "Params": [
+      [
+        "Path",
+        "Download destination",
+        "",
+        false,
+        "false",
+        "C:\\temp\\fscps.tools\\nuget"
+      ],
+      [
+        "Url",
+        "Url/Uri to where the latest nuget download is located\nThe default value is \"https://dist.nuget.org/win-x86-commandline/latest/nuget.exe\"",
+        "",
+        false,
+        "false",
+        "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Install-FSCPSNugetCLI",
+    "Links": null,
+    "Syntax": "Install-FSCPSNugetCLI [[-Path] <String>] [[-Url] <String>] [<CommonParameters>]",
+    "Synopsis": "Installation of Nuget CLI",
+    "Alias": "",
+    "Description": "Download latest Nuget CLI",
+    "CommandName": "Install-FSCPSNugetCLI"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSAzureSignToolSignFile -Uri \"https://my-vault.vault.azure.net\" `\r\n-TenantId \"01234567-abcd-ef012-0000-0123456789ab\" `\r\n-CertificateName \"my-key-name\" `\r\n-ClientId \"01234567-abcd-ef012-0000-0123456789ab\" `\r\n-ClientSecret \"secret\" `\r\n-FILE \"$filePath\"\nThis will sign the target file with the KeyVault certificate",
+    "Params": [
+      [
+        "Uri",
+        "A fully qualified URL of the key vault with the certificate that will be used for signing. An example value might be https://my-vault.vault.azure.net.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "TenantId",
+        "This is the tenant id used to authenticate to Azure, which will be used to generate an access token.",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "CertificateName",
+        "The name of the certificate used to perform the signing operation.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "ClientId",
+        "This is the client ID used to authenticate to Azure, which will be used to generate an access token.",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "ClientSecret",
+        "This is the client secret used to authenticate to Azure, which will be used to generate an access token.",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "TimestampServer",
+        "A URL to an RFC3161 compliant timestamping service.",
+        "",
+        true,
+        "false",
+        "http://timestamp.digicert.com"
+      ],
+      [
+        "FILE",
+        "A file to sign",
+        "",
+        true,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSAzureSignToolSignFile",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSAzureSignToolSignFile [[-Uri] <String>] [-TenantId] <String> [[-CertificateName] <String>] [[-ClientId] <String>] [-ClientSecret] <SecureString> [-TimestampServer] <String> [-FILE] <String> [<CommonParameters>]",
+    "Synopsis": "Function to sign the files with KeyVault",
+    "Alias": "",
+    "Description": "Function to sign the files with KeyVault",
+    "CommandName": "Invoke-FSCPSAzureSignToolSignFile"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>$AzureParams = Get-FSCActiveAzureStorageConfig\r\nPS C:\\> New-D365Bacpac | Invoke-FSCPSAzureStorageDelete @AzureParams\nThis will get the current Azure Storage Account configuration details and use them as parameters to delete the file from Azure Storage Account.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageDelete -AccountId \"miscfiles\" -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -Container \"backupfiles\" -FileName \"UAT_20180701.bacpac\"\nThis will delete the \"UAT_20180701.bacpac\" from the \"backupfiles\" container, inside the \"miscfiles\" Azure Storage Account.\r\nA SAS key is used to gain access to the container and deleteng the file.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "File",
+      "Files",
+      "Bacpac",
+      "Container"
+    ],
+    "Params": [
+      [
+        "AccountId",
+        "Storage Account Name / Storage Account Id where you want to store the file",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccountId"
+      ],
+      [
+        "AccessToken",
+        "The token that has the needed permissions for the delete action",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccessToken"
+      ],
+      [
+        "SAS",
+        "The SAS key that you have created for the storage account or blob container",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageSAS"
+      ],
+      [
+        "Container",
+        "Name of the blob container inside the storage account you want to store the file",
+        "Blobname,Blob",
+        false,
+        "false",
+        "$Script:AzureStorageContainer"
+      ],
+      [
+        "FileName",
+        "Path to the file you want to delete",
+        "File",
+        true,
+        "true (ByValue)",
+        ""
+      ],
+      [
+        "Force",
+        "Instruct the cmdlet to overwrite the file in the container if it already exists",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "EnableException",
+        "This parameters disables user-friendly warnings and enables the throwing of exceptions\r\nThis is less user friendly, but allows catching exceptions in calling scripts",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSAzureStorageDelete",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSAzureStorageDelete [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -FileName <String> [-Force] [-EnableException] [<CommonParameters>]\nInvoke-FSCPSAzureStorageDelete [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -FileName <String> [-Force] [-EnableException] [<CommonParameters>]",
+    "Synopsis": "Delete a file to Azure",
+    "Alias": "",
+    "Description": "Delete any file to an Azure Storage Account",
+    "CommandName": "Invoke-FSCPSAzureStorageDelete"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageDownload -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\" -FileName \"OriginalUAT.bacpac\" -Path \r\n\"c:\\temp\"\nWill download the \"OriginalUAT.bacpac\" file from the storage account and save it to \"c:\\temp\\OriginalUAT.bacpac\"\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageDownload -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\" -Path \"c:\\temp\" -Latest\nWill download the file with the latest modified datetime from the storage account and save it to \"c:\\temp\\\".\r\nThe complete path to the file will returned as output from the cmdlet.\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>$AzureParams = Get-FSCPSActiveAzureStorageConfig\r\nPS C:\\> Invoke-FSCPSAzureStorageDownload @AzureParams -Path \"c:\\temp\" -Latest\nThis will get the current Azure Storage Account configuration details\r\nand use them as parameters to download the latest file from an Azure Storage Account\nWill download the file with the latest modified datetime from the storage account and save it to \"c:\\temp\\\".\r\nThe complete path to the file will returned as output from the cmdlet.\n-------------------------- EXAMPLE 4 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageDownload -Latest\nThis will use the default parameter values that are based on the configuration stored inside \"Get-FSCPSActiveAzureStorageConfig\".\r\nWill download the file with the latest modified datetime from the storage account and save it to \"c:\\temp\\fscps.tools\".\n-------------------------- EXAMPLE 5 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageDownload -AccountId \"miscfiles\" -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -Container \"backupfiles\" -Path \"c:\\temp\" -Latest\nWill download the file with the latest modified datetime from the storage account and save it to \"c:\\temp\\\".\r\nA SAS key is used to gain access to the container and downloading the file from it.\r\nThe complete path to the file will returned as output from the cmdlet.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "File",
+      "Files",
+      "Latest",
+      "Bacpac",
+      "Container"
+    ],
+    "Params": [
+      [
+        "AccountId",
+        "Storage Account Name / Storage Account Id where you want to fetch the file from",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccountId"
+      ],
+      [
+        "AccessToken",
+        "The token that has the needed permissions for the download action",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccessToken"
+      ],
+      [
+        "SAS",
+        "The SAS key that you have created for the storage account or blob container",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageSAS"
+      ],
+      [
+        "Container",
+        "Name of the blob container inside the storage account you where the file is",
+        "Blobname,Blob",
+        false,
+        "false",
+        "$Script:AzureStorageContainer"
+      ],
+      [
+        "FileName",
+        "Name of the file that you want to download",
+        "Name",
+        true,
+        "true (ByPropertyName)",
+        ""
+      ],
+      [
+        "Path",
+        "Path to the folder / location you want to save the file\nThe default path is \"c:\\temp\\fscps.tools\"",
+        "",
+        false,
+        "false",
+        "$Script:DefaultTempPath"
+      ],
+      [
+        "Latest",
+        "Instruct the cmdlet to download the latest file from Azure regardless of name",
+        "GetLatest",
+        true,
+        "false",
+        "False"
+      ],
+      [
+        "Force",
+        "Instruct the cmdlet to overwrite the local file if it already exists",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "EnableException",
+        "This parameters disables user-friendly warnings and enables the throwing of exceptions\r\nThis is less user friendly, but allows catching exceptions in calling scripts",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSAzureStorageDownload",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSAzureStorageDownload [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -FileName <String> [-Path <String>] [-Force] [-EnableException] [<CommonParameters>]\nInvoke-FSCPSAzureStorageDownload [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] [-Path <String>] [-Latest] [-Force] [-EnableException] [<CommonParameters>]",
+    "Synopsis": "Download a file to Azure",
+    "Alias": "",
+    "Description": "Download any file to an Azure Storage Account",
+    "CommandName": "Invoke-FSCPSAzureStorageDownload"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageUpload -AccountId \"miscfiles\" -AccessToken \"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" -Container \"backupfiles\" -Filepath \r\n\"c:\\temp\\bacpac\\UAT_20180701.bacpac\"  -DeleteOnUpload\nThis will upload the \"c:\\temp\\bacpac\\UAT_20180701.bacpac\" up to the \"backupfiles\" container, inside the \"miscfiles\" Azure Storage Account that is access with the \r\n\"xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51\" token.\r\nAfter upload the local file will be deleted.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>$AzureParams = Get-D365ActiveAzureStorageConfig\r\nPS C:\\> New-D365Bacpac | Invoke-FSCPSAzureStorageUpload @AzureParams\nThis will get the current Azure Storage Account configuration details and use them as parameters to upload the file to an Azure Storage Account.\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>New-D365Bacpac | Invoke-FSCPSAzureStorageUpload\nThis will generate a new bacpac file using the \"New-D365Bacpac\" cmdlet.\r\nThe file will be uploaded to an Azure Storage Account using the \"Invoke-FSCPSAzureStorageUpload\" cmdlet.\r\nThis will use the default parameter values that are based on the configuration stored inside \"Get-D365ActiveAzureStorageConfig\" for the \"Invoke-FSCPSAzureStorageUpload\" cmdlet.\n-------------------------- EXAMPLE 4 --------------------------\nPS C:\\>Invoke-FSCPSAzureStorageUpload -AccountId \"miscfiles\" -SAS \"sv2018-03-28&siunlisted&src&sigAUOpdsfpoWE976ASDhfjkasdf(5678sdfhk\" -Container \"backupfiles\" -Filepath \r\n\"c:\\temp\\bacpac\\UAT_20180701.bacpac\"\nThis will upload the \"c:\\temp\\bacpac\\UAT_20180701.bacpac\" up to the \"backupfiles\" container, inside the \"miscfiles\" Azure Storage Account.\r\nA SAS key is used to gain access to the container and uploading the file to it.",
+    "Tags": [
+      "Azure",
+      "Azure Storage",
+      "Config",
+      "Configuration",
+      "Token",
+      "Blob",
+      "File",
+      "Files",
+      "Bacpac",
+      "Container"
+    ],
+    "Params": [
+      [
+        "AccountId",
+        "Storage Account Name / Storage Account Id where you want to store the file",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccountId"
+      ],
+      [
+        "AccessToken",
+        "The token that has the needed permissions for the upload action",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageAccessToken"
+      ],
+      [
+        "SAS",
+        "The SAS key that you have created for the storage account or blob container",
+        "",
+        false,
+        "false",
+        "$Script:AzureStorageSAS"
+      ],
+      [
+        "Container",
+        "Name of the blob container inside the storage account you want to store the file",
+        "Blobname,Blob",
+        false,
+        "false",
+        "$Script:AzureStorageContainer"
+      ],
+      [
+        "Filepath",
+        "Path to the file you want to upload",
+        "Path,File",
+        true,
+        "true (ByValue)",
+        ""
+      ],
+      [
+        "ContentType",
+        "Media type of the file that is going to be uploaded\nThe value will be used for the blob property \"Content Type\".\r\nIf the parameter is left empty, the commandlet will try to automatically determined the value based on the file's extension.\r\nIf the parameter is left empty and the value cannot be automatically be determined, Azure storage will automatically assign \"application/octet-stream\" as the content type.\r\nValid media type values can be found here: https://www.iana.org/assignments/media-types/media-types.xhtml",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Force",
+        "Instruct the cmdlet to overwrite the file in the container if it already exists",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "DeleteOnUpload",
+        "Switch to tell the cmdlet if you want the local file to be deleted after the upload completes",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "EnableException",
+        "This parameters disables user-friendly warnings and enables the throwing of exceptions\r\nThis is less user friendly, but allows catching exceptions in calling scripts",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSAzureStorageUpload",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSAzureStorageUpload [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -Filepath <String> [-ContentType <String>] [-Force] [-DeleteOnUpload] [-EnableException] [<CommonParameters>]\nInvoke-FSCPSAzureStorageUpload [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>] -Filepath <String> [-ContentType <String>] [-Force] [-DeleteOnUpload] [-EnableException] [<CommonParameters>]",
+    "Synopsis": "Upload a file to Azure",
+    "Alias": "",
+    "Description": "Upload any file to an Azure Storage Account",
+    "CommandName": "Invoke-FSCPSAzureStorageUpload"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSChoco install gh -y --allow-unofficial -Silent\nThis will install GH tools on the system without console output",
+    "Params": [
+      [
+        "Command",
+        "The command of the choco to execute\nSupport a list of softwares that you want to have installed on the system",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "RemainingArguments",
+        "List of arguments",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "Silent",
+        "Disable output",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "SkipUpdate",
+        "Skip the chocolatey update",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "Force",
+        "Force command. Reinstall latest version if command is install or upgrade to latest version",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSChoco",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSChoco [-Command] <String> [[-RemainingArguments] <Object>] [-Silent] [-SkipUpdate] [-Force] [<CommonParameters>]",
+    "Synopsis": "Install software from Choco",
+    "Alias": "",
+    "Description": "Installs software from Chocolatey\n\nFull list of software: https://community.chocolatey.org/packages",
+    "CommandName": "Invoke-FSCPSChoco"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSCompile -Version \"10.0.39\" -Type FSCM\nExample output:\nMETADATA_DIRECTORY  : D:\\a\\8\\s\\Metadata\r\nFRAMEWORK_DIRECTORY : C:\\temp\\buildbuild\\packages\\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99\r\nBUILD_OUTPUT_DIRECTORY    : C:\\temp\\buildbuild\\bin\r\nNUGETS_FOLDER    : C:\\temp\\buildbuild\\packages\r\nBUILD_LOG_FILE_PATH     : C:\\Users\\VssAdministrator\\AppData\\Local\\Temp\\Build.sln.msbuild.log\r\nPACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78\r\nPACKAGE_PATH         : C:\\temp\\buildbuild\\artifacts\\MAIN TEST-DeployablePackage-10.0.39-78.zip\r\nARTIFACTS_PATH       : C:\\temp\\buildbuild\\artifacts\r\nARTIFACTS_LIST       : [\"C:\\temp\\buildbuild\\artifacts\\MAIN TEST-DeployablePackage-10.0.39-78.zip\"]\nThis will build D365FSC package with version \"10.0.39\" to the Temp folder\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Invoke-FSCPSCompile -Version \"10.0.39\" -Path \"c:\\Temp\"\nExample output:\nMETADATA_DIRECTORY  : D:\\a\\8\\s\\Metadata\r\nFRAMEWORK_DIRECTORY : C:\\temp\\buildbuild\\packages\\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.7120.99\r\nBUILD_OUTPUT_DIRECTORY    : C:\\temp\\buildbuild\\bin\r\nNUGETS_FOLDER    : C:\\temp\\buildbuild\\packages\r\nBUILD_LOG_FILE_PATH     : C:\\Users\\VssAdministrator\\AppData\\Local\\Temp\\Build.sln.msbuild.log\r\nPACKAGE_NAME         : MAIN TEST-DeployablePackage-10.0.39-78\r\nPACKAGE_PATH         : C:\\temp\\buildbuild\\artifacts\\MAIN TEST-DeployablePackage-10.0.39-78.zip\r\nARTIFACTS_PATH       : C:\\temp\\buildbuild\\artifacts\r\nARTIFACTS_LIST       : [\"C:\\temp\\buildbuild\\artifacts\\MAIN TEST-DeployablePackage-10.0.39-78.zip\"]\nThis will build D365FSC package with version \"10.0.39\" to the Temp folder",
+    "Params": [
+      [
+        "Version",
+        "The version of the D365FSC used to build",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "SourcesPath",
+        "The folder contains a metadata files with binaries",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Type",
+        "The type of the FSCPS project to build",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "BuildFolderPath",
+        "The destination build folder",
+        "",
+        false,
+        "false",
+        "(Join-Path $script:DefaultTempPath _bld)"
+      ],
+      [
+        "OutputAsHashtable",
+        "Instruct the cmdlet to return a hashtable object",
+        "",
+        false,
+        "false",
+        "False"
+      ],
+      [
+        "Force",
+        "Cleanup destination build folder befor build",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSCompile",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSCompile [[-Version] <String>] [-SourcesPath] <String> [[-Type] {FSCM | Commerce | ECommerce}] [[-BuildFolderPath] <String>] [-OutputAsHashtable] [-Force] [<CommonParameters>]",
+    "Synopsis": "Invoke the D365FSC models compilation",
+    "Alias": "",
+    "Description": "Invoke the D365FSC models compilation",
+    "CommandName": "Invoke-FSCPSCompile"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Invoke-FSCPSDigiCertSignFile -SM_API_KEY \"$codeSignDigiCertAPISecretName\" `\r\n-SM_CLIENT_CERT_FILE_URL \"$codeSignDigiCertUrlSecretName\" `\r\n-SM_CLIENT_CERT_PASSWORD $(ConvertTo-SecureString $codeSignDigiCertPasswordSecretName -AsPlainText -Force) `\r\n-SM_CODE_SIGNING_CERT_SHA1_HASH \"$codeSignDigiCertHashSecretName\" `\r\n-FILE \"$filePath\"\nThis will sign the target file with the DigiCert certificate",
+    "Params": [
+      [
+        "SM_HOST",
+        "Digicert host URL. Default value \"https://clientauth.one.digicert.com\"",
+        "",
+        false,
+        "false",
+        "https://clientauth.one.digicert.com"
+      ],
+      [
+        "SM_API_KEY",
+        "The DigiCert API Key",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "SM_CLIENT_CERT_FILE",
+        "The DigiCert certificate local path (p12)",
+        "",
+        false,
+        "false",
+        "c:\\temp\\digicert.p12"
+      ],
+      [
+        "SM_CLIENT_CERT_FILE_URL",
+        "The DigiCert certificate URL (p12)",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "SM_CLIENT_CERT_PASSWORD",
+        "The DigiCert certificate password",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "SM_CODE_SIGNING_CERT_SHA1_HASH",
+        "The DigiCert certificate thumbprint(fingerprint)",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "FILE",
+        "A file to sign",
+        "",
+        true,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Invoke-FSCPSDigiCertSignFile",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSDigiCertSignFile [[-SM_HOST] <String>] [-SM_API_KEY] <String> [[-SM_CLIENT_CERT_FILE] <String>] [[-SM_CLIENT_CERT_FILE_URL] <String>] [-SM_CLIENT_CERT_PASSWORD] <SecureString> [-SM_CODE_SIGNING_CERT_SHA1_HASH] <String> [-FILE] <String> [<CommonParameters>]",
+    "Synopsis": "Function to sign the files with digicert",
+    "Alias": "",
+    "Description": "Function to sign the files with digicert",
+    "CommandName": "Invoke-FSCPSDigiCertSignFile"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Invoke-FSCPSInstallModule -Modules @(\"Az\", \"Pester\")\nThis example installs and imports the \"Az\" and \"Pester\" modules in the current user scope.",
+    "Params": [
+      [
+        "Modules",
+        "An array of module names to be installed and imported.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Name": "Invoke-FSCPSInstallModule",
+    "Links": null,
+    "Syntax": "Invoke-FSCPSInstallModule [[-Modules] <String[]>] [<CommonParameters>]",
+    "Synopsis": "Installs and imports specified PowerShell modules, with special handling for the \"Az\" module.",
+    "Alias": "",
+    "Description": "The `Invoke-FSCPSInstallModule` function takes an array of module names, installs them if they are not already installed, and then imports them. It also handles the uninstallation of the \"AzureRm\" module if \"Az\" is specified. Real-time monitoring is temporarily disabled during the installation process to speed it up.",
+    "CommandName": "Invoke-FSCPSInstallModule"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Register-FSCPSAzureStorageConfig -ConfigStorageLocation \"System\"\nThis will store all Azure Storage Configurations as defaults for all users on the machine.",
+    "Tags": [
+      "Configuration",
+      "Azure",
+      "Storage"
+    ],
+    "Params": [
+      [
+        "ConfigStorageLocation",
+        "Parameter used to instruct where to store the configuration objects\nThe default value is \"User\" and this will store all configuration for the active user\nValid options are:\r\n\"User\"\r\n\"System\"\n\"System\" will store the configuration as default for all users, so they can access the configuration objects",
+        "",
+        false,
+        "false",
+        "User"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Register-FSCPSAzureStorageConfig",
+    "Links": null,
+    "Syntax": "Register-FSCPSAzureStorageConfig [[-ConfigStorageLocation] <String>] [<CommonParameters>]",
+    "Synopsis": "Register Azure Storage Configurations",
+    "Alias": "",
+    "Description": "Register all Azure Storage Configurations",
+    "CommandName": "Register-FSCPSAzureStorageConfig"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Set-FSCPSActiveAzureStorageConfig -Name \"UAT-Exports\"\nThis will import the \"UAT-Exports\" set from the Azure Storage Account configurations.\r\nIt will update the active Azure Storage Account configuration.\n-------------------------- EXAMPLE 2 --------------------------\nPS C:\\>Set-FSCPSActiveAzureStorageConfig -Name \"UAT-Exports\" -ConfigStorageLocation \"System\"\nThis will import the \"UAT-Exports\" set from the Azure Storage Account configurations.\r\nIt will update the active Azure Storage Account configuration.\r\nThe data will be stored in the system wide configuration storage, which makes it accessible from all users.\n-------------------------- EXAMPLE 3 --------------------------\nPS C:\\>Set-FSCPSActiveAzureStorageConfig -Name \"UAT-Exports\" -Temporary\nThis will import the \"UAT-Exports\" set from the Azure Storage Account configurations.\r\nIt will update the active Azure Storage Account configuration.\r\nThe update will only last for the rest of this PowerShell console session.",
+    "Params": [
+      [
+        "Name",
+        "The name the Azure Storage Account configuration you want to load into the active Azure Storage Account configuration",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "ConfigStorageLocation",
+        "Parameter used to instruct where to store the configuration objects\nThe default value is \"User\" and this will store all configuration for the active user\nValid options are:\r\n\"User\"\r\n\"System\"\n\"System\" will store the configuration so all users can access the configuration objects",
+        "",
+        false,
+        "false",
+        "User"
+      ],
+      [
+        "Temporary",
+        "Instruct the cmdlet to only temporarily override the persisted settings in the configuration storage",
+        "",
+        false,
+        "false",
+        "False"
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Set-FSCPSActiveAzureStorageConfig",
+    "Links": null,
+    "Syntax": "Set-FSCPSActiveAzureStorageConfig [[-Name] <String>] [[-ConfigStorageLocation] <String>] [-Temporary] [<CommonParameters>]",
+    "Synopsis": "Set the active Azure Storage Account configuration",
+    "Alias": "",
+    "Description": "Updates the current active Azure Storage Account configuration with a new one",
+    "CommandName": "Set-FSCPSActiveAzureStorageConfig"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Set-FSCPSSettings -SettingsFilePath \"c:\\temp\\settings.json\"\nThis will output the current FSCPS configuration.\r\nThe object returned will be a Hashtable.",
+    "Tags": [
+      "Environment",
+      "Url",
+      "Config",
+      "Configuration",
+      "Upload",
+      "ClientId",
+      "Settings"
+    ],
+    "Params": [
+      [
+        "SettingsFilePath",
+        "Set path to the settings.json file",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "SettingsJsonString",
+        "String contains JSON with custom settings",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Set-FSCPSSettings",
+    "Links": null,
+    "Syntax": "Set-FSCPSSettings [[-SettingsFilePath] <String>] [[-SettingsJsonString] <String>] [<CommonParameters>]",
+    "Synopsis": "Set the FSCPS configuration details",
+    "Alias": "",
+    "Description": "Set the FSCPS configuration details from the configuration store\n\nAll settings retrieved from this cmdlets is to be considered the default parameter values across the different cmdlets",
+    "CommandName": "Set-FSCPSSettings"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Update-FSCPSISVSource MetadataPath \"C:\\temp\\PackagesLocalDirectory\" -Url \"https://ciellosarchive.blob.core.windows.net/test/Main-Extension-10.0.39_20240516.263.zip?sv=2023-01-03&st=2024-05-21T1\r\n4%3A26%3A41Z&se=2034-05-22T14%3A26%3A00Z&sr=b&sp=r&sig=W%2FbS1bQrr59i%2FBSHWsftkfNsE1HvFXTrICwZSFiUItg%3D\"\"\nThis will update the local metadata with the source from the downloaded zip archive.",
+    "Params": [
+      [
+        "MetadataPath",
+        "Path to the local Metadata folder",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "Url",
+        "Url/Uri to zip file contains code/package/axmodel",
+        "",
+        true,
+        "false",
+        ""
+      ],
+      [
+        "FileName",
+        "The name of the file should be downloaded by the url. Use if the url doesnt contain the filename.",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Update-FSCPSISVSource",
+    "Links": null,
+    "Syntax": "Update-FSCPSISVSource [-MetadataPath] <String> [-Url] <String> [[-FileName] <String>] [<CommonParameters>]",
+    "Synopsis": "Installation of Nuget CLI",
+    "Alias": "",
+    "Description": "Download latest Nuget CLI",
+    "CommandName": "Update-FSCPSISVSource"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Update-FSCPSModelVersion -xppSourcePath \"c:\\temp\\metadata\" -xppLayer \"ISV\" -versionNumber \"5.4.8.4\" -xppDescriptorSearch $(\"TestModel\"+\"\\Descriptor\\*.xml\")\nthis will change the version of the TestModel to 5.4.8.4",
+    "Params": [
+      [
+        "xppSourcePath",
+        "Path to the xpp metadata folder",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "xppDescriptorSearch",
+        "Descriptor search pattern",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "xppLayer",
+        "Layer of the code",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "versionNumber",
+        "Target model version change to",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Update-FSCPSModelVersion",
+    "Links": null,
+    "Syntax": "Update-FSCPSModelVersion [[-xppSourcePath] <String>] [[-xppDescriptorSearch] <String>] [[-xppLayer] <Object>] [[-versionNumber] <Object>] [<CommonParameters>]",
+    "Synopsis": "This updates the D365FSC model version",
+    "Alias": "",
+    "Description": "This updates the D365FSC model version",
+    "CommandName": "Update-FSCPSModelVersion"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\>Update-FSCPSNugetsFromLCS -LCSUserName \"admin@contoso.com\" -LCSUserPassword \"superSecureString\" -LCSProjectId \"123456\" -LCSClientId \"123ebf68-a86d-4392-ae38-57b2172ee789\" -FSCMinimumVersion \r\n\"10.0.38\"\nthis will uploads the D365FSC nugets from the LCS to the active storage account",
+    "Params": [
+      [
+        "LCSUserName",
+        "The LCS username",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "LCSUserPassword",
+        "The LCS password",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "LCSProjectId",
+        "The LCS project ID",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "LCSClientId",
+        "The ClientId what has access to the LCS",
+        "",
+        false,
+        "false",
+        ""
+      ],
+      [
+        "FSCMinimumVersion",
+        "The minimum version of the FSC to update the NuGet`s",
+        "",
+        false,
+        "false",
+        ""
+      ]
+    ],
+    "Author": "Oleksandr Nikolaiev (@onikolaiev)",
+    "Name": "Update-FSCPSNugetsFromLCS",
+    "Links": null,
+    "Syntax": "Update-FSCPSNugetsFromLCS [[-LCSUserName] <String>] [[-LCSUserPassword] <SecureString>] [[-LCSProjectId] <String>] [[-LCSClientId] <String>] [[-FSCMinimumVersion] <String>] [<CommonParameters>]",
+    "Synopsis": "This uploads the D365FSC nugets from the LCS to the active storage account",
+    "Alias": "",
+    "Description": "This uploads the D365FSC nugets from the LCS to the active NuGet storage account",
+    "CommandName": "Update-FSCPSNugetsFromLCS"
+  },
+  {
+    "Examples": "-------------------------- EXAMPLE 1 --------------------------\nPS > Update-FSCPSRSATWebDriver -webDriversPath \"C:\\CustomPath\\WebDrivers\"\nThis example will update the webdrivers for the RSAT tool located at the specified path.",
+    "Params": [
+      [
+        "webDriversPath",
+        "The path where the web drivers are located. Default is \"C:\\Program Files (x86)\\Regression Suite Automation Tool\\Common\\External\\Selenium\".",
+        "",
+        false,
+        "false",
+        "C:\\Program Files (x86)\\Regression Suite Automation Tool\\Common\\External\\Selenium"
+      ]
+    ],
+    "Name": "Update-FSCPSRSATWebDriver",
+    "Links": null,
+    "Syntax": "Update-FSCPSRSATWebDriver [[-webDriversPath] <String>] [<CommonParameters>]",
+    "Synopsis": "Update the web drivers for Microsoft Edge and Google Chrome browsers.",
+    "Alias": "",
+    "Description": "This function checks the specified web drivers path. If the path doesn't exist, it uses a default path. It defines registry paths and URLs, retrieves the local web driver versions, and checks if an update is needed based on version comparison.\n\nThe function updates the web drivers for both Microsoft Edge and Google Chrome browsers by downloading the latest versions from their respective official websites and extracting the files to the specified path.",
+    "CommandName": "Update-FSCPSRSATWebDriver"
+  }
+]
