@@ -82,8 +82,10 @@ function Invoke-FSCCompile {
             }
             $responseObject = [Ordered]@{}
             Write-PSFMessage -Level Important -Message "//================= Reading current FSC-PS settings ============================//"
-            Write-PSFMessage -Level Important -Message "IsOneBox: $($Script:IsOnebox)"
-            if($Script:IsOnebox)
+            $isOneBox = "$($Script:IsOnebox)"
+            if([string]::IsNullOrEmpty($isOneBox)){$isOneBox = $false}
+            Write-PSFMessage -Level Important -Message "IsOneBox: $isOneBox"
+            if($isOneBox -eq $true)
             {
                 Write-PSFMessage -Level Important -Message "EnvironmentType: $($Script:EnvironmentType)"
                 Write-PSFMessage -Level Important -Message "HostName: $($environment.Infrastructure.HostName)"
@@ -99,7 +101,10 @@ function Invoke-FSCCompile {
             {
                 $Version = $settings.buildVersion
             }
-            
+
+            Write-Ascii -ForegroundColor Green "FSCPS" -Compress 
+            Write-Ascii -ForegroundColor Green "$($settings.fscPsVer)" -Compress 
+
             if([string]::IsNullOrEmpty($Version))
             {
                 throw "D365FSC Version should be specified."

@@ -103,7 +103,7 @@ function Get-FSCPSAzureStorageFile {
         if (Test-PSFFunctionInterrupt) { return}
 
         $params = Get-ParameterValue |
-            ConvertTo-PSFHashtable -ReferenceCommand Get-D365AzureStorageFile -ReferenceParameterSetName $PSCmdlet.ParameterSetName
+            ConvertTo-PSFHashtable -ReferenceParameterSetName $PSCmdlet.ParameterSetName -ReferenceCommand Get-D365AzureStorageFile 
         $files = Get-D365AzureStorageFile @params
 
         try {
@@ -121,7 +121,7 @@ function Get-FSCPSAzureStorageFile {
             }
             else {
                 $d365AzureStorageDownloadParams = $params |
-                    ConvertTo-PSFHashtable -ReferenceCommand Invoke-FSCPSAzureStorageDownload -Exclude Latest
+                    ConvertTo-PSFHashtable -ReferenceCommand Invoke-FSCPSAzureStorageDownload -ReferenceParameterSetName $PSCmdlet.ParameterSetName -Exclude Latest
                 $d365AzureStorageDownloadParams.Force = $true
                 foreach ($obj in $files) {
                     $null = Test-PathExists -Path $DestinationPath -Type Container -Create

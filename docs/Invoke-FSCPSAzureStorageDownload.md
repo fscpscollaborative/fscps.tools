@@ -240,10 +240,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, File, Files, Latest, Bacpac, Container
 
-This is refactored function from d365fo.tools
+This is a wrapper for the d365fo.tools function Invoke-D365AzureStorageDownload.
 
-Original Author: Mötz Jensen (@Splaxi)
 Author: Oleksandr Nikolaiev (@onikolaiev)
+Author: Florian Hopfner (@FH-Inway)
 
 The cmdlet supports piping and can be used in advanced scenarios.
 See more on github and the wiki pages.
