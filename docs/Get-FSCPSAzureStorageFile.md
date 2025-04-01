@@ -21,7 +21,7 @@ Get-FSCPSAzureStorageFile [-AccountId <String>] [-AccessToken <String>] [-SAS <S
 ### Latest
 ```
 Get-FSCPSAzureStorageFile [-AccountId <String>] [-AccessToken <String>] [-SAS <String>] [-Container <String>]
- [-Latest] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-DestinationPath <String>] [-Latest] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -159,7 +159,7 @@ If empty just show the file information
 
 ```yaml
 Type: String
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False

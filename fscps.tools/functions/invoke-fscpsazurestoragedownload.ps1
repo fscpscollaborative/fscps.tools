@@ -72,12 +72,12 @@
         
     .NOTES
         Tags: Azure, Azure Storage, Config, Configuration, Token, Blob, File, Files, Latest, Bacpac, Container
-
+        
         This is a wrapper for the d365fo.tools function Invoke-D365AzureStorageDownload.
-
+        
         Author: Oleksandr Nikolaiev (@onikolaiev)
         Author: Florian Hopfner (@FH-Inway)
-
+        
         The cmdlet supports piping and can be used in advanced scenarios. See more on github and the wiki pages.
         
 #>
@@ -114,7 +114,7 @@ function Invoke-FSCPSAzureStorageDownload {
 
     PROCESS {
         $params = Get-ParameterValue |
-            ConvertTo-PSFHashtable -ReferenceCommand Invoke-D365AzureStorageDownload
+            ConvertTo-PSFHashtable -ReferenceCommand Invoke-D365AzureStorageDownload -ReferenceParameterSetName $PSCmdlet.ParameterSetName
         Invoke-D365AzureStorageDownload @params
     }
 }

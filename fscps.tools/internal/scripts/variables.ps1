@@ -90,7 +90,14 @@ $Script:DatabaseUserName = $dataAccess.SqlUser
 $Script:DatabaseUserPassword = $dataAccess.SqlPwd
 $Script:Company = "DAT"
 
-$Script:IsOnebox = $environment.Common.IsOneboxEnvironment
+if($environment.Common.IsOneboxEnvironment)
+{
+    $Script:IsOnebox = $environment.Common.IsOneboxEnvironment
+}
+else
+{
+    $Script:IsOnebox = $false
+}
 
 $RegSplat = @{
     Path = "HKLM:\SOFTWARE\Microsoft\Dynamics\Deployment\"
