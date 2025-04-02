@@ -105,7 +105,7 @@ function Invoke-FSCCompile {
                 $Version = $settings.buildVersion
             }
 
-            Convert-FSCPSTextToAscii -Text "FSCPS $($settings.fscPsVer)" -Font Standard
+            Convert-FSCPSTextToAscii -Text "FSCPS $($settings.fscPsVer)" -Font Standard -BorderType DoubleBox
 
             if([string]::IsNullOrEmpty($Version))
             {
