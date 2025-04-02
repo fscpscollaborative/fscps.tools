@@ -18,7 +18,7 @@ Write-Host "The user running is: $($env:UserName)"
 Write-Host "Installing required PowerShell modules" -ForegroundColor Yellow
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools", "WriteAscii")
+$modules = @("PSFramework", "PSScriptAnalyzer", "Az.Storage", "PSNotification", "d365fo.tools", "Invoke-MsBuild", "dbatools", "fscps.ascii")
 #Register-PSRepository -Default -Verbose
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 foreach ($module in  $modules) {
