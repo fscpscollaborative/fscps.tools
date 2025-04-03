@@ -52,10 +52,10 @@ PowerShellVersion = '5.0'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.12.346'; }, 
-               @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; },
-               @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.22'; }, 
-               @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; }
-               @{ModuleName = 'fscps.ascii'; ModuleVersion = '1.0.11'; })
+                @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; },
+                @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.22'; }, 
+                @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; }
+                @{ModuleName = 'fscps.ascii'; ModuleVersion = '1.0.12'; })
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = 'bin\fscps.tools.dll'
