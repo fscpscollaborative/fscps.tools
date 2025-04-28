@@ -83,7 +83,7 @@ function Invoke-FSCCompile {
             $responseObject = [Ordered]@{}
 
 
-            Convert-FSCPSTextToAscii -Text "Get FSCPS settings" -Font Term -BorderType DoubleBox
+            Convert-FSCPSTextToAscii -Text "Get FSCPS settings" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
 
             $isOneBox = "$($Script:IsOnebox)"
             if([string]::IsNullOrEmpty($isOneBox)){$isOneBox = $false}
@@ -105,7 +105,7 @@ function Invoke-FSCCompile {
                 $Version = $settings.buildVersion
             }
 
-            Convert-FSCPSTextToAscii -Text "FSCPS $($settings.fscPsVer)" -Font Small -BorderType DoubleBox
+            Convert-FSCPSTextToAscii -Text "FSCPS $($settings.fscPsVer)" -Font "Ivrit" -BorderType DoubleDots -HorizontalLayout Fitted 
 
             if([string]::IsNullOrEmpty($Version))
             {
@@ -184,7 +184,7 @@ function Invoke-FSCCompile {
             $responseObject.BUILD_OUTPUT_DIRECTORY = $msOutputDirectory
             $responseObject.BUILD_FOLDER_PATH = $BuildFolderPath
 
-            Convert-FSCPSTextToAscii -Text "Getting the list of models" -Font Term -BorderType DoubleBox
+            Convert-FSCPSTextToAscii -Text "Getting the list of models" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
 
             if($($settings.specifyModelsManually) -eq "true")
             {
@@ -258,15 +258,15 @@ function Invoke-FSCCompile {
         try {            
             if($Force)
             {
-                Convert-FSCPSTextToAscii -Text "Cleanup build folder" -Font Term -BorderType DoubleBox
+                Convert-FSCPSTextToAscii -Text "Cleanup build folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
                 Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
             }
 
-            Convert-FSCPSTextToAscii -Text "Generate solution folder" -Font Term -BorderType DoubleBox
+            Convert-FSCPSTextToAscii -Text "Generate solution folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
             $null = Invoke-GenerateSolution -ModelsList $modelsToBuild -Version "$Version" -MetadataPath $SourceMetadataPath -SolutionFolderPath $BuildFolderPath @CMDOUT
             Write-PSFMessage -Level Important -Message "Complete"
    
-            Convert-FSCPSTextToAscii -Text "Copy source files to the build folder" -Font Term -BorderType DoubleBox
+            Convert-FSCPSTextToAscii -Text "Copy source files to the build folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
             Write-PSFMessage -Level Important -Message "Source folder: $SourcesPath"
@@ -274,7 +274,7 @@ function Invoke-FSCCompile {
             Copy-Item $SourcesPath\* -Destination $BuildFolderPath -Recurse -Force @CMDOUT
             Write-PSFMessage -Level Important -Message "Complete"
     
-            Convert-FSCPSTextToAscii -Text "Download NuGet packages" -Font Term -BorderType DoubleBox  
+            Convert-FSCPSTextToAscii -Text "Download NuGet packages" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
             $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
             $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
             $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
@@ -284,7 +284,7 @@ function Invoke-FSCCompile {
             Write-PSFMessage -Level Important -Message "Complete"
             $responseObject.NUGETS_FOLDER = $NuGetPackagesPath
             
-            Convert-FSCPSTextToAscii -Text "Install NuGet packages" -Font Term -BorderType DoubleBox  
+            Convert-FSCPSTextToAscii -Text "Install NuGet packages" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
             #validata NuGet installation
             $nugetPath = Get-PSFConfigValue -FullName "fscps.tools.path.nuget"
             if(-not (Test-Path $nugetPath))
@@ -298,13 +298,13 @@ function Invoke-FSCCompile {
             $null = (& $nugetPath restore $NuGetPackagesConfigFilePath -PackagesDirectory $NuGetPackagesPath -ConfigFile $NuGetConfigFilePath)
             Write-PSFMessage -Level Important -Message "Complete"
 
-            Convert-FSCPSTextToAscii -Text "Copy binaries to the build folder" -Font Term -BorderType DoubleBox   
+            Convert-FSCPSTextToAscii -Text "Copy binaries to the build folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted  
             Copy-Filtered -Source $SourceMetadataPath -Target (Join-Path $BuildFolderPath bin) -Filter *.*
             Write-PSFMessage -Level Important -Message "Complete"
 
             if($modelsToBuild)
             {
-                Convert-FSCPSTextToAscii -Text "Build the solution" -Font Term -BorderType DoubleBox  
+                Convert-FSCPSTextToAscii -Text "Build the solution" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
                 
                 Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
@@ -324,7 +324,7 @@ function Invoke-FSCCompile {
                     Write-PSFMessage -Level Host -Message ("Build completed successfully in {0:N1} seconds." -f $msbuildresult.BuildDuration.TotalSeconds)
                     if($settings.enableBuildCaching)
                     {
-                        Convert-FSCPSTextToAscii -Text "Upload cached models to the storageaccount" -Font Term -BorderType DoubleBox
+                        Convert-FSCPSTextToAscii -Text "Upload cached models to the storageaccount" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
                         foreach ($model in $modelsToBuild.Split(","))
                         {
                             try {
@@ -381,7 +381,7 @@ function Invoke-FSCCompile {
                     Write-PSFMessage -Level Warning -Message "Current PS version is $($PSVersionTable.PSVersion). The latest PS version acceptable to generate the D365FSC deployable package is 5."
                 }
                 else {                
-                    Convert-FSCPSTextToAscii -Text "Generate package" -Font Term -BorderType DoubleBox
+                    Convert-FSCPSTextToAscii -Text "Generate package" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
 
                     $createRegularPackage = $settings.createRegularPackage
                     $createCloudPackage = $settings.createCloudPackage
@@ -617,7 +617,7 @@ function Invoke-FSCCompile {
             }
             if($settings.exportModel)
             {
-                Convert-FSCPSTextToAscii -Text "Export models" -Font Term -BorderType DoubleBox
+                Convert-FSCPSTextToAscii -Text "Export models" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
 
                 try {
                     $axModelFolder = Join-Path $artifactDirectory AxModels
