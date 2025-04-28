@@ -96,12 +96,12 @@ function Invoke-CommerceCompile {
                 Debug = If ($PSBoundParameters.Debug -eq $true) { $true } else { $false }
             }
             $responseObject = [Ordered]@{}
-            Write-PSFMessage -Level Important -Message "//================= Reading current FSC-PS settings ============================//"
+            Convert-FSCPSTextToAscii -Text "Reading current FSC-PS settings" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted
             $settings = Get-FSCPSSettings @CMDOUT
             Write-PSFMessage -Level Important -Message "Complete"
             #if($Force)
             #{
-                Write-PSFMessage -Level Important -Message "//================= Cleanup build folder =======================================//"
+                Convert-FSCPSTextToAscii -Text "Cleanup build folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted
                 Remove-Item $BuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
                 Write-PSFMessage -Level Important -Message "Complete"
             #}
@@ -113,6 +113,8 @@ function Invoke-CommerceCompile {
             else {
                 $artifactDirectory = $settings.artifactsPath
             }
+
+            Convert-FSCPSTextToAscii -Text "FSCPS $($settings.fscPsVer)" -Font "Ivrit" -BorderType DoubleDots -HorizontalLayout Fitted 
 
             if (Test-Path -Path $artifactDirectory -ErrorAction SilentlyContinue)
             {
@@ -155,13 +157,13 @@ function Invoke-CommerceCompile {
         if (Test-PSFFunctionInterrupt) { return }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         try {               
-            Write-PSFMessage -Level Important -Message "//================= Copy source files to the build folder ======================//"            
+            Convert-FSCPSTextToAscii -Text "Copy source files to the build folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted             
             $null = Test-PathExists -Path $BuildFolderPath -Type Container -Create @CMDOUT
             $null = Test-PathExists -Path $SolutionBuildFolderPath -Type Container -Create @CMDOUT
             Copy-Item $SourcesPath\* -Destination $SolutionBuildFolderPath -Recurse -Force @CMDOUT
             Write-PSFMessage -Level Important -Message "Complete"
 
-            Write-PSFMessage -Level Important -Message "//================= Build solution =============================================//"
+            Convert-FSCPSTextToAscii -Text "Build the solution" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted 
 
             $msbuildpath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -products * -requires Microsoft.Component.MSBuild -property installationPath -latest
 
@@ -195,7 +197,7 @@ function Invoke-CommerceCompile {
             Set-Location $origLocation
             if($settings.generatePackages)
             {
-                Write-PSFMessage -Level Important -Message "//================= Generate package ==========================================//"
+                Convert-FSCPSTextToAscii -Text "Generate package" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted
 
                 switch ($settings.namingStrategy) {
                     { $settings.namingStrategy -eq "Default" }
@@ -249,7 +251,7 @@ function Invoke-CommerceCompile {
                 [System.IO.DirectoryInfo]$sCInstallerPath = Get-ChildItem -Path $SolutionBuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*StoreCommerce.*.exe$"} | ForEach-Object {$_.FullName}
                 [System.IO.DirectoryInfo]$sUInstallerPath = Get-ChildItem -Path $SolutionBuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*ScaleUnit.*.exe$"} | ForEach-Object {$_.FullName}
                 
-                Write-PSFMessage -Level Important -Message "//================= Copy packages to the artifacts folder ======================//"
+                Convert-FSCPSTextToAscii -Text "Copy packages to the artifacts folder" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted
                 if($csuZipPackagePath)
                 {    
                     Write-PSFMessage -Level Important -Message "CSU Package processing..."
@@ -298,7 +300,7 @@ function Invoke-CommerceCompile {
                     $responseObject.SU_INSTALLER_PATH = $destinationFullName
                 }
 
-                Write-PSFMessage -Level Important -Message "//================= Export NuGets ===============================================//"
+                Convert-FSCPSTextToAscii -Text "Export NuGets" -Font "Term" -BorderType DoubleDots -HorizontalLayout Fitted
                 Get-ChildItem -Path $BuildFolderPath -Recurse | Where-Object {$_.FullName -match "bin.*.Release.*.nupkg$"} | ForEach-Object {
                     if($settings.cleanupNugets)
                     {                
