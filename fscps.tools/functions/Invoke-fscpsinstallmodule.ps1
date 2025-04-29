@@ -15,8 +15,9 @@
         This example installs and imports the "Az" and "Pester" modules in the current user scope.
         
     .NOTES
-        - Real-time monitoring is disabled during the installation process to improve performance.
-        - The "AzureRm" module is uninstalled if "Az" is specified.
+            - Real-time monitoring is disabled during the installation process to improve performance.
+            - The "AzureRm" module is uninstalled if "Az" is specified.
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Invoke-FSCPSInstallModule {

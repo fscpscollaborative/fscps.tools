@@ -137,5 +137,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 - The function uses the Azure DevOps REST API to retrieve the test suite.
 - An authentication token is required.
 - Handles errors and interruptions gracefully.
+Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS

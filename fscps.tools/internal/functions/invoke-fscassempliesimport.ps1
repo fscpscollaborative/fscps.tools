@@ -14,6 +14,7 @@
         
     .NOTES
         General notes
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Invoke-FSCAssembliesImport([string]$binDir)
 {

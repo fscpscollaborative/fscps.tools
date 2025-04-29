@@ -29,9 +29,9 @@
         This example retrieves test suites from the test plan with ID 123 in the specified organization and project.
         
     .NOTES
-        - The function uses the Azure DevOps REST API to retrieve test suites.
-        - An authentication token is required.
-        - Handles pagination through continuation tokens.
+            - The function uses the Azure DevOps REST API to retrieve test suites.
+            - An authentication token is required.
+            - Handles pagination through continuation tokens.
         
         Author: Oleksandr Nikolaiev (@onikolaiev)
 #>

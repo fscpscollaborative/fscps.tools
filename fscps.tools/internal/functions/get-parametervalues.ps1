@@ -18,16 +18,16 @@
         
     .EXAMPLE
         function Test-Parameters {
-        [CmdletBinding()]
-        param(
-        $Name = $Env:UserName,
-        $Age
-        )
-        $Parameters = Get-ParameterValue
-        # This WILL ALWAYS have a value...
-        Write-Host $Parameters["Name"]
-        # But this will NOT always have a value...
-        Write-Host $PSBoundParameters["Name"]
+            [CmdletBinding()]
+            param(
+            $Name = $Env:UserName,
+            $Age
+            )
+            $Parameters = Get-ParameterValue
+            # This WILL ALWAYS have a value...
+            Write-Host $Parameters["Name"]
+            # But this will NOT always have a value...
+            Write-Host $PSBoundParameters["Name"]
         }
         
     .NOTES
@@ -36,6 +36,7 @@
         Original Author: Eric Loveland (@elovelan)
         Author: Florian Hopfner (@FH-Inway)
         
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Get-ParameterValue {
     [CmdletBinding()]
