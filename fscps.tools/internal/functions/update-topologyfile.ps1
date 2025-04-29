@@ -22,6 +22,7 @@
         Author: Tommy Skaue (@Skaue)
         Author: Mötz Jensen (@Splaxi)
         
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Update-TopologyFile {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]

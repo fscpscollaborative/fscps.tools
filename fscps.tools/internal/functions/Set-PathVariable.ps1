@@ -24,6 +24,7 @@
         Author: ThePoShWolf
     .LINK
         
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 Function Set-PathVariable {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]

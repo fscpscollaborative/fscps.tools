@@ -29,10 +29,10 @@
         
     .EXAMPLE
         PS C:\> Invoke-FSCPSDigiCertSignFile -SM_API_KEY "$codeSignDigiCertAPISecretName" `
-        -SM_CLIENT_CERT_FILE_URL "$codeSignDigiCertUrlSecretName" `
-        -SM_CLIENT_CERT_PASSWORD $(ConvertTo-SecureString $codeSignDigiCertPasswordSecretName -AsPlainText -Force) `
-        -SM_CODE_SIGNING_CERT_SHA1_HASH "$codeSignDigiCertHashSecretName" `
-        -FILE "$filePath"
+            -SM_CLIENT_CERT_FILE_URL "$codeSignDigiCertUrlSecretName" `
+            -SM_CLIENT_CERT_PASSWORD $(ConvertTo-SecureString $codeSignDigiCertPasswordSecretName -AsPlainText -Force) `
+            -SM_CODE_SIGNING_CERT_SHA1_HASH "$codeSignDigiCertHashSecretName" `
+            -FILE "$filePath"
         
         This will sign the target file with the DigiCert certificate
     .NOTES

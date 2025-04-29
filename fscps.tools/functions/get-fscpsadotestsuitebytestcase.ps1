@@ -29,9 +29,10 @@
         This example retrieves the test suite associated with the test case ID 1460 in the specified organization and project.
         
     .NOTES
-        - The function uses the Azure DevOps REST API to retrieve the test suite.
-        - An authentication token is required.
-        - Handles errors and interruptions gracefully.
+            - The function uses the Azure DevOps REST API to retrieve the test suite.
+            - An authentication token is required.
+            - Handles errors and interruptions gracefully.
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Get-FSCPSADOTestSuiteByTestCase {

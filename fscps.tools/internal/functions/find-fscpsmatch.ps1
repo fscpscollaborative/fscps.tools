@@ -25,6 +25,7 @@
         
     .NOTES
         This if refactored Find-VSTSMatch function
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Find-FSCPSMatch {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]

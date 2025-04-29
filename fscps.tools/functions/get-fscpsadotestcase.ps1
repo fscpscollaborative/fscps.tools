@@ -30,9 +30,10 @@
         This example retrieves detailed information about the test case with ID 1234 in the specified organization and project.
         
     .NOTES
-        - The function uses the Azure DevOps REST API to retrieve test case information.
-        - An authentication token is required.
-        - Handles errors and interruptions gracefully.
+            - The function uses the Azure DevOps REST API to retrieve test case information.
+            - An authentication token is required.
+            - Handles errors and interruptions gracefully.
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Get-FSCPSADOTestCase {

@@ -21,7 +21,7 @@ ModuleVersion = '1.1.332'
 GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
 
 # Author of this module
-Author = 'Oleksandr Nikolaiev'
+Author = 'Oleksandr Nikolaiev (@onikolaiev)'
 
 # Company or vendor of this module
 CompanyName = 'Ciellos Inc.'
