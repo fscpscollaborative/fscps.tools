@@ -27,9 +27,10 @@
         This example retrieves agents from the agent pool with ID 1 in the specified organization.
         
     .NOTES
-        - The function uses the Azure DevOps REST API to retrieve agent information.
-        - An authentication token is required.
-        - Handles errors and interruptions gracefully.
+            - The function uses the Azure DevOps REST API to retrieve agent information.
+            - An authentication token is required.
+            - Handles errors and interruptions gracefully.
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Get-FSCPSADOAgent {

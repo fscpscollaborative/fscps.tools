@@ -54,5 +54,6 @@ Accept wildcard characters: False
 ## NOTES
 - Real-time monitoring is disabled during the installation process to improve performance.
 - The "AzureRm" module is uninstalled if "Az" is specified.
+Author: Oleksandr Nikolaiev (@onikolaiev)
 
 ## RELATED LINKS

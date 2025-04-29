@@ -29,11 +29,11 @@
         
     .EXAMPLE
         PS C:\> Invoke-FSCPSAzureSignToolSignFile -Uri "https://my-vault.vault.azure.net" `
-        -TenantId "01234567-abcd-ef012-0000-0123456789ab" `
-        -CertificateName "my-key-name" `
-        -ClientId "01234567-abcd-ef012-0000-0123456789ab" `
-        -ClientSecret "secret" `
-        -FILE "$filePath"
+            -TenantId "01234567-abcd-ef012-0000-0123456789ab" `
+            -CertificateName "my-key-name" `
+            -ClientId "01234567-abcd-ef012-0000-0123456789ab" `
+            -ClientSecret "secret" `
+            -FILE "$filePath"
         
         This will sign the target file with the KeyVault certificate
     .NOTES

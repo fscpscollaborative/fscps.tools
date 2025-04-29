@@ -32,9 +32,10 @@
         This example retrieves the test cases from the test suite with ID 1001 within the test plan with ID 2001 in the specified organization and project.
         
     .NOTES
-        - The function uses the Azure DevOps REST API to retrieve test cases.
-        - An authentication token is required.
-        - Handles errors and interruptions gracefully.
+            - The function uses the Azure DevOps REST API to retrieve test cases.
+            - An authentication token is required.
+            - Handles errors and interruptions gracefully.
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 
 function Get-FSCPSADOTestCasesBySuite {

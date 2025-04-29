@@ -26,6 +26,7 @@
     .NOTES
         Author: Mötz Jensen (@Splaxi)
         
+        Author: Oleksandr Nikolaiev (@onikolaiev)
 #>
 function Test-ConfigStorageLocation {
     [CmdletBinding()]
