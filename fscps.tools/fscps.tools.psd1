@@ -64,7 +64,7 @@ RequiredAssemblies = 'bin\fscps.tools.dll'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-# TypesToProcess = @()
+TypesToProcess = = 'xml\fscps.tools.Types.ps1xml'
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'xml\fscps.tools.Format.ps1xml'

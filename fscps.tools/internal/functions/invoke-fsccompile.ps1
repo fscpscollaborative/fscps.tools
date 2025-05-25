@@ -676,7 +676,7 @@ function Invoke-FSCCompile {
             }
             
             $responseObject.ARTIFACTS_LIST = $artifacts
-            Convert-FSCPSTextToAscii -Text "Done" -Font "Term" -BorderType DoubleDots -HorizontalLayout ControlledSmushing -ScreenWigth 105 -Padding 2
+            Convert-FSCPSTextToAscii -Text "Compilation complete." -Font "Term" -BorderType DoubleDots -HorizontalLayout ControlledSmushing -ScreenWigth 105 -Padding 2
         }
         catch {
             Write-PSFMessage -Level Host -Message "Error: " -Exception $PSItem.Exception
