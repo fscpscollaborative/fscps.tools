@@ -85,7 +85,6 @@ function Get-FSCPSSystemUpdatePackage {
                 Set-FSCPSActiveAzureStorageConfig -Name $StorageAccountConfig -Temporary
             }
         }
-
          # Set the destination file name based on the UpdateType
          if ($UpdateType -eq [UpdateType]::SystemUpdate) {
             $destinationFileName = "Service Update - $D365FSCVersion"
@@ -108,12 +107,11 @@ function Get-FSCPSSystemUpdatePackage {
         try {           
             
             $download = (-not(Test-Path $destinationFilePath))
-
             if(!$download)
             {
                 Write-PSFMessage -Level Host -Message $destinationFileName
                 try {
-                    $blobFile = Get-FSCPSAzureStorageFile -Name $destinationFileName
+                    $blobFile = Get-FSCPSAzureStorageFile -Name "*$destinationFileName*"
                 }
                 catch {
                     Write-PSFMessage -Level Error -Message "File $destinationFileName is not found at $($azureDetails.Container)"
