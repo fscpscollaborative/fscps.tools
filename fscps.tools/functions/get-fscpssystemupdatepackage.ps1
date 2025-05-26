@@ -95,9 +95,15 @@ function Get-FSCPSSystemUpdatePackage {
         } elseif ($UpdateType -eq [UpdateType]::ProactiveQualityUpdate) {
             $destinationFileName = "Proactive Quality Update - $D365FSCVersion"
         }
-
+        try {
+            $blobFile = Get-FSCPSAzureStorageFile -Name "*$destinationFileName*"
+        }
+        catch {
+            Write-PSFMessage -Level Error -Message "File $destinationFileName is not found at $($azureDetails.Container)"
+            throw                    
+        }
         # Combine the OutputPath with the destination file name
-        $destinationFilePath = Join-Path -Path $OutputPath -ChildPath $destinationFileName
+        $destinationFilePath = Join-Path -Path $OutputPath -ChildPath $blobFile.Name
     }
 
     process {
@@ -107,17 +113,10 @@ function Get-FSCPSSystemUpdatePackage {
         try {           
             
             $download = (-not(Test-Path $destinationFilePath))
+            
             if(!$download)
             {
-                Write-PSFMessage -Level Host -Message $destinationFileName
-                try {
-                    $blobFile = Get-FSCPSAzureStorageFile -Name "*$destinationFileName*"
-                }
-                catch {
-                    Write-PSFMessage -Level Error -Message "File $destinationFileName is not found at $($azureDetails.Container)"
-                    throw                    
-                }
-                
+                Write-PSFMessage -Level Host -Message $blobFile.Name            
                 $blobSize = $blobFile.Length
                 $localSize = (Get-Item $destinationFilePath).length
                 Write-PSFMessage -Level Verbose -Message "BlobSize is: $blobSize"
@@ -132,7 +131,7 @@ function Get-FSCPSSystemUpdatePackage {
 
             if($download)
             {
-                Invoke-FSCPSAzureStorageDownload -FileName $destinationFileName -Path $OutputPath -Force:$Force
+                Invoke-FSCPSAzureStorageDownload -FileName $blobFile.Name -Path $OutputPath -Force:$Force
                 if (-not [System.IO.Path]::GetExtension($destinationFilePath) -ne ".zip") {
                     # Rename the file to have a .zip extension
                     $newFilePath = "$destinationFilePath.zip".Replace(" ", "")
