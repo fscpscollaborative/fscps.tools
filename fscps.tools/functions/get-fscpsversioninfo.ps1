@@ -93,6 +93,7 @@ Function Get-FSCPSVersionInfo {
                             data = @{
                                 AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
                                 PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
+                                PlatformUpdate                  = $d.data.PlatformUpdate
                                 FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
                                 FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
                                 FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
@@ -113,6 +114,7 @@ Function Get-FSCPSVersionInfo {
                             data = @{
                                 AppVersion                      = $( if($VersionStrategy -eq 'GA') { $d.data.AppVersionGA } else { $d.data.AppVersionLatest } )
                                 PlatformVersion                 = $( if($VersionStrategy -eq 'GA') { $d.data.PlatformVersionGA  } else { $d.data.PlatformVersionLatest } )
+                                PlatformUpdate                  = $d.data.PlatformUpdate
                                 FSCServiseUpdatePackageId       = $d.data.fscServiseUpdatePackageId
                                 FSCPreviewVersionPackageId      = $d.data.fscPreviewVersionPackageId
                                 FSCLatestQualityUpdatePackageId = $d.data.fscLatestQualityUpdatePackageId
