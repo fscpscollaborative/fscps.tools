@@ -20,33 +20,11 @@
         This will get the version information of MyCustomModel including layer name
         
     .NOTES
+        Tags: D365, FO, Finance, Operations, Model, Version, Descriptor, Metadata
+        
         Author: Oleksandr Nikolaiev (@onikolaiev)
+        
 #>
-
-# Helper function to convert layer number to layer name
-function Get-LayerName {
-    param([int]$LayerNumber)
-    
-    switch ($LayerNumber) {
-        0 { return "SYS" }
-        1 { return "SYP" }
-        2 { return "GLS" }
-        3 { return "GLP" }
-        4 { return "FPK" }
-        5 { return "FPP" }
-        6 { return "SLN" }
-        7 { return "SLP" }
-        8 { return "ISV" }
-        9 { return "ISP" }
-        10 { return "VAR" }
-        11 { return "VAP" }
-        12 { return "CUS" }
-        13 { return "CUP" }
-        14 { return "USR" }
-        15 { return "USP" }
-        default { return "Unknown" }
-    }
-}
 
 function Get-FSCPSModelVersion {
     [CmdletBinding()]
@@ -62,6 +40,31 @@ function Get-FSCPSModelVersion {
         # Validate that the model path exists
         if (-not (Test-Path -LiteralPath $ModelPath -PathType Container)) {
             throw "Model path '$ModelPath' does not exist or is not a directory"
+        }
+
+        # Helper function to convert layer number to layer name
+        function Get-LayerName {
+            param([int]$LayerNumber)
+            
+            switch ($LayerNumber) {
+                0 { return "SYS" }
+                1 { return "SYP" }
+                2 { return "GLS" }
+                3 { return "GLP" }
+                4 { return "FPK" }
+                5 { return "FPP" }
+                6 { return "SLN" }
+                7 { return "SLP" }
+                8 { return "ISV" }
+                9 { return "ISP" }
+                10 { return "VAR" }
+                11 { return "VAP" }
+                12 { return "CUS" }
+                13 { return "CUP" }
+                14 { return "USR" }
+                15 { return "USP" }
+                default { return "Unknown" }
+            }
         }
     }
     
