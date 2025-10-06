@@ -138,7 +138,7 @@ function Invoke-CommerceCompile {
             }            
 
             # Gather version info
-            #$versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
+            $versionData = Get-FSCPSVersionInfo -Version $Version @CMDOUT
 
             $SolutionBuildFolderPath = (Join-Path $BuildFolderPath "$($Version)_build")
             $responseObject.BUILD_FOLDER_PATH = $SolutionBuildFolderPath
@@ -239,6 +239,61 @@ function Invoke-CommerceCompile {
                         
                         break;
                     }
+                    { $settings.namingStrategy -eq "ModelVersion" }
+                    {
+                        # New naming strategy: "Contoso D365 Commerce A10.0.45 PU66 - V2.2.78.1"
+                        try {
+                            $basePackageName = $settings.packageName
+                            $buildVersion = $Version
+                            $platformUpdate = $versionData.data.PlatformUpdate
+                            
+                            # Get commerce version from repo.props file
+                            $commerceVersion = ""
+                            $repoPropsPath = Join-Path $SourcesPath "repo.props"
+                            
+                            if (Test-Path $repoPropsPath) {
+                                try {
+                                    [xml]$repoPropsXml = Get-Content $repoPropsPath -Encoding UTF8
+                                    
+                                    $majorVersionNode = $repoPropsXml.SelectNodes("//MajorVersion")
+                                    $buildNumberNode = $repoPropsXml.SelectNodes("//BuildNumber")
+                                    
+                                    if ($majorVersionNode -and $buildNumberNode) {
+                                        $majorVersion = $majorVersionNode[0].InnerText
+                                        $buildNumber = $buildNumberNode[0].InnerText
+                                        $commerceVersion = "$majorVersion.$buildNumber"
+                                        Write-PSFMessage -Level Important -Message "Found commerce version from repo.props: $commerceVersion"
+                                    }
+                                    else {
+                                        Write-PSFMessage -Level Warning -Message "Could not find MajorVersion or BuildNumber in repo.props"
+                                    }
+                                }
+                                catch {
+                                    Write-PSFMessage -Level Warning -Message "Error parsing repo.props: $($_.Exception.Message)"
+                                }
+                            }
+                            else {
+                                Write-PSFMessage -Level Warning -Message "repo.props file not found at: $repoPropsPath"
+                            }
+                            
+                            if ([string]::IsNullOrEmpty($commerceVersion)) {
+                                Write-PSFMessage -Level Warning -Message "Commerce version not found, using build version as fallback"
+                                $commerceVersion = $buildVersion
+                            }
+                            
+                            # Construct the package name: "Contoso D365 Commerce A10.0.45 PU66 - V2.2.78.1"
+                            $packageName = "$basePackageName D365 Commerce A$buildVersion PU$platformUpdate - V$commerceVersion"
+                            
+                            Write-PSFMessage -Level Important -Message "Generated package name: $packageName"
+                        }
+                        catch {
+                            Write-PSFMessage -Level Warning -Message "Error generating ModelVersion package name: $($_.Exception.Message). Falling back to settings package name."
+                            $packageName = if($settings.packageName.Contains('.zip')) { $settings.packageName } else { $settings.packageName + ".zip" }
+                        }
+                        
+                        break;
+                    }
+
                     Default {
                         $packageName = $settings.packageName
                         break;

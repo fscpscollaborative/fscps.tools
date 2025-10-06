@@ -58,10 +58,19 @@ The settings file can be everywhere and provided to the fscps.tools through the 
 | FSCServiseUpdatePackageId | The AssetId of the Service Update (GA) package of the FSC. Depends on the FSC Version(version.default.json). | All | GitHub | "" |
 | ecommerceMicrosoftRepoUrl | The Msdyn365.Commerce.OnlineSDK repo URL what will use to build the ECommerce pacage. | Ecommerce | GitHub | "" |
 | ecommerceMicrosoftRepoBranch | The Msdyn365.Commerce.OnlineSDK repo branch. | Ecommerce | GitHub | "" |
-| namingStrategy | The package naming strategy. Custom value means the result package will have the name specified in the packageName variable. Default / Custom | All | All | Default |
+| namingStrategy | The package naming strategy. Custom value means the result package will have the name specified in the packageName variable. Default / Custom / ModelVersion | All | All | Default |
 | packageName | Name of the package | All | All | "" |
+| versionSourceModelName | The model name to be used as version source for package naming when namingStrategy is set to "ModelVersion". This model will be used to retrieve the metadata version number for package name generation. | FSCM | All | "" |
 | versionStrategy | This value means the version of the NuGet packages that will be taken to build the D365FSC code. GA - the NuGets from the GA version of the FSC will be taken (e.g. 10.0.39). Latest - latest available packages. Values: GA/Latest | FSCM | All | GA |
-| cleanupNugets | Cleanup Commerce compiled NuGet packages with microsoft artifacts | Commerce | All | "" |
+| cleanupNugets | Cleanup Commerce compiled NuGet packages with microsoft artifacts | Commerce | All | false |
+| cleanupAfterBuild | Cleanup build cache after build | All | All | true |
+| cleanupCSUPackage | Cleanup CSU (Commerce Scale Unit) package after build | Commerce | All | false |
+| solutionName | Name of the solution | All | All | "" |
+| artifactsPath | The destination artifacts path | All | All | "" |
+| artifactsFolderName | The name of the folder contains the result artifacts | All | All | artifacts |
+| signArtifacts | Option to sign generated artifacts | All | All | false |
+| repoToken | Repository access token | All | All | "" |
+| fscPsVer | Version of the fscps.tools module | All | All | {current module version} |
 | enableBuildCaching | If true, will "cache" FSC models after build and upload it to the ModelStorage storage account. If next build triggered fscps will check the CRC of each model folder and if its equal with the cached CRC the folder with the model binaries will be extracted to the source folder, and target model will be skipped to the build. | FSCM | All | false |
 
 
