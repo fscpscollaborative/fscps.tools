@@ -30,24 +30,24 @@
 #>
 function Test-ConfigStorageLocation {
     [CmdletBinding()]
-    [OutputType('System.String')]
+    [OutputType([PSFramework.Configuration.ConfigScope])]
     param (
         [ValidateSet('User', 'System')]
         [string] $ConfigStorageLocation = "User"
     )
     
-    $configScope = "UserDefault"
+    $configScope = [PSFramework.Configuration.ConfigScope]::UserDefault
 
     if ($ConfigStorageLocation -eq "System") {
         if ($Script:IsAdminRuntime) {
-            $configScope = "SystemDefault"
+            $configScope = [PSFramework.Configuration.ConfigScope]::SystemDefault
         }
         else {
             Write-PSFMessage -Level Host -Message "Unable to locate save the <c='em'>configuration objects</c> in the <c='em'>system wide configuration store</c> on the machine. Please start an elevated session and run the cmdlet again."
             Stop-PSFFunction -Message "Elevated permissions needed. Please start an elevated session and run the cmdlet again." -StepsUpward 1
-            return
+            return $null
         }
     }
 
-    $configScope
+    return $configScope
 }

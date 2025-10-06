@@ -45,9 +45,24 @@ function Import-ModuleFile
 		$Path
 	)
 	
-	$resolvedPath = $ExecutionContext.SessionState.Path.GetResolvedPSPathFromPSPath($Path).ProviderPath
-	if ($doDotSource) { . $resolvedPath }
-	else { $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($resolvedPath))), $null, $null) }
+	try {
+		$resolvedPath = $ExecutionContext.SessionState.Path.GetResolvedPSPathFromPSPath($Path).ProviderPath
+		if ($script:doDotSource) { 
+			. $resolvedPath 
+		}
+		else { 
+			$content = [io.file]::ReadAllText($resolvedPath)
+			if (-not [string]::IsNullOrWhiteSpace($content)) {
+				$scriptBlock = [scriptblock]::Create($content)
+				if ($scriptBlock) {
+					$ExecutionContext.InvokeCommand.InvokeScript($false, $scriptBlock, $null, $null)
+				}
+			}
+		}
+	}
+	catch {
+		Write-Warning "Failed to import module file '$Path': $($_.Exception.Message)"
+	}
 }
 
 
