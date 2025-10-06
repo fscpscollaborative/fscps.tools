@@ -136,6 +136,3 @@ function Get-FSCPSModelVersion {
         Invoke-TimeSignal -End
     }          
 }
-
-$curModelVersion = Get-FSCPSModelVersion -ModelPath "D:\Sources\vertex\connector-d365-unified-connector\PackagesLocalDirectory\Vertex"
-$curModelVersion.Version

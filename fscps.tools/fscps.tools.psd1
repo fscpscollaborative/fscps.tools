@@ -51,7 +51,7 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.12.346'; }, 
+RequiredModules = @(@{ModuleName = 'PSFramework'; ModuleVersion = '1.13.406'; }, 
                @{ModuleName = 'Az.Storage'; ModuleVersion = '1.11.0'; }, 
                @{ModuleName = 'd365fo.tools'; ModuleVersion = '0.7.22'; }, 
                @{ModuleName = 'Invoke-MsBuild'; ModuleVersion = '2.7.1'; }, 
