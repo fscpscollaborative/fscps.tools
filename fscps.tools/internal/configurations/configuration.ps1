@@ -91,7 +91,9 @@ Set-PSFConfig -FullName 'fscps.tools.settings.all.artifactsFolderName' -Value 'a
 Set-PSFConfig -FullName 'fscps.tools.settings.all.generatePackages' -Value $true -Initialize -Description 'Option to enable a packages generation functionality. Default / TRUE'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.createRegularPackage' -Value $true -Initialize -Description 'Option to generate an LCS Deployable Package after build. The "generatePackages" option should be enabled. Default / TRUE'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.createCloudPackage' -Value $false -Initialize -Description 'Option to generate a Power Platform Unified Package after build. The "generatePackages" option should be enabled. Default / FALSE'
-Set-PSFConfig -FullName 'fscps.tools.settings.all.namingStrategy' -Value 'Default' -Initialize -Description 'The package naming strategy. Custom value means the result package will have the name specified in the packageName variable. Default / Custom'
+Set-PSFConfig -FullName 'fscps.tools.settings.all.namingStrategy' -Value 'Default' -Initialize -Description 'The package naming strategy. Custom value means the result package will have the name specified in the packageName variable. Default / Custom / ModelVersion'
+Set-PSFConfig -FullName 'fscps.tools.settings.all.versionSourceModelName' -Value '' -Initialize -Description 'The model name to be used for naming the package. This model will be used to receive the metadata number.'
+
 Set-PSFConfig -FullName 'fscps.tools.settings.all.packageNamePattern' -Value 'BRANCHNAME-PACKAGENAME-FNSCMVERSION_DATE.RUNNUMBER' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.all.packageName' -Value '' -Initialize -Description 'Name of the package'
 

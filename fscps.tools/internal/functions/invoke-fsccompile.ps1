@@ -425,6 +425,45 @@ function Invoke-FSCCompile {
                             
                             break;
                         }
+                        { $settings.namingStrategy -eq "ModelVersion" }
+                        {
+                            # New naming strategy: "Contoso D365 FnSCM A10.0.42 PU66 - V2.2.77.1.zip"
+                            try {
+                                $basePackageName = $settings.packageName
+                                $buildVersion = $Version
+                                $platformUpdate = $versionData.data.PlatformUpdate
+                                
+                                # Get model version if versionSourceModelName is specified
+                                $modelVersion = ""
+                                if (-not [string]::IsNullOrEmpty($settings.versionSourceModelName)) {
+                                    $modelPath = Join-Path $SourceMetadataPath $settings.versionSourceModelName
+                                    if (Test-Path $modelPath) {
+                                        $curModelVersion = Get-FSCPSModelVersion -ModelPath $modelPath
+                                        if ($curModelVersion) {
+                                            $modelVersion = $curModelVersion.Version
+                                        }
+                                    }
+                                    else {
+                                        Write-PSFMessage -Level Warning -Message "Model path not found for naming: $modelPath"
+                                    }
+                                }
+                                
+                                if ([string]::IsNullOrEmpty($modelVersion)) {
+                                    Write-PSFMessage -Level Warning -Message "Model version not found, using build version as fallback"
+                                    $modelVersion = $buildVersion
+                                }
+                                
+                                $packageName = "$basePackageName D365 FnSCM A$buildVersion PU$platformUpdate - V$modelVersion.zip"
+                                
+                                Write-PSFMessage -Level Important -Message "Generated package name: $packageName"
+                            }
+                            catch {
+                                Write-PSFMessage -Level Warning -Message "Error generating ModelVersion package name: $($_.Exception.Message). Falling back to settings package name."
+                                $packageName = if($settings.packageName.Contains('.zip')) { $settings.packageName } else { $settings.packageName + ".zip" }
+                            }
+                            
+                            break;
+                        }
                         Default {
                             $packageName = $settings.packageName
                             break;
