@@ -24,7 +24,7 @@ GUID = '6b3d02bf-e176-4052-9b40-5012339c20b3'
 Author = 'Oleksandr Nikolaiev (@onikolaiev)'
 
 # Company or vendor of this module
-CompanyName = 'Ciellos Inc.'
+CompanyName = 'Oleksandr Nikolaiev (@onikolaiev)'
 
 # Copyright statement for this module
 Copyright = 'Copyright (c) 2025 Oleksandr Nikolaiev. All rights reserved.'
@@ -84,6 +84,7 @@ FunctionsToExport = 'Get-FSCPSSettings', 'Set-FSCPSSettings', 'Invoke-FSCPSChoco
                'Register-FSCPSAzureStorageConfig', 
                'Set-FSCPSActiveAzureStorageConfig', 
                'Invoke-FSCPSAzureStorageDownload', 
+               'Get-FSCPSModelVersion',
                'Invoke-FSCPSAzureStorageUpload', 'Invoke-FSCPSAzureStorageDelete', 
                'Update-FSCPSISVSource', 'Update-FSCPSNugetsFromLCS', 
                'Invoke-FSCPSInstallModule', 'Get-FSCPSADOTestCase', 
