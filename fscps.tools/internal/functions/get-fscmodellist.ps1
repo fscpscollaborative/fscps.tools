@@ -50,14 +50,15 @@ function Get-FSCModelList
         (Get-ChildItem -Directory "$MetadataPath") | ForEach-Object {
 
             $testModel = ($_.BaseName -match "Test")
+            $hasDescriptor = (Test-Path ("$MetadataPath/$($_.BaseName)/Descriptor"))
 
-            if ($testModel -and $IncludeTest) {
+            if ($testModel -and $IncludeTest -and ($hasDescriptor -or $All)) {
                 $modelsList += ($_.BaseName)
             }
-            if((Test-Path ("$MetadataPath/$($_.BaseName)/Descriptor")) -and !$testModel) {
+            if($hasDescriptor -and !$testModel) {
                 $modelsList += ($_.BaseName)
             }
-            if(!(Test-Path ("$MetadataPath/$($_.BaseName)/Descriptor")) -and !$testModel -and $All) {
+            if(!$hasDescriptor -and !$testModel -and $All) {
                 $modelsList += ($_.BaseName)
             }
         }
