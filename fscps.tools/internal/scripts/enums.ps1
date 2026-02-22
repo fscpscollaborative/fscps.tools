@@ -47,3 +47,8 @@ enum UpdateType {
     FinalQualityUpdate
     ProactiveQualityUpdate
 }
+
+enum VersionStrategy {
+    GA
+    Latest
+}
