@@ -28,9 +28,9 @@ function Invoke-CloudRuntimeAssembliesImport()
 
 
     $activeDirectory = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"                          #"Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-    $сrmPackageExtentionBase = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase.dll"          #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase.dll"
-    $сrmPackageCoreFinanceOperations = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.FinanceOperations.dll" #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.FinanceOperations.dll"
-    $сrmPackageCore = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.dll"                   #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.dll"
+    $CrmPackageExtentionBase = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase.dll"          #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase.dll"
+    $CrmPackageCoreFinanceOperations = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.FinanceOperations.dll" #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.FinanceOperations.dll"
+    $CrmPackageCore = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.dll"                   #"Microsoft.CrmSdk.XrmTooling.PackageDeployment.Core.9.1.0.116\lib\net462\Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageCore.dll"
     $shared = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.Dynamics.VSExtension.Shared.dll"                                    #"Microsoft.Dynamics.VSExtension.Shared.7.0.30011\lib\net472\Microsoft.Dynamics.VSExtension.Shared.dll"
     $applicationInsights = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.ApplicationInsights.dll"                                            #"Microsoft.ApplicationInsights.2.21.0\lib\net46\Microsoft.ApplicationInsights.dll"
     $vSSharedUtil = Join-Path $miscPath "\CloudRuntimeDlls\Microsoft.PowerPlatform.VSShared.Util.dll"                                                   #"PowerPlatSharedLibrary.1.0.0\lib\net472\PowerPlatSharedLibrary.dll"
@@ -46,9 +46,9 @@ function Invoke-CloudRuntimeAssembliesImport()
     [Reflection.Assembly]::LoadFile($json) > $null
     [Reflection.Assembly]::LoadFile($xrmSdk) > $null
     [Reflection.Assembly]::LoadFile($activeDirectory) > $null
-    [Reflection.Assembly]::LoadFile($сrmPackageExtentionBase) > $null
-    [Reflection.Assembly]::LoadFile($сrmPackageCoreFinanceOperations) > $null
-    [Reflection.Assembly]::LoadFile($сrmPackageCore) > $null
+    [Reflection.Assembly]::LoadFile($CrmPackageExtentionBase) > $null
+    [Reflection.Assembly]::LoadFile($CrmPackageCoreFinanceOperations) > $null
+    [Reflection.Assembly]::LoadFile($CrmPackageCore) > $null
     [Reflection.Assembly]::LoadFile($shared) > $null
     [Reflection.Assembly]::LoadFile($applicationInsights) > $null
     [Reflection.Assembly]::LoadFile($vSSharedUtil) > $null
