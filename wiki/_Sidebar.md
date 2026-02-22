@@ -11,6 +11,10 @@
 * [Compile ISV model](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Compile-ISV-model)
 * [Invoke Choco](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Use-Choco)
 * [Download FSC NuGets](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Download-FSC-NuGets)
+* [Download System Update Package](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Download-System-Update-Package)
+* [Sign Files (DigiCert / Azure KeyVault)](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Sign-Files)
+* [Work with Model Versions](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Work-With-Model-Versions)
+* [Work with ADO Test Cases](https://github.com/fscpscollaborative/fscps.tools/wiki/How-To-Work-With-ADO-Test-Cases)
 
 ## **Guides**
 * [[Work with Azure Storage Account]]
