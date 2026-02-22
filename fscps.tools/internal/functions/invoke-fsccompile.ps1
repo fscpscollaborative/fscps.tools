@@ -197,6 +197,23 @@ function Invoke-FSCCompile {
                 }
                 $models = $mdls -join ","
                 $modelsToPackage = $models
+                # Separate models with source code (Descriptor) for compilation
+                $mdlsToBuild = @()
+                foreach ($mdl in $mdls)
+                {
+                    $mdl = $mdl.Trim()
+                    if([string]::IsNullOrEmpty($mdl)) { continue }
+                    $descriptorPath = Join-Path $mtdtdPath (Join-Path $mdl "Descriptor")
+                    if(Test-Path $descriptorPath)
+                    {
+                        $mdlsToBuild += $mdl
+                    }
+                    else
+                    {
+                        Write-PSFMessage -Level Important -Message "Model '$mdl' has no source code (Descriptor folder not found). It will be included in the package from binaries."
+                    }
+                }
+                $modelsToBuild = $mdlsToBuild -join ","
             }
             else {
                 $models = Get-FSCModelList -MetadataPath $SourceMetadataPath -IncludeTest:($settings.includeTestModel -eq 'true') @CMDOUT         
@@ -210,7 +227,7 @@ function Invoke-FSCCompile {
                         $modelsToCache = @()
                         Write-PSFMessage -Level Important -Message "Running in $($settings.repoProvider). Start processing"
 
-                        foreach ($model in $models.Split(","))
+                        foreach ($model in ($models.Split(",") | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }))
                         {                            
                             $modelName = $model
                             Write-PSFMessage -Level Important -Message "Model: $modelName cache validation"

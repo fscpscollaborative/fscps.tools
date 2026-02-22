@@ -11,6 +11,12 @@
     .PARAMETER Version
         The version of the NuGet package to download
         
+    .PARAMETER KnownVersion
+        The short FNO version (e.g. "10.0.45"). The actual NuGet version will be resolved using the version info data and the KnownType parameter
+        
+    .PARAMETER KnownType
+        The version strategy to use when resolving KnownVersion. Valid values are GA and Latest
+        
     .PARAMETER Type
         The type of the NuGet package to download
         
@@ -35,6 +41,16 @@
         
         This will download the NuGet package with version "10.0.1777.99" and type "PlatformCompilerPackage" to the c:\temp folder and override if the package with the same name exists.
         
+    .EXAMPLE
+        PS C:\> Get-FSCPSNuget -KnownVersion "10.0.45" -KnownType GA -Type PlatformCompilerPackage -Path "c:\temp"
+        
+        This will resolve the GA platform version for FNO 10.0.45 and download the PlatformCompilerPackage NuGet to c:\temp
+        
+    .EXAMPLE
+        PS C:\> Get-FSCPSNuget -KnownVersion "10.0.45" -KnownType Latest -Type ApplicationDevALM -Path "c:\temp"
+        
+        This will resolve the Latest application version for FNO 10.0.45 and download the ApplicationDevALM NuGet to c:\temp
+        
     .NOTES
         Author: Oleksandr Nikolaiev (@onikolaiev)
         
@@ -46,10 +62,14 @@ function Get-FSCPSNuget {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignment", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
     [OutputType([System.Collections.Hashtable])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Version')]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Version')]
         [string] $Version,
+        [Parameter(Mandatory = $true, ParameterSetName = 'KnownVersion')]
+        [string] $KnownVersion,
+        [Parameter(Mandatory = $true, ParameterSetName = 'KnownVersion')]
+        [VersionStrategy] $KnownType,
         [Parameter(Mandatory = $true)]
         [NuGetType] $Type,
         [string] $Path,
@@ -59,6 +79,33 @@ function Get-FSCPSNuget {
     BEGIN {
         Invoke-TimeSignal -Start
         $packageName = ""
+
+        # Resolve version from KnownVersion + KnownType if provided
+        if ($PSCmdlet.ParameterSetName -eq 'KnownVersion') {
+            Write-PSFMessage -Level Verbose -Message "Resolving NuGet version for FNO version '$KnownVersion' with strategy '$KnownType'"
+            $originalStrategy = Get-PSFConfigValue -FullName "fscps.tools.settings.all.versionStrategy"
+            try {
+                Set-PSFConfig -FullName "fscps.tools.settings.all.versionStrategy" -Value ($KnownType.ToString())
+                $versionInfo = Get-FSCPSVersionInfo -Version $KnownVersion
+                if (-not $versionInfo) {
+                    Stop-PSFFunction -Message "Could not resolve version info for FNO version '$KnownVersion'. Make sure the version exists in the versions data."
+                    return
+                }
+                # Determine the resolved version based on NuGet type
+                switch ($Type) {
+                    { $_ -in @([NuGetType]::PlatformCompilerPackage, [NuGetType]::PlatformDevALM) } {
+                        $Version = $versionInfo.data.PlatformVersion
+                    }
+                    { $_ -in @([NuGetType]::ApplicationDevALM, [NuGetType]::ApplicationSuiteDevALM) } {
+                        $Version = $versionInfo.data.AppVersion
+                    }
+                }
+                Write-PSFMessage -Level Verbose -Message "Resolved NuGet version: '$Version'"
+            }
+            finally {
+                Set-PSFConfig -FullName "fscps.tools.settings.all.versionStrategy" -Value $originalStrategy
+            }
+        }
         switch ($Type) {
             ([NugetType]::ApplicationSuiteDevALM)
             { 
