@@ -180,4 +180,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 Author: Oleksandr Nikolaiev (@onikolaiev)
 
+To enable parallel MSBuild compilation, set the `msBuildParameters` value in your FSC-PS settings file before invoking this cmdlet. Example: `/MaxCpuCount:16 /p:BuildInParallel=true`. When omitted or empty, the compile step uses the existing default MSBuild behavior.
+
 ## RELATED LINKS

@@ -49,6 +49,7 @@ Set-PSFConfig -FullName 'fscps.tools.settings.all.buildVersion' -Value '' -Initi
 Set-PSFConfig -FullName 'fscps.tools.settings.all.solutionName' -Value '' -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.all.enableBuildCaching' -Value $false -Initialize -Description ''
 Set-PSFConfig -FullName 'fscps.tools.settings.all.cleanupAfterBuild' -Value $true -Initialize -Description 'Cleanup build cache after build'
+Set-PSFConfig -FullName 'fscps.tools.settings.all.msBuildParameters' -Value '' -Initialize -Description 'Additional MSBuild command-line arguments appended to the compile step (e.g. /MaxCpuCount:16 /p:BuildInParallel=true).'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.exportModel' -Value $false -Initialize -Description 'Option to generate axmodel file. IMPORTANT!!! generatePackages option should be set to True'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.uploadPackageToLCS' -Value $false -Initialize -Description 'Option to upload the generated package to the LCS after the build and generate process. IMPORTANT!!! generatePackages option should be set to True'
 Set-PSFConfig -FullName 'fscps.tools.settings.all.models' -Value '' -Initialize -Description 'Comma-delimited array of models.'

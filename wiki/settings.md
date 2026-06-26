@@ -72,6 +72,7 @@ The settings file can be everywhere and provided to the fscps.tools through the 
 | repoToken | Repository access token | All | All | "" |
 | fscPsVer | Version of the fscps.tools module | All | All | {current module version} |
 | enableBuildCaching | If true, will "cache" FSC models after build and upload it to the ModelStorage storage account. If next build triggered fscps will check the CRC of each model folder and if its equal with the cached CRC the folder with the model binaries will be extracted to the source folder, and target model will be skipped to the build. | FSCM | All | false |
+| msBuildParameters | Additional MSBuild command-line arguments appended to the compile step. Opt-in: leave empty for current single-threaded behavior. Example: `/MaxCpuCount:16 /p:BuildInParallel=true` | All | All | "" |
 
 
 ## Environments settings
