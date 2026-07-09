@@ -170,14 +170,20 @@ function Invoke-CommerceCompile {
             $origLocation = Get-Location
             Set-Location $SolutionBuildFolderPath
 
+            $commerceMsBuildParameters = "/t:restore,rebuild /property:Configuration=Release /property:NuGetInteractive=true /property:BuildingInsideVisualStudio=false"
+            if (-not [string]::IsNullOrWhiteSpace($settings.msBuildParameters)) {
+                $commerceMsBuildParameters = "$commerceMsBuildParameters $($settings.msBuildParameters)"
+                Write-PSFMessage -Level Important -Message "Using additional MSBuild parameters: $($settings.msBuildParameters)"
+            }
+
             if($msbuildpath -ne "")
             {
                 $msbuildexepath = Join-Path $msbuildpath "MSBuild\Current\Bin\MSBuild.exe"
-                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath $settings.solutionName) -MsBuildParameters "/t:restore,rebuild /property:Configuration=Release /property:NuGetInteractive=true /property:BuildingInsideVisualStudio=false" -MsBuildFilePath "$msbuildexepath" -ShowBuildOutputInCurrentWindow -BypassVisualStudioDeveloperCommandPrompt @CMDOUT
+                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath $settings.solutionName) -MsBuildParameters $commerceMsBuildParameters -MsBuildFilePath "$msbuildexepath" -ShowBuildOutputInCurrentWindow -BypassVisualStudioDeveloperCommandPrompt @CMDOUT
             }
             else
             {
-                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath $settings.solutionName) -MsBuildParameters "/t:restore,rebuild /property:Configuration=Release /property:NuGetInteractive=true /property:BuildingInsideVisualStudio=false" -ShowBuildOutputInCurrentWindow @CMDOUT
+                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath $settings.solutionName) -MsBuildParameters $commerceMsBuildParameters -ShowBuildOutputInCurrentWindow @CMDOUT
             }
 
             $responseObject.BUILD_LOG_FILE_PATH = $msbuildresult.BuildLogFilePath
