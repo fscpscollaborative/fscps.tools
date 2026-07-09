@@ -325,13 +325,13 @@ function Invoke-FSCCompile {
                 
                 Set-Content $BuidPropsFile (Get-Content $BuidPropsFile).Replace('ReferenceFolders', $msReferenceFolder)
 
-                $msBuildParameters = ""
+                $msBuildParameters = "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory"
                 if (-not [string]::IsNullOrWhiteSpace($settings.msBuildParameters)) {
-                    $msBuildParameters = $settings.msBuildParameters
                     Write-PSFMessage -Level Important -Message "Using additional MSBuild parameters: $($settings.msBuildParameters)"
+                    $msBuildParameters = "$msBuildParameters $($settings.msBuildParameters)"
                 }
 
-                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -P "/p:BuildTasksDirectory=$msBuildTasksDirectory /p:MetadataDirectory=$msMetadataDirectory /p:FrameworkDirectory=$msFrameworkDirectory /p:ReferencePath=$msReferencePath /p:OutputDirectory=$msOutputDirectory" -MsBuildParameters $msBuildParameters -ShowBuildOutputInCurrentWindow @CMDOUT
+                $msbuildresult = Invoke-MsBuild -Path (Join-Path $SolutionBuildFolderPath "\Build\Build.sln") -MsBuildParameters $msBuildParameters -ShowBuildOutputInCurrentWindow @CMDOUT
 
                 $responseObject.BUILD_LOG_FILE_PATH = $msbuildresult.BuildLogFilePath
 
