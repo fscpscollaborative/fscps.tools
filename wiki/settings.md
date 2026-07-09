@@ -64,6 +64,7 @@ The settings file can be everywhere and provided to the fscps.tools through the 
 | versionStrategy | This value means the version of the NuGet packages that will be taken to build the D365FSC code. GA - the NuGets from the GA version of the FSC will be taken (e.g. 10.0.39). Latest - latest available packages. Values: GA/Latest | FSCM | All | GA |
 | cleanupNugets | Cleanup Commerce compiled NuGet packages with microsoft artifacts | Commerce | All | false |
 | cleanupAfterBuild | Cleanup build cache after build | All | All | true |
+| fscCompileNugetForce | Force a fresh download of the D365FSC compiler NuGet packages on every compile (default behaviour). Set to false to reuse already downloaded packages and keep them during cleanup, for faster repeated local builds. | FSCM | All | true |
 | cleanupCSUPackage | Cleanup CSU (Commerce Scale Unit) package after build | Commerce | All | false |
 | solutionName | Name of the solution | All | All | "" |
 | artifactsPath | The destination artifacts path | All | All | "" |
