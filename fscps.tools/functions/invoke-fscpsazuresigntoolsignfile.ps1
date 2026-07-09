@@ -51,7 +51,7 @@ function Invoke-FSCPSAzureSignToolSignFile {
         [string] $ClientId,
         [Parameter(HelpMessage = "This is the client secret used to authenticate to Azure, which will be used to generate an access token.", Mandatory = $true)]
         [SecureString] $ClientSecret,
-        [Parameter(HelpMessage = "A URL to an RFC3161 compliant timestamping service.", Mandatory = $true)]
+        [Parameter(HelpMessage = "A URL to an RFC3161 compliant timestamping service.", Mandatory = $false)]
         [string] $TimestampServer = "http://timestamp.digicert.com",    
         [Parameter(HelpMessage = "A file to sign", Mandatory = $true)]
         [string] $FILE
