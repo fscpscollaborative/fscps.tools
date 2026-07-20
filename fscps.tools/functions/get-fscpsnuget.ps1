@@ -164,10 +164,14 @@ function Get-FSCPSNuget {
             if(!$download)
             {
                 $blobFile = Get-FSCPSAzureStorageFile -Name $packageName
-                $blobSize = $blobFile.Length
+                # Get-FSCPSAzureStorageFile exposes the blob size as a PSFSize on the 'Size'
+                # property (the underlying 'Length' is renamed). Reading '.Length' here returns
+                # the PowerShell scalar length (1), which never matches the real file size and
+                # forced a re-download every run. Cast the PSFSize to bytes for a correct compare.
+                $blobSize = [long]$blobFile.Size
                 $localSize = (Get-Item $destinationNugetFilePath).length
                 Write-PSFMessage -Level Verbose -Message "BlobSize is: $blobSize"
-                Write-PSFMessage -Level Verbose -Message "LocalSize is: $blobSize"
+                Write-PSFMessage -Level Verbose -Message "LocalSize is: $localSize"
                 $download = $blobSize -ne $localSize
             }
 

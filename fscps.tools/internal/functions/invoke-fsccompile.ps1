@@ -100,6 +100,13 @@ function Invoke-FSCCompile {
             }
             $settings = Get-FSCPSSettings @CMDOUT
 
+            # Whether to force a fresh NuGet download every run. Defaults to $true (original
+            # behaviour). When set to $false the already downloaded packages are reused and
+            # kept during cleanup, which speeds up repeated local builds.
+            try   { $nugetForce = [System.Convert]::ToBoolean($settings.fscCompileNugetForce) }
+            catch { $nugetForce = $true }
+            Write-PSFMessage -Level Important -Message "fscCompileNugetForce: $nugetForce"
+
             if([string]::IsNullOrEmpty($Version))
             {
                 $Version = $settings.buildVersion
@@ -293,10 +300,10 @@ function Invoke-FSCCompile {
     
             Convert-FSCPSTextToAscii -Text "Download NuGet packages" -Font "Term" -BorderType DoubleDots -HorizontalLayout ControlledSmushing -ScreenWigth 160 -Padding 2
             $null = Test-PathExists -Path $NuGetPackagesPath -Type Container -Create @CMDOUT
-            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force @CMDOUT
-            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force @CMDOUT
+            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformCompilerPackage -Path $NuGetPackagesPath -Force:$nugetForce @CMDOUT
+            $null = Get-FSCPSNuget -Version $PlatformVersion -Type PlatformDevALM -Path $NuGetPackagesPath -Force:$nugetForce @CMDOUT
+            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationDevALM -Path $NuGetPackagesPath -Force:$nugetForce @CMDOUT
+            $null = Get-FSCPSNuget -Version $ApplicationVersion -Type ApplicationSuiteDevALM -Path $NuGetPackagesPath -Force:$nugetForce @CMDOUT
 
             Write-PSFMessage -Level Important -Message "Complete"
             $responseObject.NUGETS_FOLDER = $NuGetPackagesPath
@@ -757,7 +764,10 @@ function Invoke-FSCCompile {
                             Remove-Item -Path $SolutionBuildFolderPath -Recurse -Force -ErrorAction SilentlyContinue
                         }
                     }
-                    if($NuGetPackagesPath)
+                    # Only remove the downloaded NuGet packages when we are forcing a fresh
+                    # download every run (fscCompileNugetForce). When caching is enabled
+                    # (fscCompileNugetForce = $false) keep them so the next build can reuse them.
+                    if($nugetForce -and $NuGetPackagesPath)
                     {
                         if (Test-Path -Path $NuGetPackagesPath -ErrorAction SilentlyContinue)
                         {
