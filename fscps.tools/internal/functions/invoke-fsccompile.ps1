@@ -663,8 +663,9 @@ function Invoke-FSCCompile {
                                     Write-PSFMessage -Level Host -Message $packageLocation.Result
                                     Write-PSFMessage -Level Host -Message "Ending package creation"
                                     Write-PSFMessage -Level Host -Message "Placing package to package output location"
-                                    
-                                    Copy-Item -Path (Join-Path $packageLocation.Result '\*') -Destination $cloudDeployablePackageArtifactsPath -Recurse
+
+                                    $cloudPackageSourcePath = Get-FSCPSCloudPackageSourcePath -PackagePath $packageLocation.Result
+                                    Copy-Item -Path (Join-Path $cloudPackageSourcePath '\*') -Destination $cloudDeployablePackageArtifactsPath -Recurse -Force
                                 }
                                 catch
                                 {
