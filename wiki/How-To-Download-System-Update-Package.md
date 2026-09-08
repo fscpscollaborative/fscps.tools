@@ -20,6 +20,8 @@ The `Get-FSCPSSystemUpdatePackage` cmdlet supports the following update types:
 | UpdateType | Description |
 | :-- | :-- |
 | **SystemUpdate** | The GA (General Availability) service update package |
+|**ServiceUpdate**| The GA (General Availability) service update package |
+|**FirstReleaseServiceUpdate**| The first release of service update |
 | **Preview** | The preview version of a service update |
 | **FinalQualityUpdate** | The final quality update for a version |
 | **ProactiveQualityUpdate** | A proactive quality update |

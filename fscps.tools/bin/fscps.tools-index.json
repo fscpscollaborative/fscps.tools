@@ -806,7 +806,7 @@
         "Name":  "Get-FSCPSSystemUpdatePackage",
         "Links":  null,
         "Examples":  "-------------------------- EXAMPLE 1 --------------------------\nPS C:\\\u003eGet-FSCPSSystemUpdatePackage -UpdateType SystemUpdate -D365FSCVersion \"10.0.40\" -OutputPath \"C:\\Packages\\\"\nDownloads the system update package for version 10.0.40 and saves it to \"C:\\Packages\\\".",
-        "Syntax":  "Get-FSCPSSystemUpdatePackage [[-UpdateType] {SystemUpdate | Preview | FinalQualityUpdate | ProactiveQualityUpdate}] [[-D365FSCVersion] \u003cString\u003e] [[-OutputPath] \u003cString\u003e] [[-StorageAccountConfig] \u003cString\u003e] [-Force] [\u003cCommonParameters\u003e]"
+        "Syntax":  "Get-FSCPSSystemUpdatePackage [[-UpdateType] {SystemUpdate | ServiceUpdate | FirstReleaseServiceUpdate | Preview | FinalQualityUpdate | ProactiveQualityUpdate}] [[-D365FSCVersion] \u003cString\u003e] [[-OutputPath] \u003cString\u003e] [[-StorageAccountConfig] \u003cString\u003e] [-Force] [\u003cCommonParameters\u003e]"
     },
     {
         "CommandName":  "Get-FSCPSVersionInfo",
