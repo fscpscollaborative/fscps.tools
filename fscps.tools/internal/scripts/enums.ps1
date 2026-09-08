@@ -43,6 +43,8 @@ enum FSCPSType {
 
 enum UpdateType {
     SystemUpdate
+    ServiceUpdate
+    FirstReleaseServiceUpdate
     Preview
     FinalQualityUpdate
     ProactiveQualityUpdate
