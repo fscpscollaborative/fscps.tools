@@ -40,7 +40,7 @@ Valid values are "SystemUpdate" and "Preview".
 Type: UpdateType
 Parameter Sets: (All)
 Aliases:
-Accepted values: SystemUpdate, Preview, FinalQualityUpdate, ProactiveQualityUpdate
+Accepted values: SystemUpdate, ServiceUpdate, FirstReleaseServiceUpdate, Preview, FinalQualityUpdate, ProactiveQualityUpdate
 
 Required: False
 Position: 1

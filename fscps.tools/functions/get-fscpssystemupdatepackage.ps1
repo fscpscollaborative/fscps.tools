@@ -88,6 +88,10 @@ function Get-FSCPSSystemUpdatePackage {
          # Set the destination file name based on the UpdateType
          if ($UpdateType -eq [UpdateType]::SystemUpdate) {
             $destinationFileName = "Service Update - $D365FSCVersion"
+        } elseif ($UpdateType -eq [UpdateType]::ServiceUpdate) {
+            $destinationFileName = "Service Update - $D365FSCVersion"
+        } elseif ($UpdateType -eq [UpdateType]::FirstReleaseServiceUpdate) {
+            $destinationFileName = "First Release Service Update - $D365FSCVersion"
         } elseif ($UpdateType -eq [UpdateType]::Preview) {
             $destinationFileName = "Preview Version - $D365FSCVersion"
         } elseif ($UpdateType -eq [UpdateType]::FinalQualityUpdate) {
